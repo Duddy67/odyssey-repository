@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<form addrulepath="/administrator/components/com_odyssey/models/rules">
+
+  <fieldset name="details" addfieldpath="/administrator/components/com_odyssey/models/fields">
+	<field name="firstname" type="text"
+		label="COM_ODYSSEY_FIELD_FIRSTNAME_LABEL"
+		description="COM_ODYSSEY_FIELD_FIRSTNAME_DESC"
+		required="true" />
+
+	<field name="lastname" type="text"
+		label="COM_ODYSSEY_FIELD_LASTNAME_LABEL"
+		description="COM_ODYSSEY_FIELD_LASTNAME_DESC" 
+		required="true" />
+
+	<field name="birthdate" type="text"
+		label="COM_ODYSSEY_FIELD_BIRTHDATE_LABEL"
+		description="COM_ODYSSEY_FIELD_BIRTHDATE_DESC" />
+
+	<field name="street" type="text"
+		label="COM_ODYSSEY_FIELD_STREET_LABEL"
+		description="COM_ODYSSEY_FIELD_STREET_DESC" />
+
+	<field name="city" type="text"
+		label="COM_ODYSSEY_FIELD_CITY_LABEL"
+		description="COM_ODYSSEY_FIELD_CITY_DESC" />
+
+	<field name="postcode" type="text"
+		label="COM_ODYSSEY_FIELD_POSTCODE_LABEL"
+		description="COM_ODYSSEY_FIELD_POSTCODE_DESC" />
+
+	<field name="country_code" type="countrylist"
+	       label="COM_ODYSSEY_FIELD_COUNTRY_LABEL"
+	       description="COM_ODYSSEY_FIELD_COUNTRY_DESC" >
+	</field>
+
+	<field name="phone" type="text"
+		label="COM_ODYSSEY_FIELD_PHONE_LABEL"
+		description="COM_ODYSSEY_FIELD_PHONE_DESC" />
+
+	<field name="id" type="hidden" id="id" default="0" />
+  </fieldset>
+</form>
+
+
+

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter">
+		<field name="search"
+		       type="text"
+		       label="COM_ODYSSEY_SEARCH_IN_TITLE"
+		       hint="JSEARCH_FILTER"
+		       class="js-stools-search-string" />
+
+		<field name="published"
+		       type="status"
+		       label="JOPTION_SELECT_PUBLISHED"
+		       description="JOPTION_SELECT_PUBLISHED_DESC"
+		       onchange="this.form.submit();">
+		       <option value="">JOPTION_SELECT_PUBLISHED</option>
+		</field>
+
+		<field name="category_id"
+		       type="category"
+		       label="JOPTION_FILTER_CATEGORY"
+		       extension="com_odyssey"
+		       description="JOPTION_FILTER_CATEGORY_DESC"
+		       onchange="this.form.submit();"
+		       published="0,1,2">
+		       <option value="">JOPTION_SELECT_CATEGORY</option>
+		</field>
+
+		<field name="access"
+		       type="accesslevel"
+		       label="JOPTION_FILTER_ACCESS"
+		       description="JOPTION_FILTER_ACCESS_DESC"
+		       onchange="this.form.submit();">
+		       <option value="">JOPTION_SELECT_ACCESS</option>
+		</field>
+
+		<field name="user_id"
+	               type="componentuser"
+		       onchange="this.form.submit();" >
+		       <option value="">COM_ODYSSEY_OPTION_SELECT_USER</option>
+		</field>
+
+		<field name="language"
+		       type="contentlanguage"
+		       label="JOPTION_FILTER_LANGUAGE"
+		       description="JOPTION_FILTER_LANGUAGE_DESC"
+		       onchange="this.form.submit();">
+		       <option value="">JOPTION_SELECT_LANGUAGE</option>
+		       <option value="*">JALL</option>
+		</field>
+
+		<field name="tag"
+		       type="tag"
+		       mode="nested"
+		       label="JOPTION_FILTER_TAG"
+		       description="JOPTION_FILTER_TAG_DESC"
+		       onchange="this.form.submit();">
+		       <option value="">JOPTION_SELECT_TAG</option>
+		</field>
+	</fields>
+
+	<fields name="list">
+		<field name="fullordering" type="list"
+			label="JGLOBAL_SORT_BY"
+			description="JGLOBAL_SORT_BY"
+			onchange="this.form.submit();" default="" >
+			<option value="">JGLOBAL_SORT_BY</option>
+			<option value="t.ordering ASC">JGRID_HEADING_ORDERING_ASC</option>
+			<option value="t.ordering DESC">JGRID_HEADING_ORDERING_DESC</option>
+			<option value="t.published ASC">JSTATUS_ASC</option>
+			<option value="t.published DESC">JSTATUS_DESC</option>
+			<option value="t.name ASC">COM_ODYSSEY_NAME_ASC</option>
+			<option value="t.name DESC">COM_ODYSSEY_NAME_DESC</option>
+			<option value="user ASC">JAUTHOR_ASC</option>
+			<option value="user DESC">JAUTHOR_DESC</option>
+			<option value="t.created ASC">JDATE_ASC</option>
+			<option value="t.created DESC">JDATE_DESC</option>
+			<option value="t.id ASC">JGRID_HEADING_ID_ASC</option>
+			<option value="t.id DESC">JGRID_HEADING_ID_DESC</option>
+		</field>
+
+		<field name="limit"
+	               type="limitbox"
+		       class="inputbox input-mini"
+		       default="25"
+		       label="COM_JOOSHOP_LIST_LIMIT"
+		       description="COM_JOOSHOP_LIST_LIMIT_DESC"
+		       onchange="this.form.submit();"/>
+	</fields>
+</form>

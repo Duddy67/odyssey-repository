@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter">
+		<field
+			name="search"
+			type="text"
+		        label="COM_ODYSSEY_SEARCH_IN_TITLE"
+			hint="JSEARCH_FILTER"
+			class="js-stools-search-string"
+		/>
+		<field
+			name="published"
+			type="status"
+			label="JOPTION_SELECT_PUBLISHED"
+			description="JOPTION_SELECT_PUBLISHED_DESC"
+			onchange="this.form.submit();"
+			>
+			<option value="">JOPTION_SELECT_PUBLISHED</option>
+		</field>
+		<field name="customer_id"
+			type="customerlist"
+			onchange="this.form.submit();" >
+		</field>
+
+		<field name="order_status" type="list"
+			label="COM_ODYSSEY_FIELD_ORDER_STATUS_LABEL"
+			description="COM_ODYSSEY_FIELD_ORDER_STATUS_DESC"
+			onchange="this.form.submit();">
+			<option value="">COM_ODYSSEY_OPTION_SELECT_ORDER_STATUS</option>
+			<option value="completed">COM_ODYSSEY_OPTION_COMPLETED_STATUS</option>
+			<option value="pending">COM_ODYSSEY_OPTION_PENDING_STATUS</option>
+			<option value="error">COM_ODYSSEY_OPTION_ERROR_STATUS</option>
+			<option value="cancelled">COM_ODYSSEY_OPTION_CANCELLED_STATUS</option>
+			<option value="other">COM_ODYSSEY_OPTION_OTHER_STATUS</option>
+		</field>
+
+		<field name="payment_status" type="list"
+			label="COM_ODYSSEY_FIELD_PAYMENT_STATUS_LABEL"
+			description="COM_ODYSSEY_FIELD_PAYMENT_STATUS_DESC"
+			onchange="this.form.submit();">
+			<option value="">COM_ODYSSEY_OPTION_SELECT_PAYMENT_STATUS</option>
+			<option value="deposit">COM_ODYSSEY_OPTION_DEPOSIT_STATUS</option>
+			<option value="completed">COM_ODYSSEY_OPTION_COMPLETED_STATUS</option>
+			<option value="pending">COM_ODYSSEY_OPTION_PENDING_STATUS</option>
+			<option value="cancelled">COM_ODYSSEY_OPTION_CANCELLED_STATUS</option>
+			<option value="error">COM_ODYSSEY_OPTION_ERROR_STATUS</option>
+			<option value="unfinished">COM_ODYSSEY_OPTION_UNFINISHED_STATUS</option>
+		</field>
+	</fields>
+	<fields name="list">
+		<field name="fullordering" type="list"
+			label="JGLOBAL_SORT_BY"
+			description="JGLOBAL_SORT_BY"
+			onchange="this.form.submit();" default="" >
+			<option value="">JGLOBAL_SORT_BY</option>
+			<option value="o.published ASC">JSTATUS_ASC</option>
+			<option value="o.published DESC">JSTATUS_DESC</option>
+			<option value="o.order_nb ASC">COM_ODYSSEY_ORDER_NUMBER_ASC</option>
+			<option value="o.order_nb DESC">COM_ODYSSEY_ORDER_NUMBER_DESC</option>
+			<option value="user ASC">JAUTHOR_ASC</option>
+			<option value="user DESC">JAUTHOR_DESC</option>
+			<option value="o.created ASC">JDATE_ASC</option>
+			<option value="o.created DESC">JDATE_DESC</option>
+			<option value="o.id ASC">JGRID_HEADING_ID_ASC</option>
+			<option value="o.id DESC">JGRID_HEADING_ID_DESC</option>
+		</field>
+		<field
+			name="limit"
+			type="limitbox"
+			class="inputbox input-mini"
+			default="25"
+			label="COM_ODYSSEY_LIST_LIMIT"
+			description="COM_ODYSSEY_LIST_LIMIT_DESC"
+			onchange="this.form.submit();"
+		/>
+	</fields>
+</form>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<form addrulepath="/administrator/components/com_odyssey/models/rules">
+
+  <fieldset name="details">
+
+	<field name="numerical" type="text"
+		label="COM_ODYSSEY_FIELD_ISO_NUMERICAL_LABEL"
+		description="COM_ODYSSEY_FIELD_CURRENCY_ISO_NUMERICAL_DESC"
+		size="8" required="true" />
+
+	<field name="alpha" type="text"
+		label="COM_ODYSSEY_FIELD_ALPHA_LABEL"
+		description="COM_ODYSSEY_FIELD_ALPHA_DESC"
+		size="8" required="true" />
+
+	<field name="symbol" type="text"
+		label="COM_ODYSSEY_FIELD_CURRENCY_SYMBOL_LABEL"
+		description="COM_ODYSSEY_FIELD_CURRENCY_SYMBOL_DESC"
+		size="8" />
+
+	<field name="fractional_unit" type="text"
+		label="COM_ODYSSEY_FIELD_CURRENCY_FRACTIONAL_UNIT_LABEL"
+		description="COM_ODYSSEY_FIELD_CURRENCY_FRACTIONAL_UNIT_DESC"
+		size="8" />
+
+	<field name="exchange_rate" type="text"
+		label="COM_ODYSSEY_FIELD_CURRENCY_EXCHANGE_RATE_LABEL"
+		description="COM_ODYSSEY_FIELD_CURRENCY_EXCHANGE_RATE_DESC"
+		size="8" />
+
+	<field name="lang_var" type="text"
+		label="COM_ODYSSEY_FIELD_LANG_VAR_LABEL"
+		description="COM_ODYSSEY_FIELD_LANG_VAR_DESC"
+		size="60" />
+
+	<!-- layout: title_alias -->
+	<field name="name" type="text"
+		label="COM_ODYSSEY_FIELD_NAME_LABEL"
+		description="COM_ODYSSEY_FIELD_NAME_DESC"
+		class="input-xxlarge input-large-text"
+		required="true" />
+
+	<!-- layout: publishingdata -->
+	<field name="id" type="text" default="0" label="JGLOBAL_FIELD_ID_LABEL" 
+	       description="JGLOBAL_FIELD_ID_DESC"
+	       readonly="true" class="readonly" />
+
+	<field name="published" type="list"
+		label="JSTATUS"
+		description="JFIELD_PUBLISHED_DESC"
+		class="inputbox"
+		size="1" default="1">
+		<option value="1">JPUBLISHED</option>
+		<option value="0">JUNPUBLISHED</option>
+	</field>
+
+	<field name="created_by" type="user"
+		label="COM_ODYSSEY_FIELD_CREATED_BY_LABEL" description="COM_ODYSSEY_FIELD_CREATED_BY_DESC" />
+
+	<field name="created" type="calendar"
+		label="COM_ODYSSEY_FIELD_CREATED_DATE_LABEL" description="COM_ODYSSEY_FIELD_CREATED_DATE_DESC"
+		class="readonly" readonly="true" size="22" format="%Y-%m-%d %H:%M:%S"
+		filter="user_utc" />
+
+	<field name="modified" type="calendar" class="readonly"
+		label="JGLOBAL_FIELD_MODIFIED_LABEL" description="COM_ODYSSEY_FIELD_MODIFIED_DESC"
+		size="22" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc" />
+
+	</fieldset>
+</form>
+
+
+

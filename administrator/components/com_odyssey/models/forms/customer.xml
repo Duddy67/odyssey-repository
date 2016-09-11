@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<form addrulepath="/administrator/components/com_odyssey/models/rules">
+
+  <fieldset name="details">
+
+	<!-- IMPORTANT: An input field called "id" must exists to set if the element 
+	     is new (id = 0) or in edition. -->
+	<field name="id" type="text" default="0" label="JGLOBAL_FIELD_ID_LABEL" 
+	       description="JGLOBAL_FIELD_ID_DESC"
+	       readonly="true" class="readonly" />
+
+	<!-- Warning: We must set filter as "unset" on the Joomla!
+	users fields to avoid record their values in users table when saving. -->      
+	<field name="name" type="text"
+		label="COM_ODYSSEY_FIELD_LASTNAME_LABEL"
+		description="COM_ODYSSEY_FIELD_LASTNAME_DESC"
+		class="input-xxlarge input-large-text readonly"
+		readonly="true" filter="unset" />
+
+	<field name="firstname" type="text"
+		label="COM_ODYSSEY_FIELD_FIRSTNAME_LABEL"
+		description="COM_ODYSSEY_FIELD_FIRSTNAME_DESC"
+		readonly="true" filter="unset" />
+
+	<field name="customer_title" type="list"
+		label="PLG_USER_ODYSSEY_PROFILE_FIELD_TITLE_LABEL"
+		description="PLG_USER_ODYSSEY_PROFILE_FIELD_TITLE_DESC"
+		class="chzn-color-state" default="">
+		<option value="">PLG_USER_ODYSSEY_PROFILE_OPTION_SELECT</option>
+		<option value="mr">PLG_USER_ODYSSEY_PROFILE_OPTION_MR</option>
+		<option value="mrs">PLG_USER_ODYSSEY_PROFILE_OPTION_MRS</option>
+		<option value="miss">PLG_USER_ODYSSEY_PROFILE_OPTION_MISS</option>
+	</field>
+
+	<field name="username" type="text"
+		label="COM_ODYSSEY_FIELD_USERNAME_LABEL"
+		description="COM_ODYSSEY_FIELD_USERNAME_DESC"
+		class="readonly" readonly="true" filter="unset" />
+
+	<field name="email" type="text"
+		label="COM_ODYSSEY_FIELD_EMAIL_LABEL"
+		description="COM_ODYSSEY_FIELD_EMAIL_DESC"
+		class="readonly" readonly="true" filter="unset" />
+
+	<field name="lastvisitDate" type="calendar"
+		label="COM_ODYSSEY_FIELD_LASTVISIT_LABEL"
+		description="COM_ODYSSEY_FIELD_LASTVISIT_DESC"
+		class="readonly" readonly="true" format="%Y-%m-%d %H:%M:%S"
+		filter="user_utc,unset" />
+
+	<field name="registerDate" type="calendar"
+		label="COM_ODYSSEY_FIELD_REGISTERDATE_LABEL"
+		description="COM_ODYSSEY_FIELD_REGISTERDATE_DESC"
+		class="readonly" readonly="true" format="%Y-%m-%d %H:%M:%S"
+		filter="user_utc,unset" />
+
+	<field name="limit_item" type="list"
+		class="inputbox" size="1" default="10" onchange="setLimitItem(this);">
+		<option value="5">5</option>
+		<option value="10">10</option>
+		<option value="15">15</option>
+		<option value="20">20</option>
+		<option value="25">25</option>
+		<option value="30">30</option>
+		<option value="50">50</option>
+		<option value="100">100</option>
+		<option value="0">JALL</option>
+	</field>
+
+
+	</fieldset>
+</form>
+
+
+

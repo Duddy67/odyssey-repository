@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<form addrulepath="/administrator/components/com_odyssey/models/rules">
+
+  <fieldset name="details">
+
+	<field name="prule_type" type="list"
+		label="COM_ODYSSEY_FIELD_TYPE_LABEL"
+		description="COM_ODYSSEY_FIELD_TYPE_DESC"
+		default="catalog">
+		<option value="catalog">COM_ODYSSEY_OPTION_CATALOG</option>
+		<option value="cart">COM_ODYSSEY_OPTION_CART</option>
+	</field>
+
+	<field name="item_type" type="list"
+		label="COM_ODYSSEY_FIELD_PRICERULE_ITEM_TYPE_LABEL"
+		description="COM_ODYSSEY_FIELD_PRICERULE_ITEM_TYPE_DESC"
+		class="item-type-select" default="travel">
+		<option value="travel">COM_ODYSSEY_OPTION_TRAVEL</option>
+		<option value="addon">COM_ODYSSEY_OPTION_ADDON</option>
+	</field>
+
+	<field name="behavior" type="list"
+		label="COM_ODYSSEY_FIELD_PRICERULE_BEHAVIOR_LABEL"
+		description="COM_ODYSSEY_FIELD_PRICERULE_BEHAVIOR_DESC"
+		default="XOR">
+		<option value="XOR">COM_ODYSSEY_OPTION_EXCLUSIVE</option>
+		<option value="AND">COM_ODYSSEY_OPTION_CUMULATIVE</option>
+		<option value="CPN_XOR">COM_ODYSSEY_OPTION_COUPON_EXCLUSIVE</option>
+		<option value="CPN_AND">COM_ODYSSEY_OPTION_COUPON_CUMULATIVE</option>
+	</field>
+
+	<field name="operation" type="list"
+		label="COM_ODYSSEY_FIELD_PRICERULE_OPERATION_LABEL"
+		description="COM_ODYSSEY_FIELD_PRICERULE_OPERATION_DESC"
+		default="-%">
+		<option value="-%">-%</option>
+		<option value="+%">+%</option>
+		<option value="-">-</option>
+		<option value="+">+</option>
+	</field>
+
+	<field name="value" type="text"
+		label="COM_ODYSSEY_FIELD_PRICERULE_VALUE_LABEL"
+		description="COM_ODYSSEY_FIELD_PRICERULE_VALUE_DESC"/>
+
+	<field name="target" type="list"
+		label="COM_ODYSSEY_FIELD_PRICERULE_TARGET_LABEL"
+		description="COM_ODYSSEY_FIELD_PRICERULE_TARGET_DESC"
+		class="target-select" default="travel">
+		<option value="travel">COM_ODYSSEY_OPTION_TRAVEL</option>
+		<option value="travel_cat">COM_ODYSSEY_OPTION_TRAVEL_CAT</option>
+		<option value="addon">COM_ODYSSEY_OPTION_ADDON</option>
+		<option value="cart_amount">COM_ODYSSEY_OPTION_CART_AMOUNT</option>
+	</field>
+
+	<field name="recipient" type="list"
+		label="COM_ODYSSEY_FIELD_PRICERULE_RECIPIENT_LABEL"
+		description="COM_ODYSSEY_FIELD_PRICERULE_RECIPIENT_DESC"
+		class="recipient-select" default="customer">
+		<option value="customer">COM_ODYSSEY_OPTION_CUSTOMER</option>
+		<option value="customer_group">COM_ODYSSEY_OPTION_CUSTOMER_GROUP</option>
+	</field>
+
+	<field name="condition" type="list"
+		label="COM_ODYSSEY_FIELD_PRICE_RULE_CONDITIONAL_LABEL"
+		description="COM_ODYSSEY_FIELD_PRICE_RULE_CONDITIONAL_DESC"
+		class="condition-select" default="travel">
+		<option value="travel">COM_ODYSSEY_OPTION_TRAVEL_QUANTITY</option>
+		<option value="travel_cat">COM_ODYSSEY_OPTION_TRAVEL_CAT_QUANTITY</option>
+		<option value="travel_cat_amount">COM_ODYSSEY_OPTION_TRAVEL_CAT_AMOUNT</option>
+	</field>
+
+	<field name="logical_opr" type="list"
+		label="COM_ODYSSEY_FIELD_PRICE_RULE_LOGICAL_OPERATOR_LABEL"
+		description="COM_ODYSSEY_FIELD_PRICE_RULE_LOGICAL_OPERATOR_DESC"
+		class="logical-operator" default="AND" >
+		<option value="AND">COM_ODYSSEY_OPTION_AND_CONDITION</option>
+		<option value="OR">COM_ODYSSEY_OPTION_OR_CONDITION</option>
+	</field>
+
+	<!--<field name="targ_child_cat" type="radio"
+		class="btn-group btn-group-yesno"
+		label="COM_ODYSSEY_FIELD_PRICE_RULE_CHILDREN_CAT_LABEL"
+		description="COM_ODYSSEY_FIELD_PRICE_RULE_CHILDREN_CAT_DESC"
+		default="0">
+		<option value="1">JYES</option>
+		<option value="0">JNO</option>
+	</field>
+
+	<field name="cond_child_cat" type="radio"
+		class="btn-group btn-group-yesno"
+		label="COM_ODYSSEY_FIELD_PRICE_RULE_CHILDREN_CAT_LABEL"
+		description="COM_ODYSSEY_FIELD_PRICE_RULE_CHILDREN_CAT_DESC"
+		default="0">
+		<option value="1">JYES</option>
+		<option value="0">JNO</option>
+	</field>-->
+
+	<field name="since_date" type="calendar"
+		label="COM_ODYSSEY_FIELD_SINCE_LABEL"
+		description="COM_ODYSSEY_FIELD_SINCE_DESC"
+		class="inputbox" format="%Y-%m-%d %H:%M" 
+		filter="user_utc" />
+
+	<field name="show_rule" type="radio"
+		class="btn-group btn-group-yesno"
+		label="COM_ODYSSEY_FIELD_PRICE_RULE_SHOW_RULE_LABEL"
+		description="COM_ODYSSEY_FIELD_PRICE_RULE_SHOW_RULE_DESC"
+		default="1">
+		<option value="1">JYES</option>
+		<option value="0">JNO</option>
+	</field>
+
+	<field name="description" type="editor"
+		label="COM_ODYSSEY_FIELD_DESCRIPTION_LABEL"
+		description="COM_ODYSSEY_FIELD_DESCRIPTION_DESC"
+		button="false">
+	</field>
+
+	<!-- layout: title_alias -->
+	<field name="name" type="text"
+		label="COM_ODYSSEY_FIELD_NAME_LABEL"
+		description="COM_ODYSSEY_FIELD_NAME_DESC"
+		class="input-xxlarge input-large-text"
+		size="25" required="true" />
+
+	<!-- layout: publishingdata -->
+	<field name="id" type="text" default="0" label="JGLOBAL_FIELD_ID_LABEL" 
+	       description="JGLOBAL_FIELD_ID_DESC"
+	       readonly="true" class="readonly" />
+
+	<field name="published" type="list"
+	       label="JSTATUS"
+	       description="JFIELD_PUBLISHED_DESC"
+	       class="inputbox" default="1">
+		<option value="1">JPUBLISHED</option>
+		<option value="0">JUNPUBLISHED</option>
+		<option value="2">JARCHIVED</option>
+		<option value="-2">JTRASHED</option>
+	</field>
+
+
+	<field name="created_by" type="user"
+		label="COM_ODYSSEY_FIELD_CREATED_BY_LABEL" description="COM_ODYSSEY_FIELD_CREATED_BY_DESC" />
+
+	<field name="created" type="calendar"
+		label="COM_ODYSSEY_FIELD_CREATED_DATE_LABEL" description="COM_ODYSSEY_FIELD_CREATED_DATE_DESC"
+		class="readonly" readonly="true" size="22" format="%Y-%m-%d %H:%M:%S"
+		filter="user_utc" />
+
+	<field name="modified" type="calendar" class="readonly"
+		label="JGLOBAL_FIELD_MODIFIED_LABEL" description="COM_ODYSSEY_FIELD_MODIFIED_DESC"
+		size="22" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc" />
+
+	<field name="publish_up" type="calendar"
+		label="JGLOBAL_FIELD_PUBLISH_UP_LABEL"
+		description="JGLOBAL_FIELD_PUBLISH_UP_DESC"
+		class="inputbox" format="%Y-%m-%d %H:%M:%S" size="22"
+		filter="user_utc" />
+
+	<field name="publish_down" type="calendar"
+		label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL"
+		description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"
+		class="inputbox" format="%Y-%m-%d %H:%M:%S" size="22"
+		filter="user_utc" />
+
+	<field name="ordering" type="text" label="JFIELD_ORDERING_LABEL"
+		description="JFIELD_ORDERING_DESC" class="inputbox" size="6"
+		default="0" />
+
+
+	</fieldset>
+</form>
+
+
+
