@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_ODYSSEY_FORM_VIEW_DEFAULT_TITLE" option="COM_ODYSSEY_FORM_VIEW_DEFAULT_OPTION">
+		<help
+			key = "JHELP_MENUS_MENU_ITEM_TRAVEL_CREATE"
+		/>
+		<message>
+			<![CDATA[COM_ODYSSEY_FORM_VIEW_DEFAULT_DESC]]>
+		</message>
+	</layout>
+	<fields name="params">
+		<fieldset name="basic">
+			<field name="enable_category"
+				type="radio"
+				class="btn-group btn-group-yesno"
+				default="0"
+				label="COM_ODYSSEY_CREATE_TRAVEL_CATEGORY_LABEL"
+				description="COM_ODYSSEY_CREATE_TRAVEL_CATEGORY_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+			</field>
+			<field name="catid"
+				type="category"
+				label="JGLOBAL_CHOOSE_CATEGORY_LABEL"
+				extension="com_odyssey"
+				description="JGLOBAL_CHOOSE_CATEGORY_DESC" />
+		</fieldset>
+	</fields>
+</metadata>

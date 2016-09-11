@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: default.xml 42 2011-03-31 09:12:23Z chdemko $ -->
+<metadata>
+	<layout title="COM_ODYSSEY_ORDERS_VIEW_DEFAULT_TITLE" option="COM_ODYSSEY_ORDERS_VIEW_DEFAULT_OPTION">
+		<message>
+			<![CDATA[COM_ODYSSEY_ORDERS_VIEW_DEFAULT_DESC]]>
+		</message>
+	</layout>
+
+</metadata>
+
