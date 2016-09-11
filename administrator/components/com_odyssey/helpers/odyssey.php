@@ -1,0 +1,476 @@
+<?php
+/**
+ * @package Odyssey
+ * @copyright Copyright (c) 2016 - 2016 Lucas Sanner
+ * @license GNU General Public License version 3, or later
+ */
+
+defined('_JEXEC') or die; //No direct access to this file.
+
+
+class OdysseyHelper
+{
+  /**
+   * Create the tabs bar ($viewName = name of the active view).
+   *
+   * @param string $viewName The name of the view to display.
+   *
+   * @return void
+   */
+  public static function addSubmenu($viewName)
+  {
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_TRAVELS'),
+				      'index.php?option=com_odyssey&view=travels', $viewName == 'travels');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_STEPS'),
+				      'index.php?option=com_odyssey&view=steps', $viewName == 'steps');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_ADDONS'),
+				      'index.php?option=com_odyssey&view=addons', $viewName == 'addons');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_PRICERULES'),
+				      'index.php?option=com_odyssey&view=pricerules', $viewName == 'pricerules');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_COUPONS'),
+				      'index.php?option=com_odyssey&view=coupons', $viewName == 'coupons');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_CUSTOMERS'),
+				      'index.php?option=com_odyssey&view=customers', $viewName == 'customers');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_ORDERS'),
+				      'index.php?option=com_odyssey&view=orders', $viewName == 'orders');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_CITIES'),
+				      'index.php?option=com_odyssey&view=cities', $viewName == 'cities');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_COUNTRIES'),
+				      'index.php?option=com_odyssey&view=countries', $viewName == 'countries');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_CURRENCIES'),
+				      'index.php?option=com_odyssey&view=currencies', $viewName == 'currencies');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_PAYMENT_MODES'),
+				      'index.php?option=com_odyssey&view=paymentmodes', $viewName == 'paymentmodes');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_TAXES'),
+				      'index.php?option=com_odyssey&view=taxes', $viewName == 'taxes');
+
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_CATEGORIES'),
+				      'index.php?option=com_categories&extension=com_odyssey', $viewName == 'categories');
+
+    if($viewName == 'categories') {
+      $document = JFactory::getDocument();
+      $document->setTitle(JText::_('COM_ODYSSEY_ADMINISTRATION_CATEGORIES'));
+    }
+  }
+
+  
+  /**
+   * Get the list of the allowed actions for the user.
+   *
+   * @param array $catIds The ids of the categories to check.
+   *
+   * @return JObject
+   */
+  public static function getActions($catIds = array())
+  {
+    $user = JFactory::getUser();
+    $result = new JObject;
+
+    $actions = array('core.admin', 'core.manage', 'core.create', 'core.edit',
+		     'core.edit.own', 'core.edit.state', 'core.delete');
+
+    //Get from the core the user's permission for each action.
+    foreach($actions as $action) {
+      //Check permissions against the component. 
+      if(empty($catIds)) { 
+	$result->set($action, $user->authorise($action, 'com_odyssey'));
+      }
+      else {
+	//Check permissions against the component categories.
+	foreach($catIds as $catId) {
+	  if($user->authorise($action, 'com_odyssey.category.'.$catId)) {
+	    $result->set($action, $user->authorise($action, 'com_odyssey.category.'.$catId));
+	    break;
+	  }
+
+	  $result->set($action, $user->authorise($action, 'com_odyssey.category.'.$catId));
+	}
+      }
+    }
+
+    return $result;
+  }
+
+
+  
+  /**
+   * Build the user list for the filter.
+   *
+   *
+   * @param string $itemName Name of the item to check.
+   *
+   * @return mixed An array of the result set rows or null if no result found.
+   */
+  public static function getUsers($itemName)
+  {
+    // Create a new query object.
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    $query->select('u.id AS value, u.name AS text');
+    $query->from('#__users AS u');
+    //Get only the names of users who have created items, this avoids to
+    //display all of the users in the drop down list.
+    $query->join('INNER', '#__odyssey_'.$itemName.' AS i ON i.created_by = u.id');
+    $query->group('u.id');
+    $query->order('u.name');
+
+    // Setup the query
+    $db->setQuery($query);
+
+    // Return the result
+    return $db->loadObjectList();
+  }
+
+
+  public static function checkSelectedFilter($filterName, $unique = false)
+  {
+    $post = JFactory::getApplication()->input->post->getArray();
+
+    //Ensure the given filter has been selected.
+    if(isset($post['filter'][$filterName]) && !empty($post['filter'][$filterName])) {
+      //Ensure that only the given filter has been selected.
+      if($unique) {
+	$filter = 0;
+	foreach($post['filter'] as $value) {
+	  if(!empty($value)) {
+	    $filter++;
+	  }
+	}
+
+	if($filter > 1) {
+	  return false;
+	}
+      }
+
+      return true;
+    }
+
+    return false;
+  }
+
+
+  public static function mappingTableOrder($pks, $tagId, $limitStart)
+  {
+    //Check first the user can edit state.
+    $user = JFactory::getUser();
+    if(!$user->authorise('core.edit.state', 'com_odyssey')) {
+      return false;
+    }
+
+    //Start ordering from 1 by default.
+    $ordering = 1;
+
+    //When pagination is used set ordering from limitstart value.
+    if($limitStart) {
+      $ordering = (int)$limitStart + 1;
+    }
+
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    //Update the ordering values of the mapping table. 
+    foreach($pks as $pk) {
+      $query->clear();
+      $query->update('#__odyssey_travel_tag_map')
+	    //Update the item ordering via the mapping table.
+	    ->set('ordering='.$ordering)
+	    ->where('travel_id='.(int)$pk)
+	    ->where('tag_id='.(int)$tagId);
+      $db->setQuery($query);
+      $db->execute();
+
+      $ordering++;
+    }
+
+    return true;
+  }
+
+
+  /**
+   * Update a mapping table according to the variables passed as arguments.
+   *
+   * @param string $table The name of the table to update (eg: #__table_name).
+   * @param array $columns Array of table's column, (primary key name must be set as the first array's element).
+   * @param array $data Array of JObject containing the column values, (values order must match the column order).
+   * @param array $ids Array containing the ids of the items to update.
+   *
+   * @return void
+   */
+  public static function updateMappingTable($table, $columns, $data, $ids)
+  {
+    //Ensure we have a valid primary key.
+    if(isset($columns[0]) && !empty($columns[0])) {
+      $pk = $columns[0];
+    }
+    else {
+      return;
+    }
+
+    // Create a new query object.
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    //Delete all the previous items linked to the primary id(s).
+    $query->delete($db->quoteName($table));
+    $query->where($pk.' IN('.implode(',', $ids).')');
+    $db->setQuery($query);
+    $db->execute();
+
+    //If no item has been defined no need to go further. 
+    if(count($data)) {
+      //List of the numerical fields (no quotes must be used).
+      $integers = array('id','item_id','travel_id','step_id','dpt_id',
+	                'addon_id','addon_option_id','dpt_step_id','max_passengers',
+			'group_prev','city_id','prule_id','psgr_nb','price','ordering',
+			'altm_subtract', 'altm_locked', 'nb_persons');
+
+      //Build the VALUES clause of the INSERT MySQL query.
+      $values = array();
+      foreach($ids as $id) {
+	foreach($data as $itemValues) {
+	  //Set the primary id to link the item with.
+	  $row = $id.',';
+
+	  foreach($itemValues as $key => $value) {
+	    //No integer values must be quoted.
+	    if(!in_array($key, $integers)) {
+	      $row .= $db->Quote($value).',';
+	    }
+	    else { //Don't quote the numerical values.
+	      $row .= $value.',';
+	    }
+	  }
+
+	  //Remove comma from the end of the string.
+	  $row = substr($row, 0, -1);
+	  //Insert a new row in the "values" clause.
+	  $values[] = $row;
+	}
+      }
+
+      //Insert a new row for each item linked to the primary id(s).
+      $query->clear();
+      $query->insert($db->quoteName($table));
+      $query->columns($columns);
+      $query->values($values);
+      $db->setQuery($query);
+      $db->execute();
+    }
+
+    return;
+  }
+
+
+  /**
+   * Checking functions used to prevent an admin to delete (or change status) the items 
+   * which are currently linked to other items.
+   *
+   * @param unsigned int $itemId The id of the item.
+   * @param string $itemType The type of the item.
+   *
+   * @return unsigned int
+   */
+  public static function isInTravel($itemId, $itemType = 'departure_step')
+  {
+    $result = 0;
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    if($itemType == 'departure_step') {
+      $query->select('COUNT(*)')
+	    ->from('#__odyssey_travel')
+	    ->where('dpt_step_id='.(int)$itemId);
+      $db->setQuery($query);
+      $result = $db->loadResult();
+    }
+
+    return $result;
+  }
+
+
+  /**
+   * Checking functions used to prevent an admin to delete (or change status) the items 
+   * which are currently linked to other items.
+   *
+   * @param unsigned int $itemId The id of the item.
+   * @param string $itemType The type of the item.
+   *
+   * @return unsigned int
+   */
+  public static function isInStep($itemId, $itemType)
+  {
+    $result = 0;
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    if($itemType == 'addon') {
+      $query->select('COUNT(*)')
+	    ->from('#__odyssey_step_addon_map')
+	    ->where('addon_id='.(int)$itemId);
+      $db->setQuery($query);
+      //Note: The figure returned doesn't correspond to the number of steps in which the
+      //given addon is in.
+      $result = $db->loadResult();
+    }
+
+    if($itemType == 'city') {
+      //Check if the given city is linked to one or more steps. 
+      $subQueries = '(SELECT COUNT(*) FROM #__odyssey_departure_step_map WHERE city_id='.(int)$itemId.') AS table1Count,'.
+		    '(SELECT COUNT(*) FROM #__odyssey_step_city_map WHERE city_id='.(int)$itemId.') AS table2Count,'.
+		    //Note: The figure returned doesn't correspond to the number of steps in which the given addon is in.
+		    '(SELECT COUNT(*) FROM #__odyssey_step_transit_city_map WHERE city_id='.(int)$itemId.') AS table3Count';
+      $query->select($subQueries);
+      $db->setQuery($query);
+      $results = $db->loadAssoc();
+
+      $result = $results['table1Count'] + $results['table2Count'] + $results['table3Count']; 
+    }
+
+    return $result;
+  }
+
+
+  /**
+   * Checking functions used to prevent an admin to delete (or change status) the items 
+   * which are currently linked to other items.
+   *
+   * @param string $alpha2 The alphanumeric code (2 letters) of the country the city belongs to.
+   *
+   * @return unsigned int
+   */
+  public static function isInCity($alpha2)
+  {
+    $result = 0;
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    $query->select('COUNT(*)')
+	  ->from('#__odyssey_city')
+	  ->where('country_code='.$db->Quote($alpha2));
+    $db->setQuery($query);
+    $result = $db->loadResult();
+
+    return $result;
+  }
+
+
+  /**
+   * Add, delete or update the set of addon options passed as first argument. 
+   *
+   * @param array $addonOptions Array of associative array containing the option values.
+   * @param unsigned int $addonId Id number of the parent addon.
+   *
+   * @return void
+   */
+  public static function setAddonOptions($addonOptions, $addonId)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    //Get the old addon option selection.
+    $query->select('id')
+	  ->from('#__odyssey_addon_option')
+	  ->where('addon_id='.(int)$addonId);
+    $db->setQuery($query);
+    $old = $db->loadColumn();
+
+    $values = $whens = $optionIds = array();
+    foreach($addonOptions as $addonOption) {
+      if(empty($addonOption['id'])) { //insert
+	//Store a value line for each addon option.
+	$values[] = (int)$addonId.','.$db->quote($addonOption['name']).','.(int)$addonOption['published'].','.(int)$addonOption['ordering'];
+      }
+      else { //update
+	//Build the WHEN clause for each field to update.
+	if(isset($whens['name'])) {
+	  $whens['name'] .= 'WHEN id = '.(int)$addonOption['id'].' THEN '.$db->quote($addonOption['name']).' '; 
+	}
+	else {
+	  $whens['name'] = 'WHEN id = '.(int)$addonOption['id'].' THEN '.$db->quote($addonOption['name']).' '; 
+	}
+
+	if(isset($whens['published'])) {
+	  $whens['published'] .= 'WHEN id = '.(int)$addonOption['id'].' THEN '.(int)$addonOption['published'].' '; 
+	}
+	else {
+	  $whens['published'] = 'WHEN id = '.(int)$addonOption['id'].' THEN '.(int)$addonOption['published'].' '; 
+	}
+
+	if(isset($whens['ordering'])) {
+	  $whens['ordering'] .= 'WHEN id = '.(int)$addonOption['id'].' THEN '.(int)$addonOption['ordering'].' '; 
+	}
+	else {
+	  $whens['ordering'] = 'WHEN id = '.(int)$addonOption['id'].' THEN '.(int)$addonOption['ordering'].' '; 
+	}
+
+	$optionIds[] = $addonOption['id'];
+
+	//Remove the updated option id which is also present in the old selection. So that
+	//we know that the remaining ids are the options to delete.
+	foreach($old as $key => $value) {
+	  if($value == $addonOption['id']) {
+	    unset($old[$key]);
+	  }
+	}
+      }
+    }
+
+    //Remove the possible deleted addon options from the table.
+    if(!empty($old)) {
+      $query->clear();
+      $query->delete('#__odyssey_addon_option')
+	    ->where('id IN('.implode(',', $old).')');
+      $db->setQuery($query);
+      $db->execute();
+
+      //Delete also the price rows corresponding to the removed options.
+      $query->clear();
+      $query->delete('#__odyssey_addon_option_price')
+	    ->where('addon_id='.(int)$addonId.' AND addon_option_id IN('.implode(',', $old).')');
+      $db->setQuery($query);
+      $db->execute();
+    }
+
+    if(!empty($values)) {
+      //Insert a new row for each option linked to the addon.
+      $columns = array('addon_id', 'name', 'published', 'ordering');
+      $query->clear();
+      $query->insert('#__odyssey_addon_option')
+	    ->columns($columns)
+	    ->values($values);
+      $db->setQuery($query);
+      $db->execute();
+    }
+
+    if(!empty($whens)) {
+      $cases = '';
+      foreach($whens as $key => $when) {
+	$cases .= $key.' = CASE '.$when.' END,';
+      }
+
+      //Remove comma from the end of the string.
+      $cases = substr($cases, 0, -1);
+
+      //Update the addon options.
+      $query->clear();
+      $query->update('#__odyssey_addon_option')
+	    ->set($cases)
+	    ->where('id IN('.implode(',', $optionIds).')');
+      $db->setQuery($query);
+      $db->execute();
+    }
+
+    return;
+  }
+}
+
+
