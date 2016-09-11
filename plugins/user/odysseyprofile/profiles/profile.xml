@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="odysseyprofile" addfieldpath="/administrator/components/com_odyssey/models/fields">
+	  <fieldset name="odysseyprofile" label="PLG_USER_ODYSSEY_PROFILE_SLIDER_LABEL" >
+
+	    <field name="firstname"
+		    type="text"
+		    id="firstname"
+		    description="PLG_USER_ODYSSEY_PROFILE_FIELD_FIRSTNAME_DESC"
+		    filter="string"
+		    label="PLG_USER_ODYSSEY_PROFILE_FIELD_FIRSTNAME_LABEL"
+		    size="30" />
+
+	    <field name="customer_title" type="list"
+		    label="PLG_USER_ODYSSEY_PROFILE_FIELD_TITLE_LABEL"
+		    description="PLG_USER_ODYSSEY_PROFILE_FIELD_TITLE_DESC"
+		    class="chzn-color-state" default="">
+		    <option value="">PLG_USER_ODYSSEY_PROFILE_OPTION_SELECT</option>
+		    <option value="mr">PLG_USER_ODYSSEY_PROFILE_OPTION_MR</option>
+		    <option value="mrs">PLG_USER_ODYSSEY_PROFILE_OPTION_MRS</option>
+		    <option value="miss">PLG_USER_ODYSSEY_PROFILE_OPTION_MISS</option>
+	    </field>
+
+	    <field name="street"
+		    type="text"
+		    id="street"
+		    description="PLG_USER_ODYSSEY_PROFILE_FIELD_STREET_DESC"
+		    filter="string"
+		    label="PLG_USER_ODYSSEY_PROFILE_FIELD_STREET_LABEL"
+		    size="30" />
+
+	    <field name="city"
+		    type="text"
+		    id="city"
+		    description="PLG_USER_ODYSSEY_PROFILE_FIELD_CITY_DESC"
+		    filter="string"
+		    label="PLG_USER_ODYSSEY_PROFILE_FIELD_CITY_LABEL"
+		    size="30" />
+
+	    <field name="country_code"
+		    type="countrylist"
+		    id="country_code"
+		    description="PLG_USER_ODYSSEY_PROFILE_FIELD_COUNTRY_DESC"
+		    filter="string"
+		    label="PLG_USER_ODYSSEY_PROFILE_FIELD_COUNTRY_LABEL" />
+
+	    <field name="region_code"
+		    type="list"
+		    id="region_code" 
+		    description="PLG_USER_ODYSSEY_PROFILE_FIELD_REGION_DESC"
+		    filter="string"
+		    label="PLG_USER_ODYSSEY_PROFILE_FIELD_REGION_LABEL" />
+
+	    <field name="postcode"
+		    type="text"
+		    id="postcode"
+		    description="PLG_USER_ODYSSEY_PROFILE_FIELD_POSTCODE_DESC"
+		    filter="string"
+		    label="PLG_USER_ODYSSEY_PROFILE_FIELD_POSTCODE_LABEL"
+		    size="30" />
+
+	    <field name="phone"
+		    type="tel"
+		    id="phone"
+		    description="PLG_USER_ODYSSEY_PROFILE_FIELD_PHONE_DESC"
+		    filter="string"
+		    label="PLG_USER_ODYSSEY_PROFILE_FIELD_PHONE_LABEL"
+		    size="30" />
+
+	  </fieldset>
+	</fields>
+</form>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="odysseypayment" method="upgrade">
+    <name>Paypal Plugin</name>
+    <author>Lucas Sanner</author>
+    <creationDate>August 2016</creationDate>
+    <copyright> Copyright (C) 2016 - 2016 Lucas Sanner. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later http://www.gnu.org/licenses/gpl.html</license>
+    <authorEmail>lucas.sanner@gmail.com</authorEmail>
+    <version>1.1</version>
+    <description>PLG_ODYSSEYPAYMENT_PAYPAL_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="paypal">paypal.php</filename>
+		<filename>index.html</filename>
+		<folder>language</folder>
+	</files>
+
+	<config>
+	  <fields name="params">
+
+	    <fieldset name="basic">
+
+		<field name="server" type="text" label="PLG_ODYSSEY_PAYMENT_PAYPAL_SERVER_LABEL"
+		  description="PLG_ODYSSEY_PAYMENT_PAYPAL_SERVER_DESC" size="40" />
+
+		<field name="api" type="text" label="PLG_ODYSSEY_PAYMENT_PAYPAL_API_LABEL"
+		  description="PLG_ODYSSEY_PAYMENT_PAYPAL_API_DESC" size="40" />
+
+		<field name="api_version" type="text" label="PLG_ODYSSEY_PAYMENT_PAYPAL_API_VERSION_LABEL"
+		  description="PLG_ODYSSEY_PAYMENT_PAYPAL_API_VERSION_DESC" />
+
+		<field name="user" type="text" label="PLG_ODYSSEY_PAYMENT_PAYPAL_USER_LABEL"
+		  description="PLG_ODYSSEY_PAYMENT_PAYPAL_USER_DESC" size="40" />
+
+		<field name="password" type="text" label="PLG_ODYSSEY_PAYMENT_PAYPAL_PASSWORD_LABEL"
+		  description="PLG_ODYSSEY_PAYMENT_PAYPAL_PASSWORD_DESC" />
+
+		<field name="signature" type="text" label="PLG_ODYSSEY_PAYMENT_PAYPAL_SIGNATURE_LABEL"
+		  description="PLG_ODYSSEY_PAYMENT_PAYPAL_SIGNATURE_DESC" size="40" />
+
+	    </fieldset>
+
+	  </fields>
+	</config>
+</extension>
