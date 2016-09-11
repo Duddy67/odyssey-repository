@@ -1,0 +1,82 @@
+/**
+ * @package Odyssey
+ * @copyright Copyright (c) 2016 Lucas Sanner
+ * @license GNU General Public License version 3, or later
+ */
+
+.datepicker {
+  /*border: 1px solid blue !important;*/
+}
+
+.normal-price {
+  text-decoration: line-through;
+}
+
+.addon-step {
+  padding: 5px;
+  border: 1px solid blue;
+}
+
+.addon-group {
+  padding: 5px;
+  border: 1px solid green;
+}
+
+.addon,
+.addon-option {
+  padding: 5px;
+  border: 1px solid red;
+}
+
+.addon-title {
+  font-size: 13px;
+}
+
+.addon-option-title {
+  font-size: 12px;
+}
+
+.addon-options {
+  margin-left: 40px;
+  padding: 5px;
+  border: 1px solid grey;
+}
+
+.multi, 
+.single,
+.option-single,
+.option-multi {
+  display: block;
+}
+
+.booking-breadcrumb {
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.booking-breadcrumb div {
+  float: left;
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+.current-position {
+  font-weight: bold;
+  color: green;
+}
+
+.booking-summary {
+  border: 1px solid #d8d8d8;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.booking-summary h2 {
+  font-size: 18px;
+}
+
+.booking-summary h3 {
+  font-size: 14px;
+}
+
