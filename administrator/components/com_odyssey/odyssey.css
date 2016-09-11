@@ -1,0 +1,606 @@
+
+.odyssey-sequence-container {
+  overflow: hidden; /* Block formatting context. */
+}
+
+.departure-item, 
+.city-item,
+.target-item,
+.condition-item,
+.recipient-item,
+.transitcity-item,
+.addon-item,
+.option-item,
+.sequence-item {
+  float: left;
+  margin-bottom: 10px !important;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #c0c0c0;
+}
+
+.recipient-item,
+.condition-item,
+.target-item {
+  width: 100%;
+}
+
+.wrap-dpt-row {
+}
+
+.wrap-dpt-row .chzn-container {
+  float: left;
+}
+
+.wrap-dpt-data {
+  float: left;
+  margin-right: 20px;
+}
+
+.dpt-date-time {
+  float: left !important;
+}
+
+.dpt-btn {
+  float: left !important;
+}
+
+.transitcity-item .chzn-container {
+  float: left !important;
+}
+
+.option-item,
+.addon-item {
+  padding-bottom: 10px;
+}
+
+.sequence-item,
+.target-item,
+.option-item,
+.addon-item {
+  overflow: hidden; /* Block formatting context. */
+}
+
+.transitcity-item {
+  float: left;
+}
+
+.transitcity-item .wrap-departures {
+  margin-left: 0 !important;
+}
+
+.ev-year-container .chzn-container .chzn-drop {
+  overflow: auto !important;
+}
+
+.departure-item .btn-wrapper, 
+.option-item .btn-wrapper, 
+.city-item .btn-wrapper,
+.transitcity-item .btn-wrapper {
+  float: right;
+  margin-left: 20px;
+  /*border: 1px solid #c0c0c0;*/
+}
+
+.sequence-item .item-ordering, 
+.option-item .item-ordering, 
+.addon-item .item-ordering {
+  float: left;
+  margin-right: 5px;
+}
+
+.sequence-item .ordering-label, 
+.addon-item .ordering-label {
+  float: left;
+  margin-left: 30px;
+  margin-right: 10px;
+}
+
+.sequence-item .btn-wrapper, 
+.target-item .btn-wrapper, 
+.condition-item .btn-wrapper, 
+.recipient-item .btn-wrapper, 
+/*.option-item .btn-wrapper,*/
+.addon-item .btn-wrapper {
+  float: left;
+  margin-left: 20px;
+  /*border: 1px solid #c0c0c0;*/
+}
+
+.addon-status {
+  float: left;
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
+.item-name {
+  float: left;
+  border: 1px solid #ccc;
+  width: 40%;
+  margin-right: 20px;
+}
+
+.target-item .item-name {
+  margin-bottom: 20px !important;
+}
+
+.psgr-nbs-label,
+.travel-ids-label,
+.step-ids-label,
+.operator-select-label,
+.item-amount-label,
+.item-quantity-label,
+.departures-label,
+.departure-number,
+.item-name-label {
+  margin: 5px 5px 0 5px;
+  font-weight: bold;
+  color: #404040;
+}
+
+.departures-label,
+.departure-number,
+.item-name-label {
+  display: block;
+  float: left;
+}
+
+.psgr-nbs,
+.step-ids,
+.travel-ids {
+  width: 150px;
+}
+
+.departures-label {
+  margin-right: 25px;
+}
+
+.departure-checkbox {
+  float: left;
+  margin-right: 10px !important;
+  margin-top: 8px !important;
+}
+
+.wrap-departures {
+  float:left;
+  clear:both;
+  margin-top: 10px !important;
+  margin-left: 20px !important;
+  margin-bottom: 5px !important;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #d8d8d8;
+}
+
+.hours-minutes {
+  width: 50px;
+  /*float: left;*/
+}
+
+.odyssey-departure-container .chzn-container {
+  /*margin-bottom: 10px !important;*/
+  /*display: block;*/
+  margin-left: 20px !important;
+}
+
+.ev-year-container {
+  /*border: 1px solid #c0c0c0;*/
+  /*float:left;*/
+}
+
+.ev-year-container .chzn-container, 
+.ev-year-container input {
+  /*float: left !important;*/
+  margin-right: 15px;
+  margin-left: 0 !important;
+}
+
+.ev-year-container .chzn-results {
+  overflow-x: initial !important;
+  overflow-y: initial !important;
+}
+
+div[id^="ev_year_month_"] {
+  width: 110px !important;
+}
+
+div[id^="ev_year_date_"] {
+  width: 70px !important;
+}
+
+input[id^="ev-year-time-"] {
+  width: 40px !important;
+}
+
+.wrap-dpt-data .allotment,
+.wrap-dpt-data .max-passengers {
+  float: left;
+  width: 50px;
+}
+
+.departure-item .city-label,
+.departure-item .allotment-label,
+.departure-item .subtract-label,
+.departure-item .max-passengers-label,
+.departure-item .step-alias-label {
+  display: block;
+  font-size: 13px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  clear:both;
+}
+
+.departure-item .yes-label,
+.departure-item .no-label {
+  float: left;
+  font-size: 13px;
+}
+
+#time-gaps {
+  width: 100%;
+}
+
+#time-gaps th {
+}
+
+#time-gaps th.datetime {
+  width: 20%;
+  /*background-color: #6e6e6e;*/
+}
+
+#time-gaps th.city {
+  width: 20%;
+}
+
+#time-gaps th.time-gap {
+  width: 28%;
+}
+
+#time-gaps th.step-alias {
+  width: 20%;
+}
+
+#time-gaps th.grouped {
+  width: 2%;
+}
+
+#time-gaps th.select {
+  width: 2%;
+}
+
+#time-gaps label {
+  color: #6e6e6e;
+  float: left;
+  margin-right: 5px;
+}
+
+#time-gaps .days {
+  display: inline;
+  width: 15%;
+  float: left;
+  margin-right: 10px;
+}
+
+#time-gaps .hours-minutes {
+  display: inline;
+  width: 25%;
+}
+
+#time-gaps .step-alias {
+  width: 90%;
+}
+
+.city-item .city-label {
+  margin-right: 10px;
+}
+
+.transitcity-item .hours-minutes-label,
+.city-item .ordering-label {
+  margin-left: 30px;
+  margin-right: 10px;
+}
+
+.city-ordering,
+.addon-ordering,
+.sequence-ordering {
+  width: 30px;
+}
+
+.hours-minutes-label {
+float: left;
+}
+
+.item-ordering {
+  font-weight: bold;
+  text-align: center;
+  color: #404040;
+  width: 3%;
+  margin-left: 5px;
+  margin-right: 30px;
+  border: 1px solid #c0c0c0;
+}
+
+table span.days, 
+table span.hours-minutes {
+  color: green;
+  font-weight: bold;
+}
+
+table .sequence-a {
+  background-color: #819ff7 !important;
+  border-bottom: 1px solid #819ff7 !important;
+}
+
+table .sequence-b {
+  background-color: #cee3f6 !important;
+  border-bottom: 1px solid #cee3f6 !important;
+}
+
+.step-sequence-fields {
+  /*float: left;*/
+  margin-right: 40px;
+}
+
+.time-gap {
+  background-color: #f5da81 !important;
+  background-color: #f5f6ce !important;
+  background-color: #f3e2a9 !important;
+  border-bottom: 1px solid #c0c0c0 !important;
+}
+
+.parent-group-label {
+  border: 1px solid #fff !important;
+  background-color: #fff !important;
+  -web-kit-box-shadow: none !important;
+  box-shadow: none !important;
+  width: 90px;
+  font-weight: bold;
+  font-size: 11px !important;
+}
+
+.order-transparent, 
+.up-ordering, 
+.down-ordering {
+display: block;
+float: left;
+}
+
+table .price-psgr {
+  width: 60px;
+}
+
+.wrap-price-psgr {
+  float: left;
+  margin-right: 18px;
+}
+
+label[class^="price-psgr-label"] {
+  float: left;
+  margin-top: 5px;
+  margin-right: 5px;
+  font-weight: bold;
+  color: #6e6e6e;
+}
+
+.price-rows th.datetime {
+  width: 12%;
+}
+
+.price-rows th.city {
+  width: 15%;
+}
+
+.price-rows th.max-passengers {
+  width: 8%;
+}
+
+.price-rows th.prices {
+}
+
+.price-rows th.expand-collapse {
+  width: 1%;
+}
+
+.price-rows td.addon-option {
+  padding-left: 30px;
+  font-weight: bold;
+  color: #6e6e6e;
+}
+
+.price-rows td.option-name {
+  padding-left: 30px;
+  font-style: italic;
+}
+
+.step-price-rows,
+.transitcity-price-rows,
+.addon-price-rows {
+  border: 1px solid #d8d8d8;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  padding: 3px;
+}
+
+.transitcity-price-rows,
+.addon-price-rows {
+  margin-bottom: 10px;
+}
+
+.step-title {
+  font-size: 18px;
+}
+
+.step-title .item-label {
+  font-weight: 300;
+  color: #5fb404;
+}
+
+.transitcity-title,
+.addon-title {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.addon-title .item-label, 
+.transitcity-title .item-label {
+  font-weight: 300;
+  color: #6e6e6e;
+}
+
+.wrap-condition,
+.wrap-ids {
+  float: left;
+  width: 100%;
+}
+
+.wrap-condition {
+  margin-top: 20px;
+}
+
+.thumbnail { /* Bootstrap class overrided */
+  float: left;
+  padding: 20px 8px 10px 0 !important;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  width: 100px;
+  overflow: auto;
+  text-align: center;
+}
+
+.odyssey-icon-title {
+ display: block;
+}
+
+/* ICOMOON */
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../../../media/com_odyssey/fonts/icomoon.eot?xdjtiq');
+  src:  url('../../../media/com_odyssey/fonts/icomoon.eot?xdjtiq#iefix') format('embedded-opentype'),
+    url('../../../media/com_odyssey/fonts/icomoon.ttf?xdjtiq') format('truetype'),
+    url('../../../media/com_odyssey/fonts/icomoon.woff?xdjtiq') format('woff'),
+    url('../../../media/com_odyssey/fonts/icomoon.svg?xdjtiq#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-home:before {
+  content: "\e900";
+}
+.icon-office:before {
+  content: "\e920";
+}
+.icon-pencil:before {
+  content: "\e901";
+}
+.icon-file-text2:before {
+  content: "\e91c";
+}
+.icon-paste:before {
+  content: "\e902";
+}
+.icon-price-tag:before {
+  content: "\e903";
+}
+.icon-price-tags:before {
+  content: "\e904";
+}
+.icon-barcode:before {
+  content: "\e905";
+}
+.icon-cart:before {
+  content: "\e906";
+}
+.icon-coin-dollar:before {
+  content: "\e907";
+}
+.icon-coin-euro:before {
+  content: "\e908";
+}
+.icon-coin-pound:before {
+  content: "\e909";
+}
+.icon-credit-card:before {
+  content: "\e90a";
+}
+.icon-calculator:before {
+  content: "\e90b";
+}
+.icon-phone:before {
+  content: "\e918";
+}
+.icon-pushpin:before {
+  content: "\e90c";
+}
+.icon-location:before {
+  content: "\e90d";
+}
+.icon-clock:before {
+  content: "\e90e";
+}
+.icon-user:before {
+  content: "\e90f";
+}
+.icon-users:before {
+  content: "\e910";
+}
+.icon-enlarge:before {
+  content: "\e919";
+}
+.icon-pie-chart:before {
+  content: "\e911";
+}
+.icon-stats-dots:before {
+  content: "\e921";
+}
+.icon-gift:before {
+  content: "\e91b";
+}
+.icon-airplane:before {
+  content: "\e91d";
+}
+.icon-truck:before {
+  content: "\e912";
+}
+.icon-road:before {
+  content: "\e91e";
+}
+.icon-earth:before {
+  content: "\e913";
+}
+.icon-link:before {
+  content: "\e91f";
+}
+.icon-flag:before {
+  content: "\e914";
+}
+.icon-star-empty:before {
+  content: "\e915";
+}
+.icon-star-half:before {
+  content: "\e916";
+}
+.icon-star-full:before {
+  content: "\e917";
+}
+.icon-move-up:before {
+  content: "\e91a";
+}
+.icon-plus:before {
+  content: "\e91a";
+}
+

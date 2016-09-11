@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.0" method="upgrade">
+ 
+    <name>com_odyssey</name>
+    <!-- The following elements are optional and free of formatting contraints -->
+    <creationDate>January 2016</creationDate>
+    <author>Lucas Sanner</author>
+    <authorEmail>l.sanner@radisnoir.com</authorEmail>
+    <authorUrl>http://www.radisnoir.com</authorUrl>
+    <license>GPL 3.0</license> 
+    <!--  The version string is recorded in the components table -->
+    <version>1.0</version>
+    <!-- The description is optional and defaults to the name -->
+    <description>COM_ODYSSEY_INSTALLATION_DESC</description>
+
+    <!-- Runs on install/uninstall/update; New in 1.6 -->
+    <scriptfile>script.php</scriptfile>
+
+    <install> <!-- Runs on install -->
+	    <sql>
+		    <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+	    </sql>
+    </install>
+    <uninstall> <!-- Runs on uninstall -->
+	    <sql>
+		    <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+	    </sql>
+    </uninstall>
+    <update> <!-- Runs on update; New in 1.6 -->
+	    <schemas>
+		    <schemapath type="mysql">sql/updates/mysql</schemapath>
+	    </schemas>
+    </update>
+
+    <files folder="site">
+	    <!-- Site Main File Copy Section -->
+	    <filename>controller.php</filename>
+	    <filename>odyssey.php</filename>
+	    <filename>index.html</filename>
+	    <filename>router.php</filename>
+	    <!-- Folders  Section -->
+	    <folder>controllers</folder>
+	    <folder>css</folder>
+	    <folder>helpers</folder>
+	    <folder>js</folder>
+	    <folder>language</folder>
+	    <folder>layouts</folder>
+	    <folder>models</folder>
+	    <folder>views</folder>
+    </files>
+
+     <media destination="com_odyssey" folder="media">
+	    <!-- Media Main File Copy Section -->
+	    <filename>index.html</filename>
+	    <!-- Folders  Section -->
+	    <folder>files</folder>
+	    <folder>images</folder>
+      </media>
+
+    <administration>
+	    <!-- Administration Menu Section -->
+	    <menu>COM_ODYSSEY_MENU</menu>
+	    <!-- Note the folder attribute: This attribute describes the folder
+		    to copy FROM in the package to install therefore files copied
+		    in this section are copied from /admin/ in the package -->
+	    <files folder="admin">
+		    <!-- Admin Main File Copy Section -->
+		    <filename>access.xml</filename>
+		    <filename>config.xml</filename>
+		    <filename>controller.php</filename>
+		    <filename>odyssey.css</filename>
+		    <filename>odyssey.php</filename>
+		    <filename>index.html</filename>
+		    <!-- Folders  Section -->
+		    <folder>controllers</folder>
+		    <folder>helpers</folder>
+		    <folder>js</folder>
+		    <folder>language</folder>
+		    <folder>layouts</folder>
+		    <folder>models</folder>
+		    <folder>sql</folder>
+		    <folder>tables</folder>
+		    <folder>views</folder>
+	    </files>
+    </administration>
+ 
+</extension>

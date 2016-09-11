@@ -1,0 +1,741 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+
+    <fieldset name="odyssey"
+	      label="COM_ODYSSEY_FIELDSET_CONFIG_ODYSSEY_LABEL"
+	      description="COM_ODYSSEY_FIELDSET_CONFIG_ODYSSEY_DESC"
+	      addfieldpath="/administrator/components/com_odyssey/models/fields">
+
+	<field name="currency_code" type="currencylist"
+		label="COM_ODYSSEY_FIELD_CURRENCY_LABEL"
+		description="COM_ODYSSEY_FIELD_MAIN_CURRENCY_DESC"
+		class="inputbox" required="true" >
+	</field>
+
+	<field name="currency_display" type="list"
+		label="COM_ODYSSEY_FIELD_CURRENCY_DISPLAY_LABEL"
+		description="COM_ODYSSEY_FIELD_CURRENCY_DISPLAY_DESC"
+		size="1" default="symbol" >
+		<option value="symbol">COM_ODYSSEY_OPTION_CURRENCY_SYMBOL</option>
+		<option value="alpha">COM_ODYSSEY_OPTION_CURRENCY_CODE</option>
+	</field>
+
+	<field name="rounding_rule" type="list"
+		label="COM_ODYSSEY_FIELD_ROUNDING_RULE_LABEL"
+		description="COM_ODYSSEY_FIELD_ROUNDING_RULE_DESC"
+		size="1" default="down" >
+		<option value="down">COM_ODYSSEY_OPTION_ROUNDING_DOWN</option>
+		<option value="up">COM_ODYSSEY_OPTION_ROUNDING_UP</option>
+	</field>
+
+	<field name="digits_precision" type="list"
+		label="COM_ODYSSEY_FIELD_DIGITS_PRECISION_LABEL"
+		description="COM_ODYSSEY_FIELD_DIGITS_PRECISION_DESC"
+		size="1" default="2" >
+		<option value="0">0</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+	</field>
+
+	<field name="spacer1" type="spacer" hr="true" />
+
+	<field name="option_time_limit"
+	       type="text"
+	       default="3"
+	       label="COM_ODYSSEY_FIELD_OPTION_TIME_LIMIT_LABEL"
+	       description="COM_ODYSSEY_FIELD_OPTION_TIME_LIMIT_DESC">
+	</field>
+
+	<field name="option_validity_period"
+	       type="text"
+	       default="1"
+	       label="COM_ODYSSEY_FIELD_OPTION_VALIDITY_PERIOD_LABEL"
+	       description="COM_ODYSSEY_FIELD_OPTION_VALIDITY_PERIOD_DESC">
+	</field>
+
+	<field name="option_reminder"
+	       type="text"
+	       default="1"
+	       label="COM_ODYSSEY_FIELD_OPTION_REMINDER_LABEL"
+	       description="COM_ODYSSEY_FIELD_OPTION_REMINDER_DESC">
+	</field>
+
+	<field name="deposit_time_limit"
+	       type="text"
+	       default="2"
+	       label="COM_ODYSSEY_FIELD_DEPOSIT_TIME_LIMIT_LABEL"
+	       description="COM_ODYSSEY_FIELD_DEPOSIT_TIME_LIMIT_DESC">
+	</field>
+
+	<field name="deposit_reminder"
+	       type="text"
+	       default="1"
+	       label="COM_ODYSSEY_FIELD_DEPOSIT_REMINDER_LABEL"
+	       description="COM_ODYSSEY_FIELD_DEPOSIT_REMINDER_DESC">
+	</field>
+
+	<field name="finalize_time_limit"
+	       type="text"
+	       default="2"
+	       label="COM_ODYSSEY_FIELD_FINALIZE_TIME_LIMIT_LABEL"
+	       description="COM_ODYSSEY_FIELD_FINALIZE_TIME_LIMIT_DESC">
+	</field>
+
+	<field name="deposit_rate"
+	       type="text"
+	       default="30"
+	       label="COM_ODYSSEY_FIELD_DEPOSIT_RATE_LABEL"
+	       description="COM_ODYSSEY_FIELD_DEPOSIT_RATE_DESC">
+	</field>
+
+	<field name="spacer2" type="spacer" hr="true" />
+
+	<field name="run_at_command"
+	       type="radio" default="1"
+	       class="btn-group btn-group-yesno"
+	       label="COM_ODYSSEY_RUN_AT_COMMAND_LABEL"
+	       description="COM_ODYSSEY_RUN_AT_COMMAND_DESC">
+	       <option value="1">JYES</option>
+	       <option value="0">JNO</option>
+	</field>
+    </fieldset>
+
+    <fieldset name="travels"
+	      label="COM_ODYSSEY_FIELDSET_CONFIG_TRAVELS_LABEL"
+	      description="COM_ODYSSEY_FIELDSET_CONFIG_TRAVELS_DES">
+
+	<field name="show_name"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="COM_ODYSSEY_SHOW_NAME_LABEL"
+	       description="COM_ODYSSEY_SHOW_NAME_DESC">
+	       <option value="1">JSHOW</option>
+	       <option value="0">JHIDE</option>
+	</field>
+
+	<field name="link_name"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="COM_ODYSSEY_LINKED_NAME_LABEL"
+	       description="COM_ODYSSEY_LINKED_NAME_DESC">
+	       <option value="1">JYES</option>
+	       <option value="0">JNO</option>
+	</field>
+
+	<field name="show_tags"
+	       type="list"
+	       default="both"
+	       label="COM_ODYSSEY_FIELD_SHOW_TAGS_LABEL"
+	       description="COM_ODYSSEY_FIELD_SHOW_TAGS_DESC">
+	       <option value="none">JNONE</option>
+	       <option value="standard">COM_ODYSSEY_OPTION_STANDARD_MODE</option>
+	       <option value="odyssey">COM_ODYSSEY_OPTION_ODYSSEY_MODE</option>
+	       <option value="both">COM_ODYSSEY_OPTION_BOTH</option>
+	</field>
+
+	<field name="show_intro"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_SHOW_INTRO_LABEL"
+	       description="COM_ODYSSEY_SHOW_INTRO_DESC">
+	       <option value="1">JSHOW</option>
+	       <option value="0">JHIDE</option>
+	</field>
+
+	<field name="show_category"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_SHOW_CATEGORY_LABEL"
+	       description="COM_ODYSSEY_SHOW_CATEGORY_DESC">
+	       <option value="1">JSHOW</option>
+	       <option value="0">JHIDE</option>
+	</field>
+
+	<field name="link_category"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_LINK_CATEGORY_LABEL"
+	       description="COM_ODYSSEY_LINK_CATEGORY_DESC">
+	       <option value="1">JYES</option>
+	       <option value="0">JNO</option>
+	</field>
+
+	<field name="show_parent_category"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_SHOW_PARENT_CATEGORY_LABEL"
+	       description="COM_ODYSSEY_SHOW_PARENT_CATEGORY_DESC">
+	       <option value="1">JSHOW</option>
+	       <option value="0">JHIDE</option>
+	</field>
+
+	<field name="link_parent_category"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_LINK_PARENT_CATEGORY_LABEL"
+	       description="COM_ODYSSEY_LINK_PARENT_CATEGORY_DESC">
+	       <option value="1">JYES</option>
+	       <option value="0">JNO</option>
+	</field>
+
+	<field name="show_author"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_SHOW_AUTHOR_LABEL"
+	       description="COM_ODYSSEY_SHOW_AUTHOR_DESC">
+	       <option value="1">JSHOW</option>
+	       <option value="0">JHIDE</option>
+	</field>
+
+	<field name="show_create_date"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_SHOW_CREATE_DATE_LABEL"
+	       description="COM_ODYSSEY_SHOW_CREATE_DATE_DESC">
+	       <option value="1">JSHOW</option>
+	       <option value="0">JHIDE</option>
+	</field>
+
+	<field name="show_modify_date"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_SHOW_MODIFY_DATE_LABEL"
+	       description="COM_ODYSSEY_SHOW_MODIFY_DATE_DESC">
+	       <option value="1">JSHOW</option>
+	       <option value="0">JHIDE</option>
+	</field>
+
+	<field name="show_publish_date"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_SHOW_PUBLISH_DATE_LABEL"
+	       description="COM_ODYSSEY_SHOW_PUBLISH_DATE_DESC">
+	       <option value="1">JSHOW</option>
+	       <option value="0">JHIDE</option>
+	</field>
+
+	<field name="show_item_navigation"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_SHOW_NAVIGATION_LABEL"
+	       description="COM_ODYSSEY_SHOW_NAVIGATION_DESC">
+	       <option value="1">JSHOW</option>
+	       <option value="0">JHIDE</option>
+	</field>
+
+	<field name="show_hits"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_SHOW_HITS_LABEL"
+	       description="COM_ODYSSEY_SHOW_HITS_DESC">
+	       <option value="1">JSHOW</option>
+	       <option value="0">JHIDE</option>
+	</field>
+
+	<field name="show_readmore"
+	       type="radio"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_SHOW_READMORE_LABEL"
+	       description="COM_ODYSSEY_SHOW_READMORE_DESC"
+	       default="1">
+	       <option value="1">JSHOW</option>
+	       <option value="0">JHIDE</option>
+	</field>
+
+	<field name="show_noauth"
+	       type="radio"
+	       default="1"
+	       class="btn-group btn-group-yesno"
+	       label="JGLOBAL_SHOW_UNAUTH_LINKS_LABEL"
+	       description="JGLOBAL_SHOW_UNAUTH_LINKS_DESC">
+	       <option value="1">JYES</option>
+	       <option value="0">JNO</option>
+	</field>
+    </fieldset>
+
+    <fieldset name="category" label="JCATEGORY"
+	      description="COM_ODYSSEY_CONFIG_CATEGORY_SETTINGS_DESC">
+
+	    <field name="category_layout" type="componentlayout"
+		   label="JGLOBAL_FIELD_LAYOUT_LABEL"
+		   description="JGLOBAL_FIELD_LAYOUT_DESC"
+		   menuitems="true"
+		   extension="com_odyssey"
+		   view="category" />
+
+		<field name="show_category_title" type="radio"
+		       class="btn-group btn-group-yesno"
+		       label="JGLOBAL_SHOW_CATEGORY_TITLE"
+		       description="JGLOBAL_SHOW_CATEGORY_TITLE_DESC"
+		       default="1">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_description"
+		       type="radio"
+		       class="btn-group btn-group-yesno"
+		       default="1"
+		       label="JGLOBAL_SHOW_CATEGORY_DESCRIPTION_LABEL"
+		       description="JGLOBAL_SHOW_CATEGORY_DESCRIPTION_DESC">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_description_image"
+		       type="radio"
+		       class="btn-group btn-group-yesno"
+		       default="1"
+		       label="JGLOBAL_SHOW_CATEGORY_IMAGE_LABEL"
+		       description="JGLOBAL_SHOW_CATEGORY_IMAGE_DESC">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+
+		<field name="maxLevel" type="list"
+		       description="JGLOBAL_MAXIMUM_CATEGORY_LEVELS_DESC"
+		       label="JGLOBAL_MAXIMUM_CATEGORY_LEVELS_LABEL"
+		       default="-1">
+		       <option value="0">JNONE</option>
+		       <option value="-1">JALL</option>
+		       <option value="1">J1</option>
+		       <option value="2">J2</option>
+		       <option value="3">J3</option>
+		       <option value="4">J4</option>
+		       <option value="5">J5</option>
+		</field>
+
+		<field name="show_category_heading_title_text"
+			type="radio"
+			class="btn-group btn-group-yesno"
+ 			label="JGLOBAL_SHOW_CATEGORY_HEADING_TITLE_TEXT_LABEL"
+			description="JGLOBAL_SHOW_CATEGORY_HEADING_TITLE_TEXT_DESC"
+			default="1">
+			<option value="1">JSHOW</option>
+			<option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_empty_categories" type="radio"
+		       class="btn-group btn-group-yesno"
+		       label="JGLOBAL_SHOW_EMPTY_CATEGORIES_LABEL"
+		       description="COM_ODYSSEY_SHOW_EMPTY_CATEGORIES_DESC"
+		       default="0">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_no_travels"
+			type="radio"
+			class="btn-group btn-group-yesno"
+			label="COM_ODYSSEY_NO_TRAVELS_LABEL"
+			description="COM_ODYSSEY_NO_TRAVELS_DESC"
+			default="1" >
+			<option value="1">JSHOW</option>
+			<option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_subcat_desc" type="radio"
+		       class="btn-group btn-group-yesno"
+		       default="1"
+		       description="JGLOBAL_SHOW_SUBCATEGORIES_DESCRIPTION_DESC"
+		       label="JGLOBAL_SHOW_SUBCATEGORIES_DESCRIPTION_LABEL">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_cat_num_travels" type="radio"
+		       class="btn-group btn-group-yesno"
+		       default="1"
+		       description="COM_ODYSSEY_FIELD_CONFIG_CAT_SHOWNUMBERS_DESC"
+		       label="COM_ODYSSEY_FIELD_CONFIG_CAT_SHOWNUMBERS_LABEL">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_cat_tags" type="radio"
+		       label="COM_ODYSSEY_FIELD_SHOW_CAT_TAGS_LABEL"
+		       description="COM_ODYSSEY_FIELD_SHOW_CAT_TAGS_DESC"
+		       class="btn-group btn-group-yesno"
+		       default="1">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+    </fieldset>
+
+    <fieldset name="categories"
+	      label="JCATEGORIES"
+	      description="COM_ODYSSEY_CONFIG_CATEGORIES_SETTINGS_DESC">
+
+	    <field name="show_base_description" type="radio"
+		    class="btn-group btn-group-yesno"
+		    default="1"
+		    label="JGLOBAL_FIELD_SHOW_BASE_DESCRIPTION_LABEL"
+		    description="JGLOBAL_FIELD_SHOW_BASE_DESCRIPTION_DESC">
+		    <option value="1">JSHOW</option>
+		    <option value="0">JHIDE</option>
+	    </field>
+
+	    <field name="maxLevelcat" type="list"
+		   default="-1"
+		   description="JGLOBAL_MAXIMUM_CATEGORY_LEVELS_DESC"
+		   label="JGLOBAL_MAXIMUM_CATEGORY_LEVELS_LABEL">
+		    <option value="-1">JALL</option>
+		    <option value="1">J1</option>
+		    <option value="2">J2</option>
+		    <option value="3">J3</option>
+		    <option value="4">J4</option>
+		    <option value="5">J5</option>
+	    </field>
+
+	    <field name="show_empty_categories_cat" type="radio"
+		    class="btn-group btn-group-yesno"
+		    default="0"
+		    label="JGLOBAL_SHOW_EMPTY_CATEGORIES_LABEL"
+		    description="COM_ODYSSEY_SHOW_EMPTY_CATEGORIES_DESC">
+		      <option value="1">JSHOW</option>
+		      <option value="0">JHIDE</option>
+	    </field>
+
+	    <field name="show_subcat_desc_cat" type="radio"
+		    class="btn-group btn-group-yesno"
+		    default="1"
+		    description="JGLOBAL_SHOW_SUBCATEGORIES_DESCRIPTION_DESC"
+		    label="JGLOBAL_SHOW_SUBCATEGORIES_DESCRIPTION_LABEL">
+		    <option value="1">JSHOW</option>
+		    <option value="0">JHIDE</option>
+	    </field>
+
+	    <field name="show_cat_num_travels_cat" type="radio"
+		    class="btn-group btn-group-yesno"
+		    default="1"
+		    description="COM_ODYSSEY_FIELD_CONFIG_CAT_SHOWNUMBERS_DESC"
+		    label="COM_ODYSSEY_FIELD_CONFIG_CAT_SHOWNUMBERS_LABEL">
+		    <option value="1">JSHOW</option>
+		    <option value="0">JHIDE</option>
+	    </field>
+    </fieldset>
+
+    <fieldset name="tag" label="COM_ODYSSEY_CONFIG_TAG_SETTINGS_LABEL"
+	      description="COM_ODYSSEY_CONFIG_TAG_SETTINGS_DESC">
+
+		<field name="tag_layout" type="componentlayout"
+		       label="JGLOBAL_FIELD_LAYOUT_LABEL"
+		       description="JGLOBAL_FIELD_LAYOUT_DESC"
+		       menuitems="true"
+		       extension="com_odyssey"
+		       view="tag" />
+
+		<field name="show_tag_title" type="radio"
+		       class="btn-group btn-group-yesno"
+		       label="COM_ODYSSEY_SHOW_TAG_TITLE_LABEL"
+		       description="COM_ODYSSEY_SHOW_TAG_TITLE_DESC"
+		       default="1">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_tag_description"
+		       type="radio"
+		       class="btn-group btn-group-yesno"
+		       default="1"
+		       label="COM_ODYSSEY_SHOW_TAG_DESCRIPTION_LABEL"
+		       description="COM_ODYSSEY_SHOW_TAG_DESCRIPTION_DESC">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_tag_image"
+		       type="radio"
+		       class="btn-group btn-group-yesno"
+		       default="1"
+		       label="COM_ODYSSEY_SHOW_TAG_IMAGE_LABEL"
+		       description="COM_ODYSSEY_SHOW_TAG_IMAGE_DESC">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+
+		<field name="tag_max_level" type="list"
+		       description="COM_ODYSSEY_MAXIMUM_TAG_LEVELS_DESC"
+		       label="COM_ODYSSEY_MAXIMUM_TAG_LEVELS_LABEL"
+		       default="-1">
+		       <option value="0">JNONE</option>
+		       <option value="-1">JALL</option>
+		       <option value="1">J1</option>
+		       <option value="2">J2</option>
+		       <option value="3">J3</option>
+		       <option value="4">J4</option>
+		       <option value="5">J5</option>
+		</field>
+
+		<field name="show_tag_heading_title_text"
+			type="radio"
+			class="btn-group btn-group-yesno"
+ 			label="COM_ODYSSEY_SHOW_TAG_HEADING_TITLE_TEXT_LABEL"
+			description="COM_ODYSSEY_SHOW_TAG_HEADING_TITLE_TEXT_DESC"
+			default="1">
+			<option value="1">JSHOW</option>
+			<option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_unused_tags" type="radio"
+		       class="btn-group btn-group-yesno"
+		       label="COM_ODYSSEY_SHOW_UNUSED_TAGS_LABEL"
+		       description="COM_ODYSSEY_SHOW_UNUSED_TAGS_DESC"
+		       default="0">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_no_tagged_travels"
+			type="radio"
+			class="btn-group btn-group-yesno"
+			label="COM_ODYSSEY_NO_TAGGED_TRAVELS_LABEL"
+			description="COM_ODYSSEY_NO_TAGGED_TRAVELS_DESC"
+			default="1" >
+			<option value="1">JSHOW</option>
+			<option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_subtag_desc" type="radio"
+		       class="btn-group btn-group-yesno"
+		       default="1"
+		       description="COM_ODYSSEY_SHOW_SUBTAG_DESCRIPTION_DESC"
+		       label="COM_ODYSSEY_SHOW_SUBTAG_DESCRIPTION_LABEL">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+
+		<field name="show_tagged_num_travels" type="radio"
+		       class="btn-group btn-group-yesno"
+		       default="1"
+		       description="COM_ODYSSEY_SHOW_TAGGED_NUM_TRAVELS_DESC"
+		       label="COM_ODYSSEY_SHOW_TAGGED_NUM_TRAVELS_LABEL">
+		       <option value="1">JSHOW</option>
+		       <option value="0">JHIDE</option>
+		</field>
+    </fieldset>
+
+    <fieldset name="blog_default_parameters"
+	      label="COM_ODYSSEY_CONFIG_BLOG_SETTINGS_LABEL"
+	      description="COM_ODYSSEY_CONFIG_BLOG_SETTINGS_DESC" >
+
+		<field name="num_leading_travels"
+		       type="text"
+		       default="1"
+		       label="COM_ODYSSEY_NUM_LEADING_TRAVELS_LABEL"
+		       description="COM_ODYSSEY_NUM_LEADING_TRAVELS_DESC">
+		</field>
+
+		<field name="num_intro_travels"
+			type="text"
+			default="4"
+			label="COM_ODYSSEY_NUM_INTRO_TRAVELS_LABEL"
+			description="COM_ODYSSEY_NUM_INTRO_TRAVELS_DESC">
+		</field>
+
+		<field name="num_columns"
+			type="text"
+			default="2"
+			label="JGLOBAL_NUM_COLUMNS_LABEL"
+			description="COM_ODYSSEY_NUM_COLUMNS_DESC">
+		</field>
+
+		<field name="num_links"
+			type="text"
+			default="4"
+			label="JGLOBAL_NUM_LINKS_LABEL"
+			description="COM_ODYSSEY_NUM_LINKS_DESC">
+		</field>
+
+		<field name="multi_column_order"
+			type="list"
+			default="0"
+			label="JGLOBAL_MULTI_COLUMN_ORDER_LABEL"
+			description="COM_ODYSSEY_MULTI_COLUMN_ORDER_DESC">
+			<option value="0">JGLOBAL_DOWN</option>
+			<option value="1">JGLOBAL_ACROSS</option>
+		</field>
+
+		<field name="show_subcategory_content" type="list"
+			default="0"
+			label="JGLOBAL_SHOW_SUBCATEGORY_CONTENT_LABEL"
+			description="COM_ODYSSEY_SHOW_SUBCATEGORY_CONTENT_DESC">
+			<option value="0">JNONE</option>
+			<option value="-1">JALL</option>
+			<option value="1">J1</option>
+			<option value="2">J2</option>
+			<option value="3">J3</option>
+			<option value="4">J4</option>
+			<option value="5">J5</option>
+		</field>
+
+    </fieldset>
+
+    <fieldset name="list_default_parameters"
+	    label="JGLOBAL_LIST_LAYOUT_OPTIONS"
+	    description="COM_ODYSSEY_CONFIG_LIST_SETTINGS_DESC" >
+
+	    <field name="show_headings"
+		   type="radio"
+		   class="btn-group btn-group-yesno"
+		   default="1"
+		   label="JGLOBAL_SHOW_HEADINGS_LABEL"
+		   description="JGLOBAL_SHOW_HEADINGS_DESC">
+		   <option value="1">JSHOW</option>
+		   <option value="0">JHIDE</option>
+	    </field>
+
+	    <field name="list_show_date"
+		    type="radio"
+		    class="btn-group btn-group-yesno"
+		    label="JGLOBAL_SHOW_DATE_LABEL"
+		    description="COM_ODYSSEY_SHOW_DATE_DESC"
+		    default="1">
+		    <option value="1">JSHOW</option>
+		    <option value="0">JHIDE</option>
+	    </field>
+
+	    <field name="date_format"
+		    type="text" size="15"
+		    label="JGLOBAL_DATE_FORMAT_LABEL"
+		    description="JGLOBAL_DATE_FORMAT_DESC" />
+
+	    <field name="list_show_hits"
+		    type="radio"
+		    class="btn-group btn-group-yesno"
+		    label="JGLOBAL_LIST_HITS_LABEL"
+		    description="COM_ODYSSEY_SHOW_HITS_DESC"
+		    default="1">
+		    <option value="1">JSHOW</option>
+		    <option value="0">JHIDE</option>
+	    </field>
+
+	    <field name="list_show_author"
+		    type="radio"
+		    class="btn-group btn-group-yesno"
+		    label="JGLOBAL_LIST_AUTHOR_LABEL"
+		    description="COM_ODYSSEY_SHOW_AUTHOR_DESC"
+		    default="1">
+		    <option value="1">JSHOW</option>
+		    <option value="0">JHIDE</option>
+	    </field>
+
+    </fieldset>
+
+    <fieldset name="shared" label="COM_ODYSSEY_SHARED_LABEL"
+	      description="COM_ODYSSEY_SHARED_DESC" >
+
+	      <field name="filter_field" 
+		     type="list"
+		     label="JGLOBAL_FILTER_FIELD_LABEL"
+		     description="JGLOBAL_FILTER_FIELD_DESC">
+		     <option value="hide">JHIDE</option>
+		     <option value="name">COM_ODYSSEY_FIELD_NAME_LABEL</option>
+		     <option value="author">JAUTHOR</option>
+	      </field>
+
+	      <field name="filter_ordering"
+		     type="radio" default="1"
+		     class="btn-group btn-group-yesno"
+		     label="COM_ODYSSEY_SHOW_SORTING_FILTER_LABEL"
+		     description="COM_ODYSSEY_SHOW_SORTING_FILTER_DESC">
+		     <option value="1">JSHOW</option>
+		     <option value="0">JHIDE</option>
+	      </field>
+
+	      <field name="show_pagination_limit" 
+		     type="radio" default="1"
+		     class="btn-group btn-group-yesno"
+		     label="JGLOBAL_DISPLAY_SELECT_LABEL"
+		     description="JGLOBAL_DISPLAY_SELECT_DESC">
+		     <option value="1">JSHOW</option>
+		     <option value="0">JHIDE</option>
+	      </field>
+
+		<field name="spacer2" type="spacer" hr="true" />
+
+	    <field name="orderby_pri"
+		    type="list"
+		    default="none"
+		    label="COM_ODYSSEY_CATEGORY_TAG_ORDER_LABEL"
+		  description="COM_ODYSSEY_CATEGORY_TAG_ORDER_DESC">
+		    <option value="none">JGLOBAL_NO_ORDER</option>
+		    <option value="alpha">JGLOBAL_TITLE_ALPHABETICAL</option>
+		    <option value="ralpha">JGLOBAL_TITLE_REVERSE_ALPHABETICAL</option>
+		    <option value="order">COM_ODYSSEY_CATEGORY_TAG_ORDER_OPTION</option>
+	    </field>
+
+	    <field name="orderby_sec" type="list"
+		   default="rdate"
+		   label="COM_ODYSSEY_TRAVEL_ORDER_LABEL" 
+		   description="COM_ODYSSEY_TRAVEL_ORDER_DESC">
+		   <option value="rdate">JGLOBAL_MOST_RECENT_FIRST</option>
+		   <option value="date">JGLOBAL_OLDEST_FIRST</option>
+		   <option value="alpha">COM_ODYSSEY_NAME_ALPHABETICAL</option>
+		   <option value="ralpha">COM_ODYSSEY_NAME_REVERSE_ALPHABETICAL</option>
+		   <option value="author">JGLOBAL_AUTHOR_ALPHABETICAL</option>
+		   <option value="rauthor">JGLOBAL_AUTHOR_REVERSE_ALPHABETICAL</option>
+		   <option value="hits">JGLOBAL_MOST_HITS</option>
+		   <option value="rhits">JGLOBAL_LEAST_HITS</option>
+		   <option value="order">JGLOBAL_ARTICLE_MANAGER_ORDER</option>
+	    </field>
+
+	    <field name="order_date" type="list"
+		   default="published"
+		   label="JGLOBAL_ORDERING_DATE_LABEL" 
+		   description="COM_ODYSSEY_TRAVEL_ORDER_DATE_DESC">
+		   <option value="created">JGLOBAL_CREATED</option>
+		   <option value="modified">JGLOBAL_MODIFIED</option>
+		   <option value="published">JPUBLISHED</option>
+	    </field>
+
+	    <field name="show_pagination"
+		    type="list"
+		    default="2"
+		    label="JGLOBAL_Pagination_Label"
+		    description="JGLOBAL_Pagination_Desc">
+		    <option value="0">JHIDE</option>
+		    <option value="1">JSHOW</option>
+		    <option value="2">JGLOBAL_AUTO</option>
+	    </field>
+
+	    <field name="show_pagination_results"
+		    type="radio"
+		    class="btn-group btn-group-yesno"
+		    default="1"
+		    label="JGLOBAL_PAGINATION_RESULTS_LABEL"
+		    description="JGLOBAL_PAGINATION_RESULTS_DESC">
+		    <option value="1">JSHOW</option>
+		    <option value="0">JHIDE</option>
+	    </field>
+
+    </fieldset>
+
+    <fieldset
+	    name="permissions"
+	    label="JCONFIG_PERMISSIONS_LABEL"
+	    description="JCONFIG_PERMISSIONS_DESC" >
+
+	    <field name="rules"
+		    type="rules"
+		    label="JCONFIG_PERMISSIONS_LABEL"
+		    class="inputbox"
+		    validate="rules"
+		    filter="rules"
+		    component="com_odyssey"
+		    section="component" />
+    </fieldset>
+</config>
