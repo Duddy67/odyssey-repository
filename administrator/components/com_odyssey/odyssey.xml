@@ -54,6 +54,7 @@
 	    <filename>index.html</filename>
 	    <!-- Folders  Section -->
 	    <folder>files</folder>
+	    <folder>fonts</folder>
 	    <folder>images</folder>
       </media>
 
