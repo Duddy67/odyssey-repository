@@ -12,6 +12,11 @@ jimport('joomla.application.component.modellist');
 
 
 
+/**
+ * Methods supporting a list of travel records.
+ *
+ * @since  1.6
+ */
 class OdysseyModelTravels extends JModelList
 {
   public function __construct($config = array())
@@ -192,7 +197,7 @@ class OdysseyModelTravels extends JModelList
     $orderDirn = $this->state->get('list.direction'); //asc or desc
 
     //In case only the tag filter is selected we want the travels to be displayed according
-    //to the our mapping table ordering.
+    //to our mapping table ordering.
     if(is_numeric($tagId) && OdysseyHelper::checkSelectedFilter('tag', true) && $orderCol == 't.ordering') {
       //Join over the travel/tag mapping table.
       $query->select('tm.ordering AS tm_ordering')

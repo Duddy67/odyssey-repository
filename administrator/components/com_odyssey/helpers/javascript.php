@@ -1,7 +1,7 @@
 <?php
 /**
- * @package Odyssey
- * @copyright Copyright (c) 2016 Lucas Sanner
+ * @package Odyssey component
+ * @copyright Copyright (c) 2016 - 2016 Lucas Sanner
  * @license GNU General Public License version 3, or later
  */
 
@@ -12,8 +12,16 @@ defined('_JEXEC') or die; //No direct access to this file.
 
 class JavascriptHelper
 {
-  //Functions which define all required language variables in order to be
-  //used in Javascript throught the Joomla.JText._() method. 
+  /**
+   * Functions which define all required language variables in order to be
+   * used in Javascript throught the Joomla.JText._() method. 
+   */
+
+  /**
+   * Loads language variables (related to button text) to be used with Javascript.
+   *
+   * @return void
+   */
   public static function getButtonText() 
   {
     JText::script('COM_ODYSSEY_BUTTON_ADD_LABEL'); 
@@ -24,6 +32,11 @@ class JavascriptHelper
   }
 
 
+  /**
+   * Loads common language variables to be used with Javascript.
+   *
+   * @return void
+   */
   public static function getCommonText() 
   {
     JText::script('COM_ODYSSEY_ITEM_NAME_LABEL'); 
@@ -57,6 +70,11 @@ class JavascriptHelper
   }
 
 
+  /**
+   * Loads language variables (related to travel item) to be used with Javascript.
+   *
+   * @return void
+   */
   public static function getTravelText() 
   {
     JText::script('COM_ODYSSEY_ERROR_NO_STEP_SEQUENCE_SELECTED'); 
@@ -74,6 +92,11 @@ class JavascriptHelper
   }
 
 
+  /**
+   * Loads language variables (related to step item) to be used with Javascript.
+   *
+   * @return void
+   */
   public static function getStepText() 
   {
     JText::script('COM_ODYSSEY_OPTION_JAN'); 
@@ -133,6 +156,11 @@ class JavascriptHelper
   }
 
 
+  /**
+   * Loads language variables (related to price rule item) to be used with Javascript.
+   *
+   * @return void
+   */
   public static function getPriceruleText() 
   {
     JText::script('COM_ODYSSEY_HEADING_MAX_PASSENGERS');
@@ -165,8 +193,16 @@ class JavascriptHelper
   }
 
 
-  //Build and load Javascript functions which return different kind of data,
-  //generaly as a JSON array.
+  /**
+   * Build and load Javascript functions which return different kind of data,
+   * generaly as a JSON array.
+   *
+   * @param array Array containing the names of the functions to build and load.
+   * @param array Array of possible arguments to pass to the PHP functions.
+   * @param string Data returned as a string by the getData JS function.
+   *
+   * @return void
+   */
   public static function loadFunctions($names, $args = array(), $data = '')
   {
     $js = array();
@@ -259,10 +295,16 @@ class JavascriptHelper
     //Place the Javascript code into the html page header.
     $doc = JFactory::getDocument();
     $doc->addScriptDeclaration($js);
+
+    return;
   }
 
 
-  //Returns region codes and names as a JSON array.
+  /**
+   * Returns region codes and names as a JSON array.
+   *
+   * @return JSON array
+   */
   public static function getRegions()
   {
     $db = JFactory::getDbo();
@@ -290,7 +332,11 @@ class JavascriptHelper
   }
 
 
-  //Returns country ids and names as a JSON array.
+  /**
+   * Returns country ids and names as a JSON array.
+   *
+   * @return JSON array
+   */
   public static function getCountries()
   {
     $db = JFactory::getDbo();
@@ -312,7 +358,11 @@ class JavascriptHelper
   }
 
 
-  //Returns city ids and names as a JSON array.
+  /**
+   * Returns city ids and names as a JSON array.
+   *
+   * @return JSON array
+   */
   public static function getCities()
   {
     $db = JFactory::getDbo();
@@ -344,6 +394,14 @@ class JavascriptHelper
   }
 
 
+  /**
+   * Return the departures of a given link or departure step 
+   * in order to be used with an addon item. 
+   *
+   * @param array Array of arguments.
+   *
+   * @return JSON array
+   */
   public static function getAddonDepartures($args)
   {
     $db = JFactory::getDbo();
@@ -377,7 +435,11 @@ class JavascriptHelper
   }
 
 
-  //Return continent ids and names as a JSON array.
+  /**
+   * Returns continent ids and names as a JSON array.
+   *
+   * @return JSON array
+   */
   public static function getContinents()
   {
     //Since continents are few in number we dont need to spend a db table for them. 
@@ -400,7 +462,14 @@ class JavascriptHelper
   }
 
 
-  //Get the passengers added by a given customer.
+  /**
+   * Get the passengers added by a given customer. 
+   *
+   * @param integer The id of the customer.
+   * @param boolean Flag which specifies if the returned array must be encoded in JSON.
+   *
+   * @return mixed A JSON array or a regular array.
+   */
   public static function getPassengers($customerId, $json = true)
   {
     $attributes = JavascriptHelper::getPassengerAttributes(false);
@@ -441,6 +510,13 @@ class JavascriptHelper
   }
 
 
+  /**
+   * Return the required attribute names for the passengers.
+   *
+   * @param boolean Flag which specifies if the returned array must be encoded in JSON.
+   *
+   * @return mixed A JSON array or a regular array.
+   */
   public static function getPassengerAttributes($json = true)
   {
     //Get the passenger ini file in which some settings are defined.

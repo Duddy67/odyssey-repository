@@ -1,6 +1,6 @@
 <?php
 /**
- * @package Odyssey
+ * @package Odyssey component
  * @copyright Copyright (c) 2016 - 2016 Lucas Sanner
  * @license GNU General Public License version 3, or later
  */
@@ -8,12 +8,16 @@
 defined('_JEXEC') or die; //No direct access to this file.
 
 
+/**
+ * Odyssey component helper.
+ *
+ */
 class OdysseyHelper
 {
   /**
    * Create the tabs bar ($viewName = name of the active view).
    *
-   * @param string $viewName The name of the view to display.
+   * @param string  The name of the view to display.
    *
    * @return void
    */
@@ -68,7 +72,7 @@ class OdysseyHelper
   /**
    * Get the list of the allowed actions for the user.
    *
-   * @param array $catIds The ids of the categories to check.
+   * @param array  The ids of the categories to check.
    *
    * @return JObject
    */
@@ -108,9 +112,9 @@ class OdysseyHelper
    * Build the user list for the filter.
    *
    *
-   * @param string $itemName Name of the item to check.
+   * @param string  Name of the item to check.
    *
-   * @return mixed An array of the result set rows or null if no result found.
+   * @return mixed  An array of the result set rows or null if no result found.
    */
   public static function getUsers($itemName)
   {
@@ -133,6 +137,16 @@ class OdysseyHelper
   }
 
 
+  /**
+   * Method used to check if travels have to be ordered or displayed according to the tag 
+   * mapping table ordering.
+   *
+   * @param string  Name of the filter to check.
+   * @param boolean  Flag to specify we want to check the filter is the only one to
+   *        be selected. 
+   *
+   * @return boolean  True if filter matches the checking conditions, false otherwise.
+   */
   public static function checkSelectedFilter($filterName, $unique = false)
   {
     $post = JFactory::getApplication()->input->post->getArray();
@@ -160,6 +174,16 @@ class OdysseyHelper
   }
 
 
+  /**
+   * Orders a set of items which have the same tag. Ordering is stored in an  
+   * alternative ordering table.
+   *
+   * @param array  An array of primary key ids.
+   * @param integer  The id of the tag against which we want to order the items.
+   * @param integer  Offset from start.
+   *
+   * @return boolean  True if successful, false otherwise.
+   */
   public static function mappingTableOrder($pks, $tagId, $limitStart)
   {
     //Check first the user can edit state.
@@ -200,10 +224,10 @@ class OdysseyHelper
   /**
    * Update a mapping table according to the variables passed as arguments.
    *
-   * @param string $table The name of the table to update (eg: #__table_name).
-   * @param array $columns Array of table's column, (primary key name must be set as the first array's element).
-   * @param array $data Array of JObject containing the column values, (values order must match the column order).
-   * @param array $ids Array containing the ids of the items to update.
+   * @param string  The name of the table to update (eg: #__table_name).
+   * @param array  Array of table's column, (primary key name must be set as the first array's element).
+   * @param array  Array of JObject containing the column values, (values order must match the column order).
+   * @param array  Array containing the ids of the items to update.
    *
    * @return void
    */
@@ -273,13 +297,13 @@ class OdysseyHelper
 
 
   /**
-   * Checking functions used to prevent an admin to delete (or change status) the items 
+   * Checking function used to prevent an admin to delete (or change status) the items 
    * which are currently linked to other items.
    *
-   * @param unsigned int $itemId The id of the item.
-   * @param string $itemType The type of the item.
+   * @param integer  The id of the item.
+   * @param string  The type of the item.
    *
-   * @return unsigned int
+   * @return integer
    */
   public static function isInTravel($itemId, $itemType = 'departure_step')
   {
@@ -300,13 +324,13 @@ class OdysseyHelper
 
 
   /**
-   * Checking functions used to prevent an admin to delete (or change status) the items 
+   * Checking function used to prevent an admin to delete (or change status) the items 
    * which are currently linked to other items.
    *
-   * @param unsigned int $itemId The id of the item.
-   * @param string $itemType The type of the item.
+   * @param integer  The id of the item.
+   * @param string  The type of the item.
    *
-   * @return unsigned int
+   * @return integer
    */
   public static function isInStep($itemId, $itemType)
   {
@@ -342,12 +366,12 @@ class OdysseyHelper
 
 
   /**
-   * Checking functions used to prevent an admin to delete (or change status) the items 
+   * Checking function used to prevent an admin to delete (or change status) the items 
    * which are currently linked to other items.
    *
-   * @param string $alpha2 The alphanumeric code (2 letters) of the country the city belongs to.
+   * @param string  The alphanumeric code (2 letters) of the country the city belongs to.
    *
-   * @return unsigned int
+   * @return integer
    */
   public static function isInCity($alpha2)
   {
@@ -367,8 +391,8 @@ class OdysseyHelper
   /**
    * Add, delete or update the set of addon options passed as first argument. 
    *
-   * @param array $addonOptions Array of associative array containing the option values.
-   * @param unsigned int $addonId Id number of the parent addon.
+   * @param array  Array of associative array containing the option values.
+   * @param integer  Id number of the parent addon.
    *
    * @return void
    */
