@@ -22,7 +22,7 @@ class plgOdysseypaymentPaypal extends JPlugin
     //Get the first part of the query where all the basic parameters are set.
     $paypalQuery = $this->getPaypalQuery();
     //Get the SetExpressCheckout query.
-    $setExpressCheckout = $this->setExpressCheckout($amounts, $cart, $settings);
+    $setExpressCheckout = $this->setExpressCheckout($travel, $addons, $settings);
     //Concatenate the 2 parts to get the complete query.
     $paypalQuery = $paypalQuery.$setExpressCheckout;
 
@@ -80,7 +80,7 @@ class plgOdysseypaymentPaypal extends JPlugin
   }
 
 
-  public function onOdysseyPaymentPaypalResponse($amounts, $cart, $settings, $utility)
+  public function onOdysseyPaymentPaypalResponse($travel, $addons, $settings, $utility)
   {
     //Carry on with the Paypal payment procedure according to the current step.
 
@@ -189,7 +189,7 @@ class plgOdysseypaymentPaypal extends JPlugin
       //Get the first part of the query where all the basic parameters are set.
       $paypalQuery = $this->getPaypalQuery();
       //Get the DoExpressCheckoutPayment query.
-      $doExpressCheckoutPayment = $this->doExpressCheckoutPayment($amounts, $cart, $settings);
+      $doExpressCheckoutPayment = $this->doExpressCheckoutPayment($travel, $addons, $settings);
       //Concatenate the 2 parts to get the complete query.
       $paypalQuery = $paypalQuery.$doExpressCheckoutPayment;
 
@@ -213,7 +213,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 	  //database.
 
 	  //Notify that payment has succeded
-	  $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=finalize.confirmPurchase', false);
+	  $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
 	  $utility['plugin_result'] = true;
 	  //Serialize the Paypal data to store it into database.
 	  $utility['payment_details'] = serialize($paypalParamsArray);
@@ -227,7 +227,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 	  //been completed for this token.), we can confirm the purchase. 
           if($paypalParamsArray['L_ERRORCODE0'] == 11607) {
 	    //Notify that payment has succeded
-	    $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=finalize.confirmPurchase', false);
+	    $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
 	    $utility['plugin_result'] = true;
 	    return $utility;
 	  }
@@ -321,11 +321,11 @@ class plgOdysseypaymentPaypal extends JPlugin
   }
 
 
-  protected function setExpressCheckout($amounts, $cart, $settings)
+  protected function setExpressCheckout($travel, $addons, $settings)
   {
     //Initialize some variables.
-    $currencyCode = $settings['currency_alpha'];
-    $countryCode2 = $settings['country_code_2'];
+    $currencyCode = $settings['currency_code'];
+    $countryCode = $settings['country_code'];
     //Load Paypal plugin language from the backend.
     $lang = JFactory::getLanguage();
     $lang->load('plg_odysseypayment_paypal', JPATH_ADMINISTRATOR);
@@ -337,12 +337,12 @@ class plgOdysseypaymentPaypal extends JPlugin
 	     '&RETURNURL='.urlencode(JUri::base().'index.php?option=com_odyssey&view=payment&task=payment.response&payment=paypal');
 
     //Get the query for the detail order.
-    $query .= $this->buildPaypalDetailOrder($amounts, $cart, $settings);
+    $query .= $this->buildPaypalDetailOrder($travel, $addons, $settings);
 
     $query .= '&PAYMENTREQUEST_0_CURRENCYCODE='.$currencyCode.
 	      '&PAYMENTREQUEST_0_DESC='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_SHOP_DESC')).
 	      '&NOSHIPPING=1'.
-	      '&LOCALECODE='.$countryCode2.
+	      '&LOCALECODE='.$countryCode.
 	      '&PAYMENTREQUEST_0_PAYMENTACTION=Sale'.
 	      '&PAYMENTREQUEST_0_CUSTOM=123456789'; //Add custom parameter.
 
@@ -370,9 +370,9 @@ class plgOdysseypaymentPaypal extends JPlugin
   //parameters plus the optional parameters we need. If DoExpressCheckoutPayment method 
   //has succeeded, Paypal return a list of parameters value we can use during 
   //our transaction. 
-  protected function doExpressCheckoutPayment($amounts, $cart, $settings)
+  protected function doExpressCheckoutPayment($travel, $addons, $settings)
   {
-    $currencyCode = $settings['currency_alpha'];
+    $currencyCode = $settings['currency_code'];
     //Get some needed data from the utility session array.
     $session = JFactory::getSession();
     $utility = $session->get('utility', array(), 'odyssey'); 
@@ -381,7 +381,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 	     '&TOKEN='.$utility['paypal_token']. //Add the token sent back by Paypal.
 
     //Get the query for the detail order.
-    $query .= $this->buildPaypalDetailOrder($amounts, $cart, $settings);
+    $query .= $this->buildPaypalDetailOrder($travel, $addons, $settings);
 
     $query .= '&PAYMENTREQUEST_0_CURRENCYCODE='.$currencyCode.
 	      '&PayerID='.$utility['payment_details']['PAYERID']. //Add payment id sent back by Paypal.
@@ -392,108 +392,67 @@ class plgOdysseypaymentPaypal extends JPlugin
 
 
   //Return the detail order which is include into a Paypal query.
-  protected function buildPaypalDetailOrder($amounts, $cart, $settings)
+  protected function buildPaypalDetailOrder($travel, $addons, $settings)
   {
     //initialize some variables.
-    $taxMethod = $settings['tax_method'];
     $rounding = $settings['rounding_rule'];
     $digits = $settings['digits_precision'];
-    $cartAmount = $cartOperation = $shippingOperation = $id = 0;
+    $travelPruleAmount = 0;
     $detailOrder = '';
     //Load Paypal plugin language from the backend.
     $lang = JFactory::getLanguage();
     $lang->load('plg_odysseypayment_paypal', JPATH_ADMINISTRATOR);
 
-    foreach($cart as $product) {
-      //Compute the amount including tax.
-      if($taxMethod == 'excl_tax') {
-	//Compute the product including tax
-	$sum = $product['unit_price'] * $product['quantity'];
-        $inclTaxResult = UtilityHelper::roundNumber(UtilityHelper::getPriceWithTaxes($sum, $product['tax_rate']), $rounding, $digits);
-	//then the amount including tax.
-	$cartAmount += $inclTaxResult;
-      }
-      else { //No need to calculate as taxes are already included.
-	$cartAmount += $product['unit_price'] * $product['quantity'];
-      }
+    //First at all set the travel price.
+    $detailOrder .= '&L_PAYMENTREQUEST_0_NAME0='.urlencode($travel['name']).
+		    '&L_PAYMENTREQUEST_0_QTY0=1'; 
 
-      //Display the product detail.
+    $detailOrder .= '&L_PAYMENTREQUEST_0_AMT0='.UtilityHelper::formatNumber($travel['travel_price']);
+    $detailOrder .= '&L_PAYMENTREQUEST_0_DESC0='.urlencode(JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_INCL_TAX', $travel['tax_rate']));
 
-      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode($product['name']).
-	              '&L_PAYMENTREQUEST_0_QTY'.$id.'='.$product['quantity']; 
+    //Now move to the addons.
+    $id = 1;
+    foreach($addons as $addon) {
+      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode($addon['name']).
+	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
+		      '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($addon['price']);
 
-      //Display the proper description according to the tax method.
-      if($taxMethod == 'excl_tax') {
-	$detailOrder .= '&L_PAYMENTREQUEST_0_DESC'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_EXCL_TAX_PRICE'));
-      }
-      else {
-	$detailOrder .= '&L_PAYMENTREQUEST_0_DESC'.$id.'='.urlencode(JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_INCL_TAX', $product['tax_rate']));
-      }
-
-      $detailOrder .= '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($product['unit_price']);
-
-      if($taxMethod == 'excl_tax') {
-	//Increment the id.
+      foreach($addon['options'] as $option) {
 	$id = $id + 1;
-        //Calculate the result of the product taxes.
-	$inclTax = $inclTaxResult - ($product['unit_price'] * $product['quantity']);
-	//Display the product taxes as an item. 
-	$detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_INCL_TAX_PRODUCT',
-	                                                                             $product['tax_rate'],$product['quantity'],$product['name'])).
-			'&L_PAYMENTREQUEST_0_QTY'.$id.'=1'.
-			'&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($inclTax);
+	$detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode($option['name']).
+			'&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
+			'&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($option['price']);
       }
 
       $id++;
-    } 
+    }
 
-    //Check for discount.
-    if($cartAmount > $amounts['fnl_crt_amt_incl_tax']) {
-      $cartOperation = $cartAmount - $amounts['fnl_crt_amt_incl_tax'];
-      $cartAmount = $cartAmount - $cartOperation;
+    //Check if some travel price rules have been applied on the travel price.
+    if(isset($travel['normal_price']) && $travel['travel_price'] > $travel['normal_price']) {
+      $travelPruleAmount = $travel['travel_price'] - $travel['normal_price'];
       //Convert positive value into negative.
-      $cartOperation = $cartOperation * -1;
+      $travelPruleAmount = $travelPruleAmount * -1;
     }
-    elseif($cartAmount < $amounts['fnl_crt_amt_incl_tax']) { //Check for raise.
-      $cartOperation = $amounts['fnl_crt_amt_incl_tax'] - $cartAmount;
-      $cartAmount = $cartAmount + $cartOperation;
+    elseif(isset($travel['normal_price']) && $travel['travel_price'] < $travel['normal_price']) { //Check for raise.
+      $travelPruleAmount = $travel['normal_price'] - $travel['travel_price'];
     }
 
-    //Add the sum of the operation applied to the cart as an item.
+    //Add the sum of the price rules applied to the travel as an item.
     //Paypal will substract or add this value.
-    if($cartOperation) {
+    if($travelPruleAmount) {
       $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_CART_OPERATION')).
 	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
-	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($cartOperation).
+	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($travelPruleAmount).
 	              '&L_PAYMENTREQUEST_0_DESC'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_CART_OPERATION_DESC'));
     }
 
-    //Display the cart amount.
-    $detailOrder .= '&PAYMENTREQUEST_0_ITEMAMT='.UtilityHelper::formatNumber($cartAmount);
+    //Display the item amount.
+    //Note: Item amount is equal to final amount as there is no extra amount such as
+    //shipping cost.
+    $detailOrder .= '&PAYMENTREQUEST_0_ITEMAMT='.UtilityHelper::formatNumber($travel['final_amount']);
 
-    //Check for shipping.
-    if(ShopHelper::isShippable()) {
-      //Check for shipping discount.
-      if($amounts['shipping_cost'] > $amounts['final_shipping_cost']) {
-	$shippingOperation = $amounts['shipping_cost'] - $amounts['final_shipping_cost'];
-	//Convert positive value into negative.
-	$shippingOperation = $shippingOperation * -1;
-      }
-      //Note: We don't check for possible shipping raise since Paypal doesn't
-      //provide variable for that.
-
-      if($shippingOperation) {
-	$detailOrder .= '&PAYMENTREQUEST_0_SHIPDISCAMT='.UtilityHelper::formatNumber($shippingOperation).
-			'&PAYMENTREQUEST_0_SHIPPINGAMT='.UtilityHelper::formatNumber($amounts['shipping_cost']);
-      }
-      else {
-	$detailOrder .= '&PAYMENTREQUEST_0_SHIPPINGAMT='.UtilityHelper::formatNumber($amounts['final_shipping_cost']);
-      }
-    }
-
-    //Display the final total amount.
-    $totalAmount = $amounts['fnl_crt_amt_incl_tax'] + $amounts['final_shipping_cost'];
-    $detailOrder .= '&PAYMENTREQUEST_0_AMT='.UtilityHelper::formatNumber($totalAmount);
+    //Display the final amount.
+    $detailOrder .= '&PAYMENTREQUEST_0_AMT='.UtilityHelper::formatNumber($travel['final_amount']);
 
     return $detailOrder;
   }

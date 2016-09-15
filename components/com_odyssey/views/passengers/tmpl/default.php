@@ -15,10 +15,9 @@ $session = JFactory::getSession();
 $travel = $session->get('travel', array(), 'odyssey'); 
 $addons = $session->get('addons', array(), 'odyssey'); 
 $settings = $session->get('settings', array(), 'odyssey'); 
-//echo '<pre>';
-//var_dump($travel);
-//echo '</pre>';
-    //var_dump($fieldset);
+echo '<pre>';
+var_dump($travel);
+echo '</pre>';
 ?>
 <script type="text/javascript">
 function checkForm() {

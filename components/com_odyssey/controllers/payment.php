@@ -107,7 +107,7 @@ class OdysseyControllerPayment extends JControllerForm
 	               'payment_details'=> '',
 	               'redirect_url'=> '',
 	               'plugin_output'=> '',     //Html code to display in the payment view.
-	               'offline_id'=> 0,         //Only used with JooShop offline plugin.
+	               'offline_id'=> 0,         //Only used with Odyssey offline plugin.
 		       'error'=>'');
       $session->set('utility', $utility, 'odyssey');
     }
