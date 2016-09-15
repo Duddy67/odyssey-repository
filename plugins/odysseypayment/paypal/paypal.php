@@ -1,7 +1,7 @@
 <?php
 /**
- * @package JooShop
- * @copyright Copyright (c)2012 - 2015 Lucas Sanner
+ * @package Odyssey
+ * @copyright Copyright (c) 2016 - 2016 Lucas Sanner
  * @license GNU General Public License version 3, or later
  */
 
@@ -17,7 +17,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 {
 
   //Grab the event triggered by the payment controller.
-  public function onOdysseyPaymentPaypal($amounts, $cart, $settings, $utility)
+  public function onOdysseyPaymentPaypal($travel, $addons, $settings, $utility)
   {
     //Get the first part of the query where all the basic parameters are set.
     $paypalQuery = $this->getPaypalQuery();
@@ -29,9 +29,9 @@ class plgOdysseypaymentPaypal extends JPlugin
     //Execute the query and get the result.
     $curl = $this->cURLSession($paypalQuery);
 
-    //Load Paypal plugin language from the backend.
+    //Load Paypal plugin language.
     $lang = JFactory::getLanguage();
-    $lang->load('plg_odysseypayment_paypal', JPATH_ADMINISTRATOR);
+    $lang->load('plg_odysseypayment_paypal', dirname(__FILE__));
 
     if(!$curl[0]) { //curl failed
       //Display an error message.
@@ -84,9 +84,9 @@ class plgOdysseypaymentPaypal extends JPlugin
   {
     //Carry on with the Paypal payment procedure according to the current step.
 
-    //Load Paypal plugin language from the backend.
+    //Load Paypal plugin language.
     $lang = JFactory::getLanguage();
-    $lang->load('plg_odysseypayment_paypal', JPATH_ADMINISTRATOR);
+    $lang->load('plg_odysseypayment_paypal', dirname(__FILE__));
 
     if($utility['paypal_step'] === 'setExpressCheckout') {
       //Empty the redirect_url variable to prevent payment controller to
@@ -326,9 +326,9 @@ class plgOdysseypaymentPaypal extends JPlugin
     //Initialize some variables.
     $currencyCode = $settings['currency_code'];
     $countryCode = $settings['country_code'];
-    //Load Paypal plugin language from the backend.
+    //Load Paypal plugin language.
     $lang = JFactory::getLanguage();
-    $lang->load('plg_odysseypayment_paypal', JPATH_ADMINISTRATOR);
+    $lang->load('plg_odysseypayment_paypal', dirname(__FILE__));
 
     //We can add custom parameter to the query, but we need 
     //GetExpressCheckoutDetails to recover it.
@@ -345,7 +345,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 	      '&LOCALECODE='.$countryCode.
 	      '&PAYMENTREQUEST_0_PAYMENTACTION=Sale'.
 	      '&PAYMENTREQUEST_0_CUSTOM=123456789'; //Add custom parameter.
-
+file_put_contents('debog_paypal.txt', print_r($query, true));
     return $query;
   }
 
@@ -399,16 +399,23 @@ class plgOdysseypaymentPaypal extends JPlugin
     $digits = $settings['digits_precision'];
     $travelPruleAmount = 0;
     $detailOrder = '';
-    //Load Paypal plugin language from the backend.
+    //Load Paypal plugin language.
     $lang = JFactory::getLanguage();
-    $lang->load('plg_odysseypayment_paypal', JPATH_ADMINISTRATOR);
+    $lang->load('plg_odysseypayment_paypal', dirname(__FILE__));
 
     //First at all set the travel price.
-    $detailOrder .= '&L_PAYMENTREQUEST_0_NAME0='.urlencode($travel['name']).
-		    '&L_PAYMENTREQUEST_0_QTY0=1'; 
 
-    $detailOrder .= '&L_PAYMENTREQUEST_0_AMT0='.UtilityHelper::formatNumber($travel['travel_price']);
-    $detailOrder .= '&L_PAYMENTREQUEST_0_DESC0='.urlencode(JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_INCL_TAX', $travel['tax_rate']));
+    $travelPrice = $travel['travel_price'];
+    //If we have travel price rules we display the normal price. The modified price will
+    //be computed by Paypal according to sum of the price rules.
+    if(isset($travel['normal_price'])) {
+      $travelPrice = $travel['normal_price'];
+    }
+
+    $detailOrder .= '&L_PAYMENTREQUEST_0_NAME0='.urlencode($travel['name']).
+		    '&L_PAYMENTREQUEST_0_QTY0=1'. 
+		    '&L_PAYMENTREQUEST_0_AMT0='.UtilityHelper::formatNumber($travelPrice).
+		    '&L_PAYMENTREQUEST_0_DESC0='.urlencode(JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_INCL_TAX', $travel['tax_rate']));
 
     //Now move to the addons.
     $id = 1;
@@ -428,13 +435,13 @@ class plgOdysseypaymentPaypal extends JPlugin
     }
 
     //Check if some travel price rules have been applied on the travel price.
-    if(isset($travel['normal_price']) && $travel['travel_price'] > $travel['normal_price']) {
-      $travelPruleAmount = $travel['travel_price'] - $travel['normal_price'];
-      //Convert positive value into negative.
-      $travelPruleAmount = $travelPruleAmount * -1;
-    }
-    elseif(isset($travel['normal_price']) && $travel['travel_price'] < $travel['normal_price']) { //Check for raise.
+    if(isset($travel['normal_price']) && $travel['travel_price'] < $travel['normal_price']) {
       $travelPruleAmount = $travel['normal_price'] - $travel['travel_price'];
+      //Convert positive value into negative.
+      $travelPruleAmount = $travelPruleAmount - ($travelPruleAmount * 2);
+    }
+    elseif(isset($travel['normal_price']) && $travel['travel_price'] > $travel['normal_price']) { //Check for raise.
+      $travelPruleAmount = $travel['travel_price'] - $travel['normal_price'];
     }
 
     //Add the sum of the price rules applied to the travel as an item.
@@ -444,6 +451,15 @@ class plgOdysseypaymentPaypal extends JPlugin
 	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
 	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($travelPruleAmount).
 	              '&L_PAYMENTREQUEST_0_DESC'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_CART_OPERATION_DESC'));
+    }
+
+    //Add the transit city extra cost if any.
+    if($travel['transit_price'] > 0) {
+      $id = $id + 1;
+      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.
+	               urlencode(JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_EXTRA_COST_TRANSIT_CITY', $travel['dpt_city_name'])).
+	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
+	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($travel['transit_price']);
     }
 
     //Display the item amount.

@@ -327,7 +327,6 @@ class PriceruleHelper
     // Setup the query
     $db->setQuery($query);
     $result = $db->loadAssoc();
-file_put_contents('debog_coupon.txt', print_r($result, true));
 
     if(is_null($result)) {
       JFactory::getApplication()->enqueueMessage(JText::_('COM_ODYSSEY_WARNING_NO_MATCHING_CODE'), 'warning');
