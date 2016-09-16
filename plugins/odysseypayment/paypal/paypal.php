@@ -414,8 +414,8 @@ file_put_contents('debog_paypal.txt', print_r($query, true));
 
     $detailOrder .= '&L_PAYMENTREQUEST_0_NAME0='.urlencode($travel['name']).
 		    '&L_PAYMENTREQUEST_0_QTY0=1'. 
-		    '&L_PAYMENTREQUEST_0_AMT0='.UtilityHelper::formatNumber($travelPrice).
-		    '&L_PAYMENTREQUEST_0_DESC0='.urlencode(JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_INCL_TAX', $travel['tax_rate']));
+		    '&L_PAYMENTREQUEST_0_AMT0='.UtilityHelper::formatNumber($travelPrice);
+		    //'&L_PAYMENTREQUEST_0_DESC0='.urlencode(JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_INCL_TAX', $travel['tax_rate']));
 
     //Now move to the addons.
     $id = 1;
@@ -447,10 +447,10 @@ file_put_contents('debog_paypal.txt', print_r($query, true));
     //Add the sum of the price rules applied to the travel as an item.
     //Paypal will substract or add this value.
     if($travelPruleAmount) {
-      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_CART_OPERATION')).
+      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_PRICERULES')).
 	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
-	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($travelPruleAmount).
-	              '&L_PAYMENTREQUEST_0_DESC'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_CART_OPERATION_DESC'));
+	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($travelPruleAmount);
+	              //'&L_PAYMENTREQUEST_0_DESC'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_PRICERULES_DESC'));
     }
 
     //Add the transit city extra cost if any.
@@ -462,13 +462,40 @@ file_put_contents('debog_paypal.txt', print_r($query, true));
 	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($travel['transit_price']);
     }
 
+    //The whole price of the travel.
+    $finalAmount = $travel['final_amount'];
+
+    $id = $id + 1;
+    //The client has chosen to pay a deposit.
+    if($travel['booking_option'] == 'deposit') {
+      $finalAmount = $travel['deposit_amount'];
+      $sumToSubtract = $travel['final_amount'] - $travel['deposit_amount'];
+      //Convert positive value into negative.
+      $sumToSubtract = $sumToSubtract - ($sumToSubtract * 2);
+
+      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_DEPOSIT_AMOUNT')).
+	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
+	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($sumToSubtract);
+    }
+    //The client pay the remaining amount of the travel.
+    elseif($travel['booking_option'] == 'remaining') {
+      $finalAmount = $travel['outstanding_balance'];
+      $sumToSubtract = $travel['final_amount'] - $travel['outstanding_balance'];
+      //Convert positive value into negative.
+      $sumToSubtract = $sumToSubtract - ($sumToSubtract * 2);
+
+      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_REMAINING_AMOUNT')).
+	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
+	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($sumToSubtract);
+    }
+
     //Display the item amount.
     //Note: Item amount is equal to final amount as there is no extra amount such as
     //shipping cost.
-    $detailOrder .= '&PAYMENTREQUEST_0_ITEMAMT='.UtilityHelper::formatNumber($travel['final_amount']);
+    $detailOrder .= '&PAYMENTREQUEST_0_ITEMAMT='.UtilityHelper::formatNumber($finalAmount);
 
     //Display the final amount.
-    $detailOrder .= '&PAYMENTREQUEST_0_AMT='.UtilityHelper::formatNumber($travel['final_amount']);
+    $detailOrder .= '&PAYMENTREQUEST_0_AMT='.UtilityHelper::formatNumber($finalAmount);
 
     return $detailOrder;
   }
