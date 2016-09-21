@@ -96,10 +96,18 @@ function checkForm() {
 
 		//Get the new price. 
 		$price = PriceruleHelper::computePriceRule($travelPrule['operation'], $travelPrule['dpt_ids'][$data['dpt_id']][$psgrNb], $price);
-		//
+		
 		if($travelPrule['show_rule']) {
-		  //echo '<div class="pricerule-name" id="pricerule-name-'.$psgrNb.'-'.$data['dpt_id'].'">'.$travelPrule['name'].'</div>';
+		  echo '<div class="pricerule-name" id="pricerule-name-'.$psgrNb.'-'.$data['dpt_id'].'-'.$travelPrule['prule_id'].'">'.
+		        $travelPrule['name'].'</div>';
 		  $isPriceRule = true;
+		}
+		else { //Hidden price rule.
+		  //We applied the hidden price rule values to the normal 
+		  //price so that there is no misunderstanding about the 
+		  //computing price in case other price rules are shown.
+		  $normalPrice = PriceruleHelper::computePriceRule($travelPrule['operation'],
+								   $travelPrule['dpt_ids'][$data['dpt_id']][$psgrNb], $normalPrice);
 		}
 	      }
 	    }

@@ -153,11 +153,13 @@
 	$('#price-psgr-'+psgrNb+'-'+dptId).css({'visibility':'visible','display':'block'});
 	//Note: In case of price rules.
 	$('#normal-price-psgr-'+psgrNb+'-'+dptId).css({'visibility':'visible','display':'block'});
+	$('div[id^="pricerule-name-'+psgrNb+'-'+dptId+'-"]').css({'visibility':'visible','display':'block'});
       }
       else {
 	$('#price-psgr-'+psgrNb+'-'+dptId).css({'visibility':'hidden','display':'none'});
 	//Note: In case of price rules.
 	$('#normal-price-psgr-'+psgrNb+'-'+dptId).css({'visibility':'hidden','display':'none'});
+	$('div[id^="pricerule-name-'+psgrNb+'-'+dptId+'-"]').css({'visibility':'hidden','display':'none'});
       }
     }
 
