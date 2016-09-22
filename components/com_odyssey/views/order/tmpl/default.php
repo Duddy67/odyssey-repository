@@ -24,7 +24,7 @@ Joomla.submitbutton = function(task)
 
 
 <form action="<?php echo JRoute::_('index.php?option=com_odyssey&o_id='.$this->item->id); ?>" 
-      method="post" name="adminForm" id="order-form" enctype="multipart/form-data" class="form-validate">
+      method="post" name="adminForm" id="order-form" enctype="multipart/form-data" class="form-validate" autocomplete="off">
 
     <?php if(!$this->outOfDate && $this->item->order_status != 'cancelled') : ?>
       <div class="btn-toolbar">

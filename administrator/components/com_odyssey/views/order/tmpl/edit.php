@@ -27,7 +27,7 @@ Joomla.submitbutton = function(task)
 </script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_odyssey&view=order&layout=edit&id='.(int) $this->item->id); ?>" 
-      method="post" name="adminForm" id="order-form" enctype="multipart/form-data" class="form-validate">
+      method="post" name="adminForm" id="order-form" enctype="multipart/form-data" class="form-validate" autocomplete="off">
 
   <div class="form-inline form-inline-header">
     <?php echo $this->form->getControlGroup('order_nb'); ?>

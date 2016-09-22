@@ -15,9 +15,9 @@ $session = JFactory::getSession();
 $travel = $session->get('travel', array(), 'odyssey'); 
 $addons = $session->get('addons', array(), 'odyssey'); 
 $settings = $session->get('settings', array(), 'odyssey'); 
-echo '<pre>';
-var_dump($travel);
-echo '</pre>';
+//echo '<pre>';
+//var_dump($travel);
+//echo '</pre>';
 ?>
 <script type="text/javascript">
 function checkForm() {
@@ -44,7 +44,7 @@ function checkForm() {
 <?php echo JLayoutHelper::render('booking_summary', array('travel' => $travel, 'settings' => $settings, 'addons' => $addons),
 				  JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
 
-<form action="index.php?option=com_odyssey&task=booking.checkPassengers" method="post" name="passengers" id="passengers">
+<form action="index.php?option=com_odyssey&task=booking.checkPassengers" method="post" name="passengers" id="passengers" autocomplete="off">
 <?php
 $fieldset = $this->form->getFieldset('details');
 
