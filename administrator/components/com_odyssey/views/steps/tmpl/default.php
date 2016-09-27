@@ -27,7 +27,7 @@ if($this->state->get('step_sequence.displayed')) {
   $stepDuration = $this->state->get('step_sequence.step_duration');
   $groupColor = 'a';
   $finalStepIndex = count($this->items) - 1;
-  $nbCol = 9;
+  $nbCol = 8;
   //var_dump($stepDuration);
 }
 ?>
@@ -71,9 +71,6 @@ echo JLayoutHelper::render('list.sequencetools', array('dpt_data' => $this->stat
 	<?php if($stepSeqDisplayed) : //Display the step sequence fields. ?>
 	  <th width="10%">
 	    <?php echo JText::_('COM_ODYSSEY_HEADING_TIME_GAP'); ?>
-	  </th>
-	  <th width="10%">
-	    <?php echo JText::_('COM_ODYSSEY_HEADING_STEP_ALIAS'); ?>
 	  </th>
 	  <th width="10%">
 	    <?php echo JText::_('COM_ODYSSEY_HEADING_STEP_DURATION'); ?>
@@ -182,13 +179,6 @@ echo JLayoutHelper::render('list.sequencetools', array('dpt_data' => $this->stat
 	      ?>
 	      <span class="small break-word"><?php echo JText::sprintf('COM_ODYSSEY_TIME_GAP', $days, $hours.':'.$minutes); ?></span>
 	      <span class="small break-word"><?php //echo JText::sprintf('COM_ODYSSEY_DAYS_HOURS_MINUTES', $days, $hours, $minutes); ?></span>
-	    </td>
-	    <td class="sequence-<?php echo $item->group_color; ?>">
-	      <?php
-		    if(!$item->group_prev) {
-		      echo ($item->step_type == 'departure') ? $this->escape($item->dpt_step_alias) : $this->escape($item->step_alias);
-	            }
-	      ?>
 	    </td>
 	    <td class="sequence-<?php echo $item->group_color; ?>">
 	      <?php

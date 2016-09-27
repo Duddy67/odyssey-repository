@@ -27,7 +27,7 @@ $langTag = JFactory::getApplication()->input->get->get('lang_tag', '', 'str');
 $db = JFactory::getDbo();
 $query = $db->getQuery(true);
 $query->select('d.dpt_id, d.date_time, d.date_time_2, IFNULL(tg.time_gap, "") AS time_gap, IFNULL(tg.dpt_id, "") AS selected,'.
-               'IFNULL(tg.step_alias, "") AS step_alias, IFNULL(tg.group_prev, "") AS group_prev, c.name AS city, c.lang_var')
+               'IFNULL(tg.group_prev, "") AS group_prev, c.name AS city, c.lang_var')
       ->from('#__odyssey_departure_step_map AS d')
       ->join('LEFT', '#__odyssey_timegap_step_map AS tg ON tg.dpt_id=d.dpt_id AND tg.step_id='.(int)$stepId)
       ->join('LEFT', '#__odyssey_city AS c ON c.id=d.city_id')

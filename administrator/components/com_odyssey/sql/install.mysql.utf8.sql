@@ -153,7 +153,6 @@ CREATE TABLE `#__odyssey_departure_step_map` (
   `dpt_id` INT UNSIGNED NOT NULL ,
   `date_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
   `date_time_2` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
-  `dpt_step_alias` VARCHAR(80) NOT NULL ,
   `max_passengers` TINYINT UNSIGNED NOT NULL ,
   `allotment` SMALLINT UNSIGNED NOT NULL ,
   `altm_subtract` TINYINT(1) UNSIGNED NOT NULL ,
@@ -170,7 +169,6 @@ CREATE TABLE `#__odyssey_timegap_step_map` (
   `step_id` INT UNSIGNED NOT NULL ,
   `dpt_id` INT UNSIGNED NOT NULL ,
   `time_gap` CHAR(9) NOT NULL ,
-  `step_alias` VARCHAR(80) NOT NULL ,
   `group_prev` TINYINT(1) NOT NULL DEFAULT 0 ,
   INDEX `idx_step_id` (`step_id` ASC) )
 ENGINE = MyISAM DEFAULT CHARSET=utf8;

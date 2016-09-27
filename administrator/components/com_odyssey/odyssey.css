@@ -221,8 +221,7 @@ input[id^="ev-year-time-"] {
 .departure-item .city-label,
 .departure-item .allotment-label,
 .departure-item .subtract-label,
-.departure-item .max-passengers-label,
-.departure-item .step-alias-label {
+.departure-item .max-passengers-label {
   display: block;
   font-size: 13px;
   margin-top: 15px;
@@ -256,10 +255,6 @@ input[id^="ev-year-time-"] {
   width: 28%;
 }
 
-#time-gaps th.step-alias {
-  width: 20%;
-}
-
 #time-gaps th.grouped {
   width: 2%;
 }
@@ -284,10 +279,6 @@ input[id^="ev-year-time-"] {
 #time-gaps .hours-minutes {
   display: inline;
   width: 25%;
-}
-
-#time-gaps .step-alias {
-  width: 90%;
 }
 
 .city-item .city-label {

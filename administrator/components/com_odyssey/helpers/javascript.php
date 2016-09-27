@@ -62,6 +62,7 @@ class JavascriptHelper
     JText::script('COM_ODYSSEY_ERROR_NO_TAX_SELECTED'); 
     JText::script('COM_ODYSSEY_HEADING_DATETIME');
     JText::script('COM_ODYSSEY_HEADING_CITY');
+    JText::script('COM_ODYSSEY_HEADING_DEPARTURE_CITY');
     JText::script('COM_ODYSSEY_OPTION_SELECT_CITY');
     JText::script('JYES');
     JText::script('JNO');

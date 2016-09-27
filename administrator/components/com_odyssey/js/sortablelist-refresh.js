@@ -111,7 +111,7 @@
 				//The ordering numbers of the price rule list need to be
 				//updated after each reordering.
 				//Submitting the form refresh the data of the list.
-				document.getElementById('adminForm').submit();
+				//document.getElementById('adminForm').submit();
 			}
 		});
 		

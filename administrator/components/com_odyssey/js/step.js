@@ -248,16 +248,6 @@
     }
     $('#wrap-dpt-data-3-'+idNb).createHTMLTag('<input>', properties, 'departure-checkbox');
 
-    properties = {'id':'wrap-dpt-data-4-'+idNb};
-    $('#departure-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
-
-    properties = {'title':Joomla.JText._('COM_ODYSSEY_STEP_ALIAS_TITLE')};
-    $('#wrap-dpt-data-4-'+idNb).createHTMLTag('<span>', properties, 'step-alias-label');
-    $('#wrap-dpt-data-4-'+idNb+' .step-alias-label').text(Joomla.JText._('COM_ODYSSEY_STEP_ALIAS_LABEL'));
-
-    properties = {'type':'text', 'name':'dpt_step_alias_'+idNb, 'value':data.dpt_step_alias};
-    $('#wrap-dpt-data-4-'+idNb).createHTMLTag('<input>', properties, 'step-alias');
-
     properties = {'type':'hidden', 'name':'dpt_id_'+idNb, 'value':data.dpt_id};
     $('#departure-item-'+idNb).createHTMLTag('<input>', properties);
   };
@@ -415,14 +405,12 @@
     if($('#dpt-id-'+dptId).is(':checked')) {
       $('#days-'+dptId).prop('readonly', false).removeClass('readonly').css('color', 'black');
       $('#hr-mn-'+dptId).prop('readonly', false).removeClass('readonly').css('color', 'black');
-      $('#step-alias-'+dptId).prop('readonly', false).removeClass('readonly').css('color', 'black');
       $('#group-prev-'+dptId).prop('disabled', false).removeClass('readonly');
       $('#group-prev-'+dptId).prop('readonly', false);
     }
     else { //unchecked
       $('#days-'+dptId).prop('readonly', true).addClass('readonly').css('color', '#c0c0c0');
       $('#hr-mn-'+dptId).prop('readonly', true).addClass('readonly').css('color', '#c0c0c0');
-      $('#step-alias-'+dptId).prop('readonly', true).addClass('readonly').css('color', '#c0c0c0');
       $('#group-prev-'+dptId).prop('disabled', true).addClass('readonly');
       $('#group-prev-'+dptId).prop('readonly', true);
     }
@@ -433,13 +421,12 @@
     //Create the table header.
     if(dptStepId) {
       var thDatetime = '<tr><th class="datetime">'+Joomla.JText._('COM_ODYSSEY_HEADING_DATETIME')+'</th>';
-      var thCity = '<th class="city">'+Joomla.JText._('COM_ODYSSEY_HEADING_CITY')+'</th>';
+      var thCity = '<th class="city">'+Joomla.JText._('COM_ODYSSEY_HEADING_DEPARTURE_CITY')+'</th>';
       var thTmg = '<th class="time-gap">'+Joomla.JText._('COM_ODYSSEY_HEADING_TIME_GAP')+'</th>'; 
-      var thStpAl = '<th class="step-alias">'+Joomla.JText._('COM_ODYSSEY_HEADING_STEP_ALIAS')+'</th>'; 
       var thGrpPrev = '<th class="grouped">'+Joomla.JText._('COM_ODYSSEY_HEADING_GROUPED')+'</th>'; 
       var thSelect = '<th class="select">#</th></tr>';
 
-      $('#time-gaps').append(thDatetime+thCity+thTmg+thStpAl+thGrpPrev+thSelect);
+      $('#time-gaps').append(thDatetime+thCity+thTmg+thGrpPrev+thSelect);
     }
 
     var stepId = $('#jform_id').val();
@@ -480,7 +467,7 @@
 
 	    $('#time-gaps').append('<tr id="row-'+dptId+'"><td id="col-1-'+dptId+'">'+dateTime+dateTime_2+'</td>'+
 	                           '<td id="col-2-'+dptId+'">'+result.city+'</td><td id="col-3-'+dptId+'"></td>'+
-				   '<td id="col-4-'+dptId+'"></td><td id="col-5-'+dptId+'"></td>'+'<td id="col-6-'+dptId+'"></td></tr>');
+				   '<td id="col-4-'+dptId+'"></td><td id="col-5-'+dptId+'"></td></tr>');
 
 	    //Build the required labels and fields.
 
@@ -498,14 +485,11 @@
 	    properties = {'type':'text', 'name':'hr_mn_'+dptId, 'id':'hr-mn-'+dptId, 'maxlength':5, 'value':result.hr_mn};
 	    $('#col-3-'+dptId).createHTMLTag('<input>', properties, 'hours-minutes');
 
-	    properties = {'type':'text', 'name':'step_alias_'+dptId, 'id':'step-alias-'+dptId, 'value':result.step_alias};
-	    $('#col-4-'+dptId).createHTMLTag('<input>', properties, 'step-alias');
-
 	    properties = {'type':'checkbox', 'name':'group_prev_'+dptId, 'id':'group-prev-'+dptId, 'value':result.group_prev};
-	    $('#col-5-'+dptId).createHTMLTag('<input>', properties);
+	    $('#col-4-'+dptId).createHTMLTag('<input>', properties);
 
 	    properties = {'type':'checkbox', 'name':'dpt_id_'+dptId, 'id':'dpt-id-'+dptId, 'value':dptId};
-	    $('#col-6-'+dptId).createHTMLTag('<input>', properties);
+	    $('#col-5-'+dptId).createHTMLTag('<input>', properties);
 
 	    //Set the checkbox state.
 	    if(result.selected !== "") { //checked

@@ -410,7 +410,7 @@
   $.fn.getDataSet = function(itemType) {
     var data = '';
     if(itemType == 'departure') {
-      data = {'date_time':'', 'month':'', 'day':'', 'time':'00:00', 'city_id':'', 'dpt_id':0, 'dpt_step_alias':''};
+      data = {'date_time':'', 'month':'', 'day':'', 'time':'00:00', 'city_id':'', 'dpt_id':0};
     } else if(itemType == 'city') {
       data = {'city_ordering':''};
     } else if(itemType == 'sequence') {

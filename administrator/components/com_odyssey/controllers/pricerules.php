@@ -21,7 +21,6 @@ class OdysseyControllerPricerules extends JControllerAdmin
     $model = parent::getModel($name, $prefix, $config);
     return $model;
   }
-
 }
 
 

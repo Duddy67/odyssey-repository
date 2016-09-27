@@ -68,9 +68,9 @@ class StepHelper
     }
 
     //Set fields.
-    $columns = array('step_id','city_id','dpt_id','date_time','date_time_2','max_passengers','dpt_step_alias','allotment','altm_subtract');
+    $columns = array('step_id','city_id','dpt_id','date_time','date_time_2','max_passengers','allotment','altm_subtract');
     /*elseif($dateType == 'every_month') { //Note: In a futur version. 
-      $columns = array('step_id','city_id','dpt_id','day','day_nb','months','max_passengers','dpt_step_alias','allotment','altm_subtract');
+      $columns = array('step_id','city_id','dpt_id','day','day_nb','months','max_passengers','allotment','altm_subtract');
     }*/
 
     //Update departure table.

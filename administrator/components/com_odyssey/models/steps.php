@@ -247,7 +247,7 @@ class OdysseyModelSteps extends JModelList
 
       //Join over the timegap mapping table to sort the steps (link and arrival types) according 
       //to theirs time gap against the departure step.
-      $query->select('tg.time_gap, tg.step_alias, tg.group_prev, ds.dpt_step_alias')
+      $query->select('tg.time_gap, tg.group_prev')
 	    ->join('LEFT', '#__odyssey_timegap_step_map AS tg ON tg.step_id=s.id AND tg.dpt_id='.(int)$dptId)
 	    //Join also over the departure mapping table as we need the departure step alias.
 	    ->join('LEFT', '#__odyssey_departure_step_map AS ds ON ds.step_id='.(int)$dptStepId.' AND ds.dpt_id='.(int)$dptId)

@@ -86,16 +86,14 @@ if($stepType == 'departure') {
 
       $departures[] = array('date_time' => $dateTime, 'date_time_2' => $dateTime2, 'city_id' => $result['city_id'],
 			    'dpt_id' => $result['dpt_id'], 'max_passengers' => $result['max_passengers'],
-			    'allotment' => $result['allotment'], 'altm_subtract' => $result['altm_subtract'],
-			    'dpt_step_alias' => $result['dpt_step_alias']);
+			    'allotment' => $result['allotment'], 'altm_subtract' => $result['altm_subtract']);
     }
     elseif($dateType == 'every_year') {
       //Extract month date and time values from the datetime value.
       preg_match('#0000-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2})#', $result['date_time'], $matches);
       $departures[] = array('month' => $matches[1], 'date' => $matches[2], 'time' => $matches[3].':'.$matches[4],
 			    'city_id' => $result['city_id'], 'dpt_id' => $result['dpt_id'],
-			    'max_passengers' => $result['max_passengers'],
-			    'dpt_step_alias' => $result['dpt_step_alias']);
+			    'max_passengers' => $result['max_passengers']);
     }
     else { //every_month
     }

@@ -306,7 +306,6 @@ class plgContentOdyssey extends JPlugin
 	    }
 
 	    $row->max_passengers = $post['max_passengers_'.$idNb];
-	    $row->dpt_step_alias = $post['dpt_step_alias_'.$idNb];
 	    $row->allotment = $post['allotment_'.$idNb];
 	    $row->altm_subtract = $post['altm_subtract_'.$idNb];
 	    $departures[] = $row;
@@ -362,7 +361,6 @@ class plgContentOdyssey extends JPlugin
 	    $row = new JObject;
 	    $row->dpt_id = $dptId;
 	    $row->time_gap = $timeGap;
-	    $row->step_alias = $post['step_alias_'.$dptId];
 
 	    $groupPrev = 0;
 	    if(isset($post['group_prev_'.$dptId])) {
@@ -499,7 +497,7 @@ class plgContentOdyssey extends JPlugin
 	}
       }
       else { //link
-	$columns = array('step_id','dpt_id','time_gap', 'step_alias', 'group_prev');
+	$columns = array('step_id','dpt_id','time_gap','group_prev');
 	OdysseyHelper::updateMappingTable('#__odyssey_timegap_step_map', $columns, $timeGaps, array($data->id));
 
 	$columns = array('step_id','city_id','ordering');
