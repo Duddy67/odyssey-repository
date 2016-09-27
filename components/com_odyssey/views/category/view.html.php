@@ -9,6 +9,7 @@ defined('_JEXEC') or die;
 
 use Joomla\Registry\Registry;
 require_once JPATH_COMPONENT_SITE.'/helpers/travel.php';
+require_once JPATH_COMPONENT_SITE.'/helpers/pricerule.php';
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/utility.php';
 
 
@@ -59,6 +60,7 @@ class OdysseyViewCategory extends JViewCategory
   protected $user;
   protected $uri;
   protected $pricesStartingAt;
+  protected $pricesStartingAtPrules;
 
   public function display($tpl = null)
   {
@@ -101,6 +103,7 @@ class OdysseyViewCategory extends JViewCategory
 
     if(!empty($itemIds)) {
       $this->pricesStartingAt = TravelHelper::getPricesStartingAt($itemIds);
+      $this->pricesStartingAtPrules = PriceruleHelper::getPricesStartingAt($itemIds, $this->items[0]->catid);
     }
 
     // Check for layout override only if this is not the active menu item
@@ -223,7 +226,7 @@ class OdysseyViewCategory extends JViewCategory
 
     $this->nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
 
-    //$this->setDocument();
+    $this->setDocument();
 
     return parent::display($tpl);
   }
@@ -232,7 +235,7 @@ class OdysseyViewCategory extends JViewCategory
   protected function setDocument() 
   {
     //Include css file (if needed).
-    //$doc = JFactory::getDocument();
-    //$doc->addStyleSheet(JURI::base().'components/com_odyssey/css/odyssey.css');
+    $doc = JFactory::getDocument();
+    $doc->addStyleSheet(JURI::base().'components/com_odyssey/css/odyssey.css');
   }
 }

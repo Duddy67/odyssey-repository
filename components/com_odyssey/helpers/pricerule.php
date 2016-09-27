@@ -22,10 +22,11 @@ class PriceruleHelper
     $catalogPrules = array();
 
     //Collect all the departure ids of the travel.
-    $dptIds = array();
+    //Is it really needed ?
+    /*$dptIds = array();
     foreach($travel as $departure) {
       $dptIds[] = $departure['dpt_id'];
-    }
+    }*/
 
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
@@ -38,7 +39,8 @@ class PriceruleHelper
 	  ->join('INNER', '#__odyssey_prule_recipient AS prr ON (pr.recipient="customer" AND prr.item_id='.(int)$user->get('id').')'.
 	                  ' OR (pr.recipient="customer_group" AND prr.item_id IN ('.implode(',', $groups).'))')
 	  ->where('pr.prule_type="catalog" AND pr.target="travel" AND tpr.travel_id='.(int)$travelId)
-	  ->where('tpr.dpt_id IN('.implode(',', $dptIds).') AND prr.prule_id=pr.id AND pr.published=1')
+	  //->where('tpr.dpt_id IN('.implode(',', $dptIds).')')
+	  ->where('prr.prule_id=pr.id AND pr.published=1')
 	  //Check against publication dates (start and stop).
 	  ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
 	  ->where('('.$db->quote($now).' > pr.publish_up OR pr.publish_up = "0000-00-00 00:00:00")')
@@ -71,7 +73,7 @@ class PriceruleHelper
       //Some travel price rules have previously been found.
       if(!empty($catalogPrules)) {
 	//Rearrange price rule data. 
-	$travelCatPrules = PriceruleHelper::setTravelCatPruleRows($travelCatPrules, $travel, $catId);
+	$travelCatPrules = PriceruleHelper::setTravelCatPruleRows($travelCatPrules, $travel);
 	//Merge travel and travel category price rules together.
 	$catalogPrules = array_merge($catalogPrules, $travelCatPrules);
 
@@ -90,7 +92,7 @@ class PriceruleHelper
       }
       else {
 	//Rearrange price rule data. 
-	$catalogPrules = PriceruleHelper::setTravelCatPruleRows($travelCatPrules, $travel, $catId);
+	$catalogPrules = PriceruleHelper::setTravelCatPruleRows($travelCatPrules, $travel);
       }
     }
 
@@ -133,7 +135,7 @@ class PriceruleHelper
 
   //Convert all rows of the same price rule into a single row containing nested arrays for
   //departure ids and value per passengers.
-  public static function setTravelPruleRows($pruleRows)
+  public static function setTravelPruleRows($pruleRows, $priceStartingAt = false)
   {
     $pruleIds = $prules = array();
     $currentDptId = 0;
@@ -169,6 +171,12 @@ class PriceruleHelper
 	  $currentDptId = $pruleRow['dpt_id'];
 	}
       }
+
+      //Add the normal price to the array.
+      if($priceStartingAt) {
+	$currentId = count($prules) - 1;
+	$prules[$currentId]['dpt_ids'][$currentDptId][] = UtilityHelper::formatNumber($pruleRow['normal_price']);
+      }
     }
 
     return $prules;
@@ -176,7 +184,7 @@ class PriceruleHelper
 
 
   //Add departure ids and value per passengers as nested arrays into each row.
-  public static function setTravelCatPruleRows($pruleRows, $travel, $catId)
+  public static function setTravelCatPruleRows($pruleRows, $travel)
   {
     foreach($pruleRows as $key => $pruleRow) {
       //Turn the string value into an array.
@@ -409,6 +417,192 @@ class PriceruleHelper
     }
 
     return;
+  }
+
+
+  /**
+   * Gets catalog price rules set for the first passenger and matching the given travels.
+   * Applies price rules accordingly and returns the lowest price for each travel.
+   *
+   * @param array  An array of travel ids.
+   * @param integer  The id of the category the travels are linked to.
+   *
+   * @return array  An array containing the lowest price for each given travel.
+   */
+  public static function getPricesStartingAt($travelIds, $catId)
+  {
+    $user = JFactory::getUser();
+    //Get user group ids to which the user belongs to.
+    $groups = JAccess::getGroupsByUser($user->get('id'));
+    //Get current date and time (equal to NOW() in SQL).
+    $now = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    //Get possible catalog price rules set for the first passenger and the given travels.
+    $query->select('tpr.travel_id, pr.name, pr.behavior, pr.show_rule, pr.ordering,tpr.prule_id,'.
+	           'tpr.dpt_id, pr.operation, tpr.value, tp.psgr_nb, tp.price AS normal_price')
+	  ->from('#__odyssey_pricerule AS pr')
+	  ->join('INNER', '#__odyssey_travel_pricerule AS tpr ON tpr.prule_id=pr.id')
+	  ->join('INNER', '#__odyssey_travel_price AS tp ON tp.travel_id=tpr.travel_id AND tp.dpt_id=tpr.dpt_id')
+	  ->join('INNER', '#__odyssey_prule_recipient AS prr ON (pr.recipient="customer" AND prr.item_id='.(int)$user->get('id').')'.
+	                  ' OR (pr.recipient="customer_group" AND prr.item_id IN ('.implode(',', $groups).'))')
+	  ->where('pr.prule_type="catalog" AND pr.target="travel" AND tpr.travel_id IN('.implode(',', $travelIds).')')
+	  //Don't collect price rules related to coupon.
+	  ->where('(pr.behavior="XOR" OR pr.behavior= "AND")')
+	  //Get only price rules set for the first passenger.
+	  ->where('tpr.psgr_nb=1 AND tp.psgr_nb=1 AND tpr.value > 0')
+	  ->where('prr.prule_id=pr.id AND pr.published=1')
+	  //Check against publication dates (start and stop).
+	  ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
+	  ->where('('.$db->quote($now).' > pr.publish_up OR pr.publish_up = "0000-00-00 00:00:00")')
+	  ->order('tpr.travel_id, pr.ordering, tpr.prule_id, tpr.dpt_id');
+    $db->setQuery($query);
+    $results = $db->loadAssocList();
+
+    //Rearrange results for more convenience.  
+    $travelPrules = array();
+    foreach($results as $key => $result) {
+      //First, set the array index as the travel id then store the corresponding price 
+      //rule rows.  
+      if(!array_key_exists($result['travel_id'], $travelPrules)) {
+	$travelPrules[$result['travel_id']]['prules'] = array($result);
+      }
+      else {
+	$travelPrules[$result['travel_id']]['prules'][] = $result;
+      }
+
+      //We reach the end of the array or the next element is regarding another travel.
+      if(!isset($results[$key + 1]) || $results[$key + 1]['travel_id'] != $result['travel_id']) {
+	//Rearrange and store price rule data. 
+	$prules = PriceruleHelper::setTravelPruleRows($travelPrules[$result['travel_id']]['prules'], true);
+	$travelPrules[$result['travel_id']]['prules'] = $prules;
+      }
+    }
+
+    $query->clear();
+    //Get possible catalog price rules set for the first passenger and linked to the travel category.
+    $query->select('t.id AS travel_id, pr.name,pr.behavior, pr.show_rule, pr.ordering, prt.prule_id,'.
+		   'tp.dpt_id, pr.operation, pr.value, tp.psgr_nb, tp.price AS normal_price')
+	  ->from('#__odyssey_pricerule AS pr')
+	  ->join('INNER', '#__odyssey_prule_target AS prt ON prt.prule_id=pr.id')
+	  //Get the first passenger prices as we need them to compute price rule results.
+	  ->join('INNER', '#__odyssey_travel AS t ON t.catid=prt.item_id')
+	  ->join('INNER', '#__odyssey_travel_price AS tp ON tp.travel_id=t.id AND tp.psgr_nb=1')
+	  ->join('INNER', '#__odyssey_prule_recipient AS prr ON (pr.recipient="customer" AND prr.item_id='.(int)$user->get('id').')'.
+	                  ' OR (pr.recipient="customer_group" AND prr.item_id IN ('.implode(',', $groups).'))')
+	  ->where('pr.prule_type="catalog" AND pr.target="travel_cat" AND prt.item_id='.(int)$catId)
+	  //Don't collect price rules related to coupon.
+	  ->where('(pr.behavior="XOR" OR pr.behavior= "AND")')
+	  //Get only price rules set for the first passenger.
+	  ->where('(prt.psgr_nbs=0 OR prt.psgr_nbs REGEXP "^(^1$)|(^1,)|(,1,)|(,1$)")')
+	  ->where('prr.prule_id=pr.id AND pr.published=1')
+	  //Check against publication dates (start and stop).
+	  ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
+	  ->where('('.$db->quote($now).' > pr.publish_up OR pr.publish_up = "0000-00-00 00:00:00")')
+	  ->order('t.id, pr.ordering, prt.prule_id,tp.dpt_id');
+    $db->setQuery($query);
+    $results = $db->loadAssocList();
+
+    //Rearrange results for more convenience.  
+    $travelCatPrules = array();
+    foreach($results as $key => $result) {
+      if(!array_key_exists($result['travel_id'], $travelCatPrules)) {
+	$travelCatPrules[$result['travel_id']]['prules'] = array($result);
+      }
+      else {
+	$travelCatPrules[$result['travel_id']]['prules'][] = $result;
+      }
+
+      if(!isset($results[$key + 1]) || $results[$key + 1]['travel_id'] != $result['travel_id']) {
+	$prules = PriceruleHelper::setTravelPruleRows($travelCatPrules[$result['travel_id']]['prules'], true);
+	$travelCatPrules[$result['travel_id']]['prules'] = $prules;
+      }
+    }
+
+    //No price rule found for those travels.
+    if(empty($travelPrules) && empty($travelCatPrules)) {
+      return array();
+    }
+
+    //Price rules have to be merged.
+    //Note: The final result is stored in the $travelPrules array.
+    if(!empty($travelPrules) && !empty($travelCatPrules)) {
+      foreach($travelIds as $travelId) {
+	//Travel and travel category price rules are linked to the same travel.
+	if(isset($travelPrules[$travelId]) && isset($travelCatPrules[$travelId])) {
+	  //Merge travel and travel category price rules together.
+	  $catalogPrules = array_merge($travelPrules[$travelId]['prules'], $travelCatPrules[$travelId]['prules']);
+	  //The elements of the merged array must be reorder according to their "ordering" attribute.
+	  //In order to do so we use a simple bubble sort algorithm.
+	  $nbPrules = count($catalogPrules);
+	  for($i = 0; $i < $nbPrules; $i++) {
+	    for($j = 0; $j < $nbPrules - 1; $j++) {
+	      if($catalogPrules[$j]['ordering'] > $catalogPrules[$j + 1]['ordering']) {
+		$temp = $catalogPrules[$j + 1];
+		$catalogPrules[$j + 1] = $catalogPrules[$j];
+		$catalogPrules[$j] = $temp;
+	      }
+	    }
+	  }
+
+	  $travelPrules[$travelId]['prules'] = $catalogPrules;
+	}
+	elseif(!isset($travelPrules[$travelId]) && isset($travelCatPrules[$travelId])) {
+	  //Store result in the $travelPrules array.
+	  $travelPrules[$travelId]['prules'] = $travelCatPrules[$travelId]['prules'];
+	}
+      }
+    }
+
+    //Compute and select the lower price for each travel.
+    $lowerPrice = array();
+    foreach($travelPrules as $travelId => $travelPrule) {
+      $delete = false;
+      foreach($travelPrule['prules'] as $key => $prule) {
+	if($delete) {
+	  unset($travelPrules[$travelId]['prules'][$key]);
+	  continue;
+	}
+
+	foreach($prule['dpt_ids'] as $dptId => $data) {
+	  //Get the normal price.
+	  $price = $data[2];
+	  //Check if a previous price rule has been applied to the normal price.
+	  if(isset($travelPrules[$travelId]['prules'][$key - 1]['dpt_ids'][$dptId][3])) {
+	    //Get the normal price previously modified by a price rule. 
+	    $price = $travelPrules[$travelId]['prules'][$key - 1]['dpt_ids'][$dptId][3];
+	  }
+
+	  //Apply the price rule and store the modified price.
+	  $price = UtilityHelper::formatNumber(PriceruleHelper::computePriceRule($prule['operation'], $data[1], $price));
+	  $travelPrules[$travelId]['prules'][$key]['dpt_ids'][$dptId][3] = $price;  
+
+	  //Compare and replace (if needed) the modified price in order to end up with 
+	  //the lowest price for this travel.
+	  if(!isset($lowerPrice[$travelId])) {
+	    $lowerPrice[$travelId] = array('normal_price' => $data[2], 'price' => $price);
+	  }
+	  else {
+	    if($price < $lowerPrice[$travelId]['price']) {
+	      $lowerPrice[$travelId]['normal_price'] = $data[2];
+	      $lowerPrice[$travelId]['price'] = $price;
+	    }
+	  }
+	}
+
+	//Check for a possible exclusive price rule. 
+	if($prule['behavior'] == 'XOR') {
+	  $delete = true;
+	}
+      }
+    }
+    //echo '<pre>';
+    //var_dump($lowerPrice);
+    //var_dump($travelPrules);
+    //echo '</pre>';
+
+    return $lowerPrice;
   }
 }
 

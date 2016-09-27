@@ -63,7 +63,13 @@ $params = $this->item->params;
   <?php endif; ?>
 
   <span class="item-field"><?php echo JText::_('COM_ODYSSEY_PRICE_STARTING_AT'); ?></span>
-  <span class="price_starting_at"><?php echo UtilityHelper::formatNumber($this->pricesStartingAt[$this->item->id]); ?></span>
+  <?php if(isset($this->pricesStartingAtPrules[$this->item->id]) &&
+	    $this->pricesStartingAtPrules[$this->item->id]['price'] < $this->pricesStartingAt[$this->item->id]) : ?>
+    <span class="normal-price"><?php echo UtilityHelper::formatNumber($this->pricesStartingAtPrules[$this->item->id]['normal_price']); ?></span>
+    <span class="price-starting-at"><?php echo UtilityHelper::formatNumber($this->pricesStartingAtPrules[$this->item->id]['price']); ?></span>
+  <?php else : ?>
+    <span class="price-starting-at"><?php echo UtilityHelper::formatNumber($this->pricesStartingAt[$this->item->id]); ?></span>
+  <?php endif; ?>
   <span class="currency"><?php echo $this->item->currency; ?></span>
 </div>
 
