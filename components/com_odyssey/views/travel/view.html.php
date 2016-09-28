@@ -11,6 +11,7 @@ jimport('joomla.application.component.view');
 require_once JPATH_COMPONENT_SITE.'/helpers/route.php';
 require_once JPATH_COMPONENT_SITE.'/helpers/travel.php';
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/utility.php';
+require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/step.php';
 
 /**
  * HTML View class for the Odyssey component.
@@ -23,6 +24,7 @@ class OdysseyViewTravel extends JViewLegacy
   protected $user;
   protected $uri;
   protected $travelData;
+  protected $steps;
 
   public function display($tpl = null)
   {
@@ -51,6 +53,13 @@ class OdysseyViewTravel extends JViewLegacy
     //Increment the hits for this travel.
     $model = $this->getModel();
     $model->hit();
+
+    if($this->item->show_steps) {
+      $this->steps = StepHelper::getStepSequence($this->item->dpt_step_id, $this->item->departure_number);
+    }
+//echo '<pre>';
+//var_dump($this->steps);
+//echo '</pre>';
 
     //Get the default currency.
     $currency = UtilityHelper::getCurrency();

@@ -73,7 +73,7 @@ class OdysseyModelTravel extends JModelItem
       $query->select($this->getState('list.select', 't.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,t.published,'.
 				     't.checked_out,t.checked_out_time,t.created,t.created_by,t.access,t.params,t.metadata,'.
 				     't.metakey,t.metadesc,t.hits,t.publish_up,t.publish_down,t.language,t.modified,t.modified_by,'.
-				     't.dpt_step_id'))
+				     't.dpt_step_id,t.show_steps,t.show_grouped_steps,t.departure_number'))
 	    ->from($db->quoteName('#__odyssey_travel').' AS t')
 	    ->where('t.id='.$pk);
 

@@ -54,6 +54,10 @@ $item = $this->item;
 	  <?php echo $this->item->tagLayout->render($this->item->tags->itemTags); ?>
   <?php endif; ?>
 
+  <?php if($this->item->show_steps) : ?>
+    <?php echo JLayoutHelper::render('steps', array('steps' => $this->steps, 'item' => $this->item), JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
+  <?php endif; ?>
+
   <?php echo JLayoutHelper::render('travel_data', array('travel_data' => $this->travelData, 'item' => $item, 'params' => $params, 'now_date' => $this->nowDate), JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
 </div>
 

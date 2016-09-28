@@ -107,6 +107,7 @@ class StepHelper
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
+    //Retrieve the departure ids of the travel in the chronological order.
     $query->select('dpt_id, date_time')
 	  ->from('#__odyssey_departure_step_map')
 	  ->where('step_id='.(int)$dptStepId)
@@ -114,24 +115,27 @@ class StepHelper
     $db->setQuery($query);
     $departures = $db->loadObjectList();
 
+    //Check that the given departure number matches.
     if(!isset($departures[$departureNb - 1])) {
       JFactory::getApplication()->enqueueMessage(JText::_('COM_ODYSSEY_WARNING_INVALID_DEPARTURE_STEP_ID'), 'warning');
       return array();
     }
 
+    //Get the departure id corresponding to the given departure number (ie: 1, 2, 3 etc).
     $dptId = $departures[$departureNb - 1]->dpt_id;
 
-    //Get the departure step state.
+    //Get some departure step data.
+    //Note: name and description attributes are used on frontend.
     $query->clear();
-    $query->select('published')
+    $query->select('published, name, description')
 	  ->from('#__odyssey_step')
 	  ->where('id='.(int)$dptStepId);
     $db->setQuery($query);
-    $dptStepState = $db->loadResult();
+    $dptStep = $db->loadObject();
 
     //Get all the steps linked to the given departure step.
     $query->clear();
-    $query->select('step_id, time_gap, group_prev')
+    $query->select('step_id, time_gap, group_prev, name, description')
 	  ->from('#__odyssey_step')
 	  ->join('INNER', '#__odyssey_timegap_step_map ON step_id=id AND dpt_id='.(int)$dptId)
 	  ->where('dpt_step_id='.(int)$dptStepId.' AND published=1')
@@ -142,11 +146,9 @@ class StepHelper
 
     //Add the departure step at the beginning of the sequence.
     array_unshift($stepSequence, array('step_id' => $dptStepId, 'dpt_id' => $dptId, 'time_gap' => '000:00:00',
-				       'group_prev' => 0, 'published' => $dptStepState)); 
+				       'group_prev' => 0, 'published' => $dptStep->published, 
+				       'name' => $dptStep->name, 'description' => $dptStep->description)); 
 
-//echo '<pre>';
-//var_dump($stepSequence);
-//echo '</pre>';
     return $stepSequence;
   }
 

@@ -80,6 +80,7 @@
 				root.enableOtherGroupSort(e, ui);
 
 				root.rearrangeOrderingValues(root.sortableGroupId, ui);
+
 				if (saveOrderingUrl) {
 					//clone and check all the checkboxes in sortable range to post
 					root.cloneMarkedCheckboxes();
@@ -98,6 +99,12 @@
 
 					//remove cloned checkboxes
 					root.removeClonedCheckboxes();
+
+					//Modification Odyssey:
+					//The ordering numbers of the price rule list need to be
+					//updated after each reordering.
+					//Submitting the form refresh the data of the list.
+					document.getElementById('adminForm').submit();
 				}
 				root.disabledOrderingElements = '';
 				//Proceed nested list
@@ -107,11 +114,6 @@
 					$(tableWrapper).sortable('refresh');
 				}
 
-				//Modification:
-				//The ordering numbers of the price rule list need to be
-				//updated after each reordering.
-				//Submitting the form refresh the data of the list.
-				//document.getElementById('adminForm').submit();
 			}
 		});
 		
