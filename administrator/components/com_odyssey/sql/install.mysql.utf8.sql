@@ -336,6 +336,7 @@ CREATE TABLE `#__odyssey_prule_target` (
   `prule_id` INT UNSIGNED NOT NULL ,
   `item_id` INT UNSIGNED NOT NULL ,
   `travel_ids` VARCHAR(120) NOT NULL ,
+  `dpt_nbs` VARCHAR(120) NOT NULL ,
   `step_ids` VARCHAR(120) NOT NULL ,
   `psgr_nbs` VARCHAR(120) NOT NULL ,
   INDEX `idx_prule_id` (`prule_id` ASC) ,

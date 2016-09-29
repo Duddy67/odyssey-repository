@@ -604,5 +604,61 @@ class PriceruleHelper
 
     return $lowerPrice;
   }
+
+
+  public static function getAddonCatalogPriceRules($travelId, $dptId)
+  {
+    $user = JFactory::getUser();
+    //Get user group ids to which the user belongs to.
+    $groups = JAccess::getGroupsByUser($user->get('id'));
+    //Get current date and time (equal to NOW() in SQL).
+    $now = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    //Retrieve the departure ids of the travel in the chronological order.
+    $query->select('dpt_id, date_time')
+	  ->from('#__odyssey_departure_step_map')
+	  ->where('step_id='.(int)$dptStepId)
+	  ->order('date_time');
+    $db->setQuery($query);
+    $departures = $db->loadObjectList();
+
+    $dptNb = 0;
+    foreach($departures as $key => $departure) {
+      if($departure->dpt_id == $dptId) {
+	$dptNb = $key + 1;
+	break;
+      }
+    }
+
+    if(!$dptNb) {
+      return array();
+    }
+
+    $query->clear();
+    $query->select('prt.item_id AS addon_id, pr.name, pr.behavior, pr.show_rule, pr.ordering, prt.prule_id,'.
+		   'ap.dpt_id, pr.operation, pr.value, ap.psgr_nb, ap.price AS normal_price')
+	  ->from('#__odyssey_pricerule AS pr')
+	  ->join('INNER', '#__odyssey_prule_target AS prt ON prt.prule_id=pr.id')
+	  //
+	  ->join('INNER', '#__odyssey_addon_price AS ap ON ap.travel_id=t.id AND ap.dpt_id='.(int)$dptId.' AND ap.price > 0')
+	  ->join('INNER', '#__odyssey_prule_recipient AS prr ON (pr.recipient="customer" AND prr.item_id='.(int)$user->get('id').')'.
+	                  ' OR (pr.recipient="customer_group" AND prr.item_id IN ('.implode(',', $groups).'))')
+	  ->where('pr.prule_type="catalog" AND pr.target="addon"')
+	  //Don't collect price rules related to coupon.
+	  ->where('(pr.behavior="XOR" OR pr.behavior= "AND")')
+	  //Get only price rules set for the given travel.
+	  ->where('(prt.travel_ids=0 OR prt.travel_ids REGEXP "^(^'.(int)$travelId.'$)|(^'.(int)$travelId.',)|(,'.(int)$travelId.',)|(,'.(int)$travelId.'$)")')
+	  //Get only price rules set for the given departure number.
+	  ->where('(prt.dpt_nbs=0 OR prt.dpt_nbs REGEXP "^(^'.(int)$dptNb.'$)|(^'.(int)$dptNb.',)|(,'.(int)$dptNb.',)|(,'.(int)$dptNb.'$)")')
+	  ->where('prr.prule_id=pr.id AND pr.published=1')
+	  //Check against publication dates (start and stop).
+	  ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
+	  ->where('('.$db->quote($now).' > pr.publish_up OR pr.publish_up = "0000-00-00 00:00:00")')
+	  ->order('t.id, pr.ordering, prt.prule_id,ap.dpt_id');
+    $db->setQuery($query);
+    $addonPrules = $db->loadAssocList();
+  }
 }
 

@@ -173,11 +173,10 @@ class JavascriptHelper
     JText::script('COM_ODYSSEY_OPTION_ADDON'); 
     JText::script('COM_ODYSSEY_OPTION_CART_AMOUNT'); 
     JText::script('COM_ODYSSEY_PASSENGER_NUMBERS_LABEL'); 
-    JText::script('COM_ODYSSEY_PASSENGER_NUMBERS_TITLE'); 
     JText::script('COM_ODYSSEY_TRAVEL_IDS_LABEL'); 
-    JText::script('COM_ODYSSEY_TRAVEL_IDS_TITLE'); 
+    JText::script('COM_ODYSSEY_DEPARTURE_NUMBERS_LABEL'); 
+    JText::script('COM_ODYSSEY_NUMBER_LIST_TITLE'); 
     JText::script('COM_ODYSSEY_STEP_IDS_LABEL'); 
-    JText::script('COM_ODYSSEY_STEP_IDS_TITLE'); 
     JText::script('COM_ODYSSEY_ITEM_QUANTITY_LABEL'); 
     JText::script('COM_ODYSSEY_ITEM_QUANTITY_TITLE'); 
     JText::script('COM_ODYSSEY_ITEM_AMOUNT_LABEL'); 

@@ -592,9 +592,11 @@ class plgContentOdyssey extends JPlugin
 
 	      $row = new JObject;
 	      $row->item_id = $value;
-	      //Note: When target is set as addon, 2 extra id fields are defined.
+	      //Note: When target is set as addon, 3 extra fields are defined.
 	      $row->travel_ids = (isset($post['travel_ids_'.$idNb])) ? $post['travel_ids_'.$idNb] : '';
+	      $row->dpt_nbs = (isset($post['dpt_nbs_'.$idNb])) ? $post['dpt_nbs_'.$idNb] : '';
 	      $row->step_ids = (isset($post['step_ids_'.$idNb])) ? $post['step_ids_'.$idNb] : '';
+	      //Common field for all target types.
 	      $row->psgr_nbs = $post['psgr_nbs_'.$idNb];
 	      $targets[] = $row;
 	    }
@@ -646,7 +648,7 @@ class plgContentOdyssey extends JPlugin
       $columns = array('prule_id','item_id');
       OdysseyHelper::updateMappingTable('#__odyssey_prule_recipient', $columns, $recipients, array($data->id));
 
-      $columns = array('prule_id','item_id','travel_ids','step_ids','psgr_nbs');
+      $columns = array('prule_id','item_id','travel_ids','dpt_nbs','step_ids','psgr_nbs');
       OdysseyHelper::updateMappingTable('#__odyssey_prule_target', $columns, $targets, array($data->id));
 
       $columns = array('prule_id','item_id','operator','item_amount','item_qty');

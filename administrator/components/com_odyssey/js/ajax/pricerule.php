@@ -89,7 +89,7 @@ if($pruleId) {
       }
 
       $query->clear();
-      $query->select('t.item_id AS id, t.psgr_nbs, t.travel_ids, t.step_ids, i.'.$field)
+      $query->select('t.item_id AS id, t.psgr_nbs, t.dpt_nbs, t.travel_ids, t.step_ids, i.'.$field)
 	    ->from('#__odyssey_prule_target AS t')
 	    ->join('LEFT', $table.' AS i ON i.id=t.item_id')
 	    ->where('t.prule_id='.(int)$pruleId);

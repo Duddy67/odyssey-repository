@@ -200,19 +200,24 @@
 	$('#target-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-ids');
 
 	if(targetType == 'addon') {
-	  properties = {'title':Joomla.JText._('COM_ODYSSEY_TRAVEL_IDS_TITLE')};
+	  properties = {'title':Joomla.JText._('COM_ODYSSEY_NUMBER_LIST_TITLE')};
 	  $('#wrap-ids-'+idNb).createHTMLTag('<span>', properties, 'travel-ids-label');
 	  $('#wrap-ids-'+idNb+' .travel-ids-label').text(Joomla.JText._('COM_ODYSSEY_TRAVEL_IDS_LABEL'));
 	  properties = {'type':'text', 'name':'travel_ids_'+idNb, 'id':'travel-ids-'+idNb, 'value':data.travel_ids};
 	  $('#wrap-ids-'+idNb).createHTMLTag('<input>', properties, 'travel-ids');
-	  properties = {'title':Joomla.JText._('COM_ODYSSEY_STEP_IDS_TITLE')};
+	  properties = {'title':Joomla.JText._('COM_ODYSSEY_NUMBER_LIST_TITLE')};
+	  $('#wrap-ids-'+idNb).createHTMLTag('<span>', properties, 'dpt-nbs-label');
+	  $('#wrap-ids-'+idNb+' .dpt-nbs-label').text(Joomla.JText._('COM_ODYSSEY_DEPARTURE_NUMBERS_LABEL'));
+	  properties = {'type':'text', 'name':'dpt_nbs_'+idNb, 'id':'dpt-nbs-'+idNb, 'value':data.dpt_nbs};
+	  $('#wrap-ids-'+idNb).createHTMLTag('<input>', properties, 'dpt-nbs');
+	  properties = {'title':Joomla.JText._('COM_ODYSSEY_NUMBER_LIST_TITLE')};
 	  $('#wrap-ids-'+idNb).createHTMLTag('<span>', properties, 'step-ids-label');
 	  $('#wrap-ids-'+idNb+' .step-ids-label').text(Joomla.JText._('COM_ODYSSEY_STEP_IDS_LABEL'));
 	  properties = {'type':'text', 'name':'step_ids_'+idNb, 'id':'step-ids-'+idNb, 'value':data.step_ids};
 	  $('#wrap-ids-'+idNb).createHTMLTag('<input>', properties, 'step-ids');
 	}
 
-	properties = {'title':Joomla.JText._('COM_ODYSSEY_PASSENGER_NUMBERS_TITLE')};
+	properties = {'title':Joomla.JText._('COM_ODYSSEY_NUMBER_LIST_TITLE')};
 	$('#wrap-ids-'+idNb).createHTMLTag('<span>', properties, 'psgr-nbs-label');
 	$('#wrap-ids-'+idNb+' .psgr-nbs-label').text(Joomla.JText._('COM_ODYSSEY_PASSENGER_NUMBERS_LABEL'));
 	//

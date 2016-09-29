@@ -105,6 +105,11 @@ class OdysseyTablePricerule extends JTable
 	return false;
       }
 
+      if(preg_match('#^dpt_nbs_([0-9]+)$#', $key) && !preg_match('#^[1-9][0-9]*(,[1-9][0-9]*)*$#', $value) && !preg_match('#^0$#', $value)) {
+	$this->setError(JText::_('COM_ODYSSEY_ERROR_NUMBER_LIST_NOT_VALID'));
+	return false;
+      }
+
       if(preg_match('#^step_ids_([0-9]+)$#', $key) && !preg_match('#^[1-9][0-9]*(,[1-9][0-9]*)*$#', $value) && !preg_match('#^0$#', $value)) {
 	$this->setError(JText::_('COM_ODYSSEY_ERROR_NUMBER_LIST_NOT_VALID'));
 	return false;

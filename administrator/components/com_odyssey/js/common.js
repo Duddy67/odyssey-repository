@@ -565,7 +565,7 @@
     }
 
     var thDatetime = '<tr><th class="datetime">'+Joomla.JText._('COM_ODYSSEY_HEADING_DATETIME')+'</th>';
-    var thCity = '<th class="city">'+Joomla.JText._('COM_ODYSSEY_HEADING_CITY')+'</th>';
+    var thCity = '<th class="city">'+Joomla.JText._('COM_ODYSSEY_HEADING_DEPARTURE_CITY')+'</th>';
     var thMaxPas = '<th class="max-passengers">'+Joomla.JText._('COM_ODYSSEY_HEADING_MAX_PASSENGERS')+'</th>'; 
     var thPrice = '<th class="prices">'+Joomla.JText._('COM_ODYSSEY_HEADING_PRICE'+rule+'_PER_PASSENGER')+'</th>'; 
     var thSelect = '<th class="expand-collapse">#</th></tr>';
