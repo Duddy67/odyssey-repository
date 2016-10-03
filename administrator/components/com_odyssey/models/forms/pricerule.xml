@@ -51,6 +51,7 @@
 		<option value="travel">COM_ODYSSEY_OPTION_TRAVEL</option>
 		<option value="travel_cat">COM_ODYSSEY_OPTION_TRAVEL_CAT</option>
 		<option value="addon">COM_ODYSSEY_OPTION_ADDON</option>
+		<option value="addon_option">COM_ODYSSEY_OPTION_ADDON_OPTION</option>
 		<option value="cart_amount">COM_ODYSSEY_OPTION_CART_AMOUNT</option>
 	</field>
 

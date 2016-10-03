@@ -80,21 +80,35 @@ if($pruleId) {
       $db->setQuery($query);
       $targets = $db->loadAssocList();
     }
-    else { //travel_cat, addon
+    else { //travel_cat, addon, addon_option
       $table = '#__categories';
       $field = 'title AS name';
-      if($target == 'addon') {
-	$table = '#__odyssey_addon';
+      if($target == 'addon' || $target == 'addon_option') {
+	$table = '#__odyssey_'.$target;
 	$field = 'name';
       }
 
       $query->clear();
       $query->select('t.item_id AS id, t.psgr_nbs, t.dpt_nbs, t.travel_ids, t.step_ids, i.'.$field)
 	    ->from('#__odyssey_prule_target AS t')
-	    ->join('LEFT', $table.' AS i ON i.id=t.item_id')
-	    ->where('t.prule_id='.(int)$pruleId);
+	    ->join('LEFT', $table.' AS i ON i.id=t.item_id');
+
+      //Get the name of the parent addon.
+      if($target == 'addon_option') {
+	$query->select('a.name AS parent_addon')
+	      ->join('LEFT', '#__odyssey_addon AS a ON a.id=i.addon_id');
+      }
+
+      $query->where('t.prule_id='.(int)$pruleId);
       $db->setQuery($query);
       $targets = $db->loadAssocList();
+
+      //Add the name of the parent addon after the option name.
+      if($target == 'addon_option') {
+	foreach($targets as $key => $item) {
+	  $targets[$key]['name'] = $item['name'].' ('.$item['parent_addon'].')';
+	}
+      }
     }
   }
   else { //cart

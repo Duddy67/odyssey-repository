@@ -171,6 +171,7 @@ class JavascriptHelper
     JText::script('COM_ODYSSEY_OPTION_TRAVEL'); 
     JText::script('COM_ODYSSEY_OPTION_TRAVEL_CAT'); 
     JText::script('COM_ODYSSEY_OPTION_ADDON'); 
+    JText::script('COM_ODYSSEY_OPTION_ADDON_OPTION'); 
     JText::script('COM_ODYSSEY_OPTION_CART_AMOUNT'); 
     JText::script('COM_ODYSSEY_PASSENGER_NUMBERS_LABEL'); 
     JText::script('COM_ODYSSEY_TRAVEL_IDS_LABEL'); 

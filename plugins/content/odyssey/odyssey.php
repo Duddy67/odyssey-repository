@@ -586,13 +586,13 @@ class plgContentOdyssey extends JPlugin
 	      $priceRules[] = array('psgr_nb' => $psgrNb, 'dpt_id' => $dptId, 'id_nb' => $idNb, 'value' => $value);
 	    }
 	  }
-	  else { //travel_cat, addon
+	  else { //travel_cat, addon, addon_option
 	    if(preg_match('#^target_id_([0-9]+)$#', $key, $matches)) {
 	      $idNb = $matches[1];
 
 	      $row = new JObject;
 	      $row->item_id = $value;
-	      //Note: When target is set as addon, 3 extra fields are defined.
+	      //Note: When target is set as addon or addon_option, 3 extra fields are defined.
 	      $row->travel_ids = (isset($post['travel_ids_'.$idNb])) ? $post['travel_ids_'.$idNb] : '';
 	      $row->dpt_nbs = (isset($post['dpt_nbs_'.$idNb])) ? $post['dpt_nbs_'.$idNb] : '';
 	      $row->step_ids = (isset($post['step_ids_'.$idNb])) ? $post['step_ids_'.$idNb] : '';

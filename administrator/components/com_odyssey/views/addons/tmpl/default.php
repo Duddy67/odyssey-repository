@@ -24,8 +24,7 @@ $canOrder = $user->authorise('core.edit.state', 'com_odyssey');
 $addonTypes = array('excursion' => 'COM_ODYSSEY_OPTION_EXCURSION',
 		    'hosting' => 'COM_ODYSSEY_OPTION_HOSTING',
 		    'insurance' => 'COM_ODYSSEY_OPTION_INSURANCE',
-		    'vehicle' => 'COM_ODYSSEY_OPTION_VEHICLE',
-		    'addon_option' => 'COM_ODYSSEY_OPTION_ADDON_OPTION');
+		    'vehicle' => 'COM_ODYSSEY_OPTION_VEHICLE');
 ?>
 
 
@@ -129,13 +128,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	  <td class="small hidden-phone">
 	    <?php
 	          if($item->group_nb == 'none') {
-
-		    $muted = '';
-		    if($item->addon_type == 'addon_option') {
-		      $muted = 'class="muted"';
-		    }
-
-		    echo '<span '.$muted.'>'.JText::_('COM_ODYSSEY_OPTION_NONE').'</span>';
+		    echo JText::_('COM_ODYSSEY_OPTION_NONE');
 		  }
                   else {
 		    preg_match('#^([0-9]+):(no_sel|single_sel|multi_sel)$#', $item->group_nb, $matches);

@@ -458,6 +458,9 @@ class OdysseyModelTravel extends JModelItem
       $addonOptions = $db->loadAssocList();
     }
 
+    //Get the possible addon price rules linked to this travel.
+    $addonPrules = PriceruleHelper::getAddonCatalogPriceRules($travel);
+
     //Prepare data.
     $data = array();
     $data['addons'] = $addons;

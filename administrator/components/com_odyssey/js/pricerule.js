@@ -104,6 +104,7 @@
       var options = '<option value="travel">'+Joomla.JText._('COM_ODYSSEY_OPTION_TRAVEL')+'</option>';
       options += '<option value="travel_cat">'+Joomla.JText._('COM_ODYSSEY_OPTION_TRAVEL_CAT')+'</option>';
       options += '<option value="addon">'+Joomla.JText._('COM_ODYSSEY_OPTION_ADDON')+'</option>';
+      options += '<option value="addon_option">'+Joomla.JText._('COM_ODYSSEY_OPTION_ADDON_OPTION')+'</option>';
       //Display the "add" button.
       $('#add-target-button-0').parent().css({'visibility':'visible','display':'block'});
     }
@@ -199,7 +200,7 @@
 	var properties = {'id':'wrap-ids-'+idNb};
 	$('#target-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-ids');
 
-	if(targetType == 'addon') {
+	if(targetType == 'addon' || targetType == 'addon_option') {
 	  properties = {'title':Joomla.JText._('COM_ODYSSEY_NUMBER_LIST_TITLE')};
 	  $('#wrap-ids-'+idNb).createHTMLTag('<span>', properties, 'travel-ids-label');
 	  $('#wrap-ids-'+idNb+' .travel-ids-label').text(Joomla.JText._('COM_ODYSSEY_TRAVEL_IDS_LABEL'));
@@ -363,6 +364,9 @@
 	break;
       case 'addon':
 	view = 'addons';
+	break;
+      case 'addon_option':
+	view = 'addonoptions';
 	break;
       case 'travel_cat_amount':
 	view = 'categories';
