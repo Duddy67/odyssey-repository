@@ -16,7 +16,7 @@ $travel = $session->get('travel', array(), 'odyssey');
 $addons = $session->get('addons', array(), 'odyssey'); 
 $settings = $session->get('settings', array(), 'odyssey'); 
 //echo '<pre>';
-//var_dump($travel);
+//var_dump($addons);
 //echo '</pre>';
 ?>
 <script type="text/javascript">

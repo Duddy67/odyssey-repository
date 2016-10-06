@@ -24,7 +24,15 @@ class OrderHelper
       $orderDetails .= '<tr><td>'.$addon['name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_ADDON').'</td>';
 
       if($addon['price'] > 0) {
-	$orderDetails .= '<td>'.UtilityHelper::formatNumber($addon['price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
+	$orderDetails .= '<td>';
+
+	//Check for price rules.
+	if(isset($addon['pricerules'])) {
+	  $orderDetails .= '<span style="text-decoration: line-through;">'.
+			     UtilityHelper::formatNumber($addon['normal_price'], $settings['digits_precision']).' '.$currency.'</span><br />';
+	}
+
+	$orderDetails .= UtilityHelper::formatNumber($addon['price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
       }
       else {
 	$orderDetails .= '<td>'.JText::_('COM_ODYSSEY_HEADING_INCLUDED').'</td></tr>';
@@ -34,7 +42,15 @@ class OrderHelper
 	$orderDetails .= '<tr><td>'.$option['name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_ADDON_OPTION').'</td>';
 
 	if($option['price'] > 0) {
-	  $orderDetails .= '<td>'.UtilityHelper::formatNumber($option['price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
+	  $orderDetails .= '<td>';
+
+	  //Check for price rules.
+	  if(isset($option['pricerules'])) {
+	    $orderDetails .= '<span style="text-decoration: line-through;">'.
+			      UtilityHelper::formatNumber($option['normal_price'], $settings['digits_precision']).' '.$currency.'</span><br />';
+	  }
+
+	  $orderDetails .= UtilityHelper::formatNumber($option['price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
 	}
 	else {
 	  $orderDetails .= '<td>'.JText::_('COM_ODYSSEY_HEADING_INCLUDED').'</td></tr>';
@@ -216,8 +232,35 @@ class OrderHelper
     }
 
     if($itemType == 'addon') {
+      $addonIds = $addonOptionIds = array();
       foreach($item as $addon) {
-	if(isset($item['pricerules'])) {
+	//Check for price rule and possible duplicate price rule.
+	if(isset($addon['pricerules']) && !in_array($addon['addon_id'], $addonIds)) {
+	  //Note: The same price rule can be applied on multiple addons so there 
+	  //is no need to insert the same price rule twice or more.
+	  $addonIds[] = $addon['addon_id'];
+
+	  foreach($addon['pricerules'] as $priceRule) {
+	    $values[] = $orderId.','.$priceRule['prule_id'].','.$db->quote($priceRule['name']).','.$db->quote($priceRule['prule_type']).','.
+			$db->quote($priceRule['behavior']).','.$db->quote($priceRule['operation']).','.$db->quote($priceRule['target']).','.
+			$priceRule['show_rule'].','.$priceRule['value'].','.$priceRule['ordering'];
+	  }
+	}
+
+	//Check for addon option price rules.
+	if(!empty($addon['options'])) {
+	  foreach($addon['options'] as $option) {
+	    //Check for price rule and possible duplicate price rule.
+	    if(isset($option['pricerules']) && !in_array($option['addon_option_id'], $addonOptionIds)) {
+	      $addonOptionIds[] = $option['addon_option_id'];
+
+	      foreach($option['pricerules'] as $priceRule) {
+		$values[] = $orderId.','.$priceRule['prule_id'].','.$db->quote($priceRule['name']).','.$db->quote($priceRule['prule_type']).','.
+			    $db->quote($priceRule['behavior']).','.$db->quote($priceRule['operation']).','.$db->quote($priceRule['target']).','.
+			    $priceRule['show_rule'].','.$priceRule['value'].','.$priceRule['ordering'];
+	      }
+	    }
+	  }
 	}
       }
     }

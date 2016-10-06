@@ -465,6 +465,8 @@ class OdysseyModelTravel extends JModelItem
     $data = array();
     $data['addons'] = $addons;
     $data['addon_options'] = $addonOptions;
+    $data['addon_prules'] = $addonPrules['addons'];
+    $data['addon_option_prules'] = $addonPrules['addon_options'];
 
     return $data;
   }
@@ -563,6 +565,8 @@ class OdysseyModelTravel extends JModelItem
 	}
       }
     }
+
+    $addons = PriceruleHelper::getMatchingAddonPriceRules($addons, $travel);
 
     return $addons;
   }

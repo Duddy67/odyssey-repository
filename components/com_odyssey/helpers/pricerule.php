@@ -626,6 +626,7 @@ class PriceruleHelper
     $db->setQuery($query);
     $departures = $db->loadObjectList();
 
+    //Get the departure chronological number corresponding to the chosen departure id. 
     $dptNb = 0;
     foreach($departures as $key => $departure) {
       if($departure->dpt_id == $dptId) {
@@ -639,7 +640,7 @@ class PriceruleHelper
     }
 
     //Compute the SQL REGEXP for each passenger number included in the travel.
-    //Note: To be used with for a more advanced feature.
+    //TODO: To be used for a more advanced feature.
     $regexp = '';
     for($i = 0; $i < $travel['nb_psgr']; $i++) {
       $psgrNb = $i + 1;
@@ -649,12 +650,13 @@ class PriceruleHelper
     //Remove comma from the end of the string.
     $regexp = substr($regexp, 0, -1);
 
+    //Get the price rules linked to the addons of the travel.
     $query->clear();
-    $query->select('prt.item_id AS addon_id, pr.name, pr.behavior, pr.show_rule, pr.ordering, prt.prule_id,'.
-		   'ap.dpt_id, pr.operation, pr.value, ap.psgr_nb, ap.price AS normal_price')
+    $query->select('ap.step_id, ap.addon_id, pr.name, pr.behavior, pr.show_rule, pr.ordering, prt.prule_id,'.
+		   'ap.dpt_id, pr.operation, pr.prule_type, pr.target, pr.value, ap.psgr_nb')
 	  ->from('#__odyssey_pricerule AS pr')
 	  ->join('INNER', '#__odyssey_prule_target AS prt ON prt.prule_id=pr.id')
-	  //
+	  //Get only price rules matching the number of passenger set by the user (TODO: to modified).
 	  ->join('INNER', '#__odyssey_addon_price AS ap ON ap.travel_id='.(int)$travelId.
 	                  ' AND ap.addon_id=prt.item_id AND ap.dpt_id='.(int)$dptId.' AND ap.psgr_nb='.$psgrNb.' AND ap.price > 0')
 	  ->join('INNER', '#__odyssey_prule_recipient AS prr ON (pr.recipient="customer" AND prr.item_id='.(int)$user->get('id').')'.
@@ -667,20 +669,156 @@ class PriceruleHelper
 	  //Get only price rules set for the given departure number.
 	  ->where('(prt.dpt_nbs=0 OR prt.dpt_nbs REGEXP "(^'.(int)$dptNb.'$)|(^'.(int)$dptNb.',)|(,'.(int)$dptNb.',)|(,'.(int)$dptNb.'$)")')
 	  //Get only price rules set for each passenger number included in the travel.
-	  //Note: To be used with for a more advanced feature.
+	  //TODO: To be used for a more advanced feature.
 	  //->where('(prt.psgr_nbs=0 OR prt.psgr_nbs REGEXP "'.$regexp.'")')
 	  ->where('prr.prule_id=pr.id AND pr.published=1')
 	  //Check against publication dates (start and stop).
 	  ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
 	  ->where('('.$db->quote($now).' > pr.publish_up OR pr.publish_up = "0000-00-00 00:00:00")')
-	  ->order('prt.prule_id, pr.ordering, ap.dpt_id, ap.psgr_nb');
+	  ->order('ap.step_id, ap.addon_id, prt.prule_id, pr.ordering, ap.dpt_id, ap.psgr_nb');
     $db->setQuery($query);
-    echo $query;
-    $addonPrules = $db->loadAssocList();
-    //$prules = PriceruleHelper::setTravelPruleRows($addonPrules);
-    //echo '<pre>';
-    //var_dump($prules);
-    //echo '</pre>';
+    //echo $query;
+    $results = $db->loadAssocList();
+
+    //Build id path arrays from which all price rules can be easily retrieved.
+    //Path pattern:  array[step_id] -> array[addon_id] -> array(pricerule data)
+    $addonPrules = array();
+    foreach($results as $result) {
+      if(!array_key_exists($result['step_id'], $addonPrules)) {
+	$addonPrules[$result['step_id']] = array($result['addon_id'] => array($result));
+      }
+      else {
+	if(!array_key_exists($result['addon_id'], $addonPrules[$result['step_id']])) {
+	  $addonPrules[$result['step_id']][$result['addon_id']] = array($result);
+	}
+	else {
+	  $addonPrules[$result['step_id']][$result['addon_id']][] = $result;
+	}
+      }
+    }
+
+    //Get the price rules linked to the addon options linked to the addons of the travel.
+    $query->clear();
+    $query->select('aop.step_id, aop.addon_id, aop.addon_option_id, pr.name, pr.behavior, pr.show_rule, pr.ordering, prt.prule_id,'.
+		   'aop.dpt_id, pr.operation, pr.prule_type, pr.target, pr.value, aop.psgr_nb')
+	  ->from('#__odyssey_pricerule AS pr')
+	  ->join('INNER', '#__odyssey_prule_target AS prt ON prt.prule_id=pr.id')
+	  //
+	  ->join('INNER', '#__odyssey_addon_option_price AS aop ON aop.travel_id='.(int)$travelId.
+	                  ' AND aop.addon_option_id=prt.item_id AND aop.dpt_id='.(int)$dptId.' AND aop.psgr_nb='.$psgrNb.' AND aop.price > 0')
+	  ->join('INNER', '#__odyssey_prule_recipient AS prr ON (pr.recipient="customer" AND prr.item_id='.(int)$user->get('id').')'.
+	                  ' OR (pr.recipient="customer_group" AND prr.item_id IN ('.implode(',', $groups).'))')
+	  ->where('pr.prule_type="catalog" AND pr.target="addon_option"')
+	  //Don't collect price rules related to coupon.
+	  ->where('(pr.behavior="XOR" OR pr.behavior= "AND")')
+	  //Get only price rules set for the given travel.
+	  ->where('(prt.travel_ids=0 OR prt.travel_ids REGEXP "(^'.(int)$travelId.'$)|(^'.(int)$travelId.',)|(,'.(int)$travelId.',)|(,'.(int)$travelId.'$)")')
+	  //Get only price rules set for the given departure number.
+	  ->where('(prt.dpt_nbs=0 OR prt.dpt_nbs REGEXP "(^'.(int)$dptNb.'$)|(^'.(int)$dptNb.',)|(,'.(int)$dptNb.',)|(,'.(int)$dptNb.'$)")')
+	  //Get only price rules set for each passenger number included in the travel.
+	  //Note: To be used for a more advanced feature.
+	  //->where('(prt.psgr_nbs=0 OR prt.psgr_nbs REGEXP "'.$regexp.'")')
+	  ->where('prr.prule_id=pr.id AND pr.published=1')
+	  //Check against publication dates (start and stop).
+	  ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
+	  ->where('('.$db->quote($now).' > pr.publish_up OR pr.publish_up = "0000-00-00 00:00:00")')
+	  ->order('aop.step_id, aop.addon_id, prt.prule_id, pr.ordering, aop.dpt_id, aop.psgr_nb');
+    $db->setQuery($query);
+    $results = $db->loadAssocList();
+
+    //Build id path arrays from which all price rules can be easily retrieved.
+    //Path pattern: array[step_id] -> array[addon_id] -> array[addon_option_id] -> array(pricerule data)
+    $addonOptionPrules = array();
+    foreach($results as $result) {
+      if(!array_key_exists($result['step_id'], $addonOptionPrules)) {
+	$addonOptionPrules[$result['step_id']] = array($result['addon_id'] => array($result['addon_option_id'] => array($result)));
+      }
+      else {
+	if(!array_key_exists($result['addon_id'], $addonOptionPrules[$result['step_id']])) {
+	  $addonOptionPrules[$result['step_id']][$result['addon_id']] = array($result['addon_option_id'] => array($result));
+	}
+	elseif(!array_key_exists($result['addon_option_id'], $addonOptionPrules[$result['step_id']][$result['addon_id']])) {
+	  $addonOptionPrules[$result['step_id']][$result['addon_id']][$result['addon_option_id']] = array($result);
+	}
+	else {
+	  $addonOptionPrules[$result['step_id']][$result['addon_id']][$result['addon_option_id']][] = $result;
+	}
+      }
+    }
+
+    $priceRules = array();
+    $priceRules['addons'] = $addonPrules;
+    $priceRules['addon_options'] = $addonOptionPrules;
+
+    return $priceRules;
+  }
+
+
+  public static function getMatchingAddonPriceRules($addons, $travel)
+  {
+    //Get the addon price rules linked to the travel. 
+    $addonCatPrules = PriceruleHelper::getAddonCatalogPriceRules($travel);
+    $addonPrules = $addonCatPrules['addons'];
+    $addonOptionPrules = $addonCatPrules['addon_options'];
+
+    //Insert the price rules which match the selected addons.
+    foreach($addons as $key => $addon) {
+      $normalPrice = $price = $addon['price'];
+      //Check price rules for this addon.
+      $prules = array();
+      if(isset($addonPrules[$addon['step_id']][$addon['addon_id']])) {
+	foreach($addonPrules[$addon['step_id']][$addon['addon_id']] as $addonPrule) {
+	  //Get the new price. 
+	  $price = PriceruleHelper::computePriceRule($addonPrule['operation'], $addonPrule['psgr_nb'], $price);
+	  $prules[] = $addonPrule;
+
+	  //Don't go further in case of Exclusive price rule.
+	  if($addonPrule['behavior'] == 'XOR') {
+	    break;
+	  }
+	}
+      }
+
+      //Insert price rule data and modify price accordingly.
+      if(!empty($prules)) {
+	$addons[$key]['price'] = $price;
+	$addons[$key]['pricerules'] = $prules;
+	$addons[$key]['normal_price'] = $normalPrice;
+      }
+
+      //Now move to the addon options if any.
+      if(!empty($addon['options'])) {
+	//Insert the price rules which match the selected addon options.
+	foreach($addon['options'] as $key2 => $option) {
+	  $normalPrice = $price = $option['price'];
+	  //Check price rules for this addon option.
+	  $prules = array();
+	  if(isset($addonOptionPrules[$addon['step_id']][$addon['addon_id']][$option['addon_option_id']])) {
+	    foreach($addonOptionPrules[$addon['step_id']][$addon['addon_id']][$option['addon_option_id']] as $addonOptionPrule) {
+	      //Get the new price. 
+	      $price = PriceruleHelper::computePriceRule($addonOptionPrule['operation'], $addonOptionPrule['psgr_nb'], $price);
+	      $prules[] = $addonOptionPrule;
+
+	      //Don't go further in case of Exclusive price rule.
+	      if($addonOptionPrule['behavior'] == 'XOR') {
+		break;
+	      }
+	    }
+	  }
+
+	  //Insert price rule data and modify price accordingly.
+	  if(!empty($prules)) {
+	    if(!empty($prules)) {
+	      $addons[$key]['options'][$key2]['price'] = $price;
+	      $addons[$key]['options'][$key2]['pricerules'] = $prules;
+	      $addons[$key]['options'][$key2]['normal_price'] = $normalPrice;
+	    }
+	  }
+	}
+      }
+    }
+
+    return $addons;
   }
 }
 

@@ -55,6 +55,7 @@ class OdysseyControllerPayment extends JControllerForm
 	OrderHelper::storeTravel($travel, $orderId);
 	OrderHelper::storePriceRules($travel, $orderId, 'travel');
 	OrderHelper::storeAddons($addons, $orderId);
+	OrderHelper::storePriceRules($addons, $orderId, 'addon');
 	OrderHelper::setPassengers($passengers, $orderId);
 
 	//Save the order id.

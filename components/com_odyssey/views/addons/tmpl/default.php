@@ -12,6 +12,8 @@ JHtml::addIncludePath(JPATH_COMPONENT.'/helpers');
 
 $addons = $this->addonData['addons'];
 $addonOptions = $this->addonData['addon_options'];
+$addonPrules = $this->addonData['addon_prules'];
+$addonOptionPrules = $this->addonData['addon_option_prules'];
 
 //Ensure first that there is at least one hosting addon (matching with the number of
 //passengers selected by the customer).
@@ -28,7 +30,7 @@ $session = JFactory::getSession();
 $travel = $session->get('travel', array(), 'odyssey'); 
 $settings = $session->get('settings', array(), 'odyssey'); 
 //echo '<pre>';
-//var_dump($settings);
+//var_dump($this->addonData['addon_option_prules']);
 //echo '</pre>';
 
 ?>
@@ -58,6 +60,42 @@ $settings = $session->get('settings', array(), 'odyssey');
       echo '<div class="addon-step">';
     }
 
+    $normalPrice = $price = $addon['price'];
+    //Check price rules for this addon.
+    $isPriceRule = false;
+    $priceRuleNames = array();
+    if(isset($addonPrules[$addon['step_id']][$addon['addon_id']])) {
+      foreach($addonPrules[$addon['step_id']][$addon['addon_id']] as $addonPrule) {
+	//Get the new price. 
+	$price = PriceruleHelper::computePriceRule($addonPrule['operation'], $addonPrule['psgr_nb'], $price);
+
+	if($addonPrule['show_rule']) {
+	  //Store the price rule names in an array so that they can be displayed out of
+	  //the scope.
+	  if(isset($priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']])) {
+	    //Add another price rule name.
+	    $priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']] .= '<div class="pricerule-name">'.$addonPrule['name'].'</div>';
+	  }
+	  else {
+	    $priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']] = '<div class="pricerule-name">'.$addonPrule['name'].'</div>';
+	  }
+
+	  $isPriceRule = true;
+	}
+	else { //Hidden price rule.
+	  //We applied the hidden price rule values to the normal 
+	  //price so that there is no misunderstanding about the 
+	  //computing price in case other price rules are shown.
+	  $normalPrice = PriceruleHelper::computePriceRule($addonPrule['operation'], $addonPrule['psgr_nb'], $normalPrice);
+	}
+
+	//Don't go further in case of Exclusive price rule.
+	if($addonPrule['behavior'] == 'XOR') {
+	  break;
+	}
+      }
+    }
+
     //The addon has no group.
     if($addon['group_nb'] == 'none') {
       //Display information and price.
@@ -65,8 +103,18 @@ $settings = $session->get('settings', array(), 'odyssey');
 	   '<h2 class="addon-title">'.$this->escape($addon['name']).'</h2>'.$addon['description'];
 
       if($addon['price'] > 0) {
+	//Check for price rules.
+	if($isPriceRule) {
+	  if(isset($priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']])) {
+	    echo $priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']];
+	  }
+
+	  echo '<div class="addon-price"><span class="normal-price">'.
+		UtilityHelper::formatNumber($normalPrice).'</span><span class="currency">'.$this->currency.'</span></div>';
+	}
+
 	echo '<div class="addon-price">'.
-	     '<span class="price">'.UtilityHelper::formatNumber($addon['price']).'</span>'.
+	     '<span class="price">'.UtilityHelper::formatNumber($price).'</span>'.
 	     '<span class="currency">'.$this->currency.'</span></div>';
       }
       //Use a hidden type tag as there is no selection for this addon.
@@ -77,6 +125,7 @@ $settings = $session->get('settings', array(), 'odyssey');
       if(!empty($addon['option_type'])) {
 	echo JLayoutHelper::render('addon_options', array('addon_options' => $addonOptions, 
 							  'addon' => $addon,
+							  'addon_option_prules' => $addonOptionPrules, 
 							  'currency' => $this->currency), JPATH_SITE.'/components/com_odyssey/layouts/');
       }
 
@@ -90,8 +139,8 @@ $settings = $session->get('settings', array(), 'odyssey');
       //The first radio button of a group (single select) is checked by default.
       $checked = ' checked="checked"';
 
-      //The previous addon belongs to the same group than the current one.
-      if(isset($addons[$key - 1]) && $addons[$key - 1]['group_nb'] == $addon['group_nb']) {
+      //The previous addon belongs to the same step and group than the current one.
+      if(isset($addons[$key - 1]) && $addons[$key - 1]['step_id'] == $addon['step_id'] && $addons[$key - 1]['group_nb'] == $addon['group_nb']) {
 	$checked = '';
       }
       else { //It's the first addon of the group.
@@ -103,8 +152,18 @@ $settings = $session->get('settings', array(), 'odyssey');
 	   '<h2 class="addon-title">'.$this->escape($addon['name']).'</h2>'.$addon['description'];
 
       if($addon['price'] > 0) {
+	//Check for price rules.
+	if($isPriceRule) {
+	  if(isset($priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']])) {
+	    echo $priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']];
+	  }
+
+	  echo '<div class="addon-price"><span class="normal-price">'.
+		UtilityHelper::formatNumber($normalPrice).'</span><span class="currency">'.$this->currency.'</span></div>';
+	}
+
 	echo '<div class="addon-price">'.
-	     '<span class="price">'.UtilityHelper::formatNumber($addon['price']).'</span>'.
+	     '<span class="price">'.UtilityHelper::formatNumber($price).'</span>'.
 	     '<span class="currency">'.$this->currency.'</span></div>';
       }
 
@@ -125,6 +184,7 @@ $settings = $session->get('settings', array(), 'odyssey');
       if(!empty($addon['option_type'])) {
 	echo JLayoutHelper::render('addon_options', array('addon_options' => $addonOptions, 
 							  'addon' => $addon, 
+							  'addon_option_prules' => $addonOptionPrules, 
 							  'currency' => $this->currency), JPATH_SITE.'/components/com_odyssey/layouts/');
       }
 

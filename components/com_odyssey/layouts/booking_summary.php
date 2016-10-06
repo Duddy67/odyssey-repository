@@ -45,14 +45,21 @@ echo $travelDetails;
   <h3><?php echo JText::_('COM_ODYSSEY_BOOKING_DETAILS_TITLE'); ?></h3>
 <?php
 $bookingDetails = '<table class="booking-details table table-condensed"><tr><th>'.JText::_('COM_ODYSSEY_HEADING_NAME').'</th><th>'.
-		 JText::_('COM_ODYSSEY_HEADING_TYPE').'</th><th>'.JText::_('COM_ODYSSEY_HEADING_PRICE').'</th></tr>';
+		   JText::_('COM_ODYSSEY_HEADING_TYPE').'</th><th>'.JText::_('COM_ODYSSEY_HEADING_PRICE').'</th></tr>';
 
-//Check for travel price rules.
 foreach($addons as $addon) {
   $bookingDetails .= '<tr><td>'.$addon['name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_ADDON').'</td>';
 
   if($addon['price'] > 0) {
-    $bookingDetails .= '<td>'.UtilityHelper::formatNumber($addon['price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
+    $bookingDetails .= '<td>';
+
+    //Check for price rules.
+    if(isset($addon['pricerules'])) {
+      $bookingDetails .= '<span style="text-decoration: line-through;">'.
+			 UtilityHelper::formatNumber($addon['normal_price'], $settings['digits_precision']).' '.$currency.'</span><br />';
+    }
+
+    $bookingDetails .= UtilityHelper::formatNumber($addon['price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
     $finalAmount = $finalAmount + $addon['price'];
   }
   else {
@@ -63,7 +70,15 @@ foreach($addons as $addon) {
     $bookingDetails .= '<tr><td>'.$option['name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_ADDON_OPTION').'</td>';
 
     if($option['price'] > 0) {
-      $bookingDetails .= '<td>'.UtilityHelper::formatNumber($option['price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
+      $bookingDetails .= '<td>';
+
+      //Check for price rules.
+      if(isset($option['pricerules'])) {
+	$bookingDetails .= '<span style="text-decoration: line-through;">'.
+			   UtilityHelper::formatNumber($option['normal_price'], $settings['digits_precision']).' '.$currency.'</span><br />';
+      }
+
+      $bookingDetails .= UtilityHelper::formatNumber($option['price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
       $finalAmount = $finalAmount + $option['price'];
     }
     else {
@@ -74,9 +89,10 @@ foreach($addons as $addon) {
 
 $bookingDetails .= '<tr><td>'.$travel['name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_TRAVEL').'</td><td>';
 
+//Check for price rules.
 if(isset($travel['pricerules'])) {
   $bookingDetails .= '<span style="text-decoration: line-through;">'.
-		   UtilityHelper::formatNumber($travel['normal_price'], $settings['digits_precision']).' '.$currency.'</span><br />';
+		     UtilityHelper::formatNumber($travel['normal_price'], $settings['digits_precision']).' '.$currency.'</span><br />';
 }
 
 $bookingDetails .= UtilityHelper::formatNumber($travel['travel_price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
