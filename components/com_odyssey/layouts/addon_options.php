@@ -13,8 +13,11 @@ $addonOptions = $displayData['addon_options'];
 $addonOptionPrules = $displayData['addon_option_prules'];
 $addon = $displayData['addon'];
 $currency = $displayData['currency'];
+$countAddonOptions = count($addonOptions);
 
-echo '<div class="addon-options">';
+if($countAddonOptions) {
+  echo '<div class="addon-options">';
+}
 
 foreach($addonOptions as $key => $addonOption) {
   //Check that the addon option belongs to the current addon.
@@ -82,7 +85,9 @@ foreach($addonOptions as $key => $addonOption) {
   }
 }
 
-echo '</div>';
+if($countAddonOptions) {
+  echo '</div>';
+}
 ?>
 
 

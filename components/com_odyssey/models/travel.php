@@ -413,7 +413,7 @@ class OdysseyModelTravel extends JModelItem
     //Get the addons set in the steps of the sequence.
     //Note: The addon prices are based on the number of passengers selected by the user.
     $query->clear();
-    $query->select('sa.step_id, sa.addon_id, IFNULL(ts.time_gap, "000:00:00") AS time_gap, a.name, a.addon_type, a.group_nb,'.
+    $query->select('sa.step_id, s.name AS step_name, sa.addon_id, IFNULL(ts.time_gap, "000:00:00") AS time_gap, a.name, a.addon_type, a.group_nb,'.
 	           'a.option_type, a.description, IFNULL(ap.price, 0) AS price, sa.ordering, h.nb_persons')
 	  ->from('#__odyssey_step_addon_map AS sa')
 	  ->join('INNER', '#__odyssey_addon AS a ON a.id=sa.addon_id')
@@ -421,6 +421,7 @@ class OdysseyModelTravel extends JModelItem
 	  ->join('LEFT', '#__odyssey_timegap_step_map AS ts ON ts.step_id=sa.step_id')
 	  ->join('LEFT', '#__odyssey_addon_price AS ap ON ap.travel_id='.(int)$travel['travel_id'].' AND ap.step_id=sa.step_id'.
 	                 ' AND ap.addon_id=sa.addon_id AND ap.dpt_id=sa.dpt_id AND ap.psgr_nb='.(int)$travel['nb_psgr'])
+	  ->join('LEFT', '#__odyssey_step AS s ON s.id=sa.step_id')
 	  ->where('sa.step_id IN('.implode(',', $stepIds).') AND sa.dpt_id='.(int)$travel['dpt_id'].' AND a.published=1')
 	  //For hosting type addons we check that the number of passengers/persons is matching.
 	  //Zero means no limit and IS NULL is to get the other addon types. 

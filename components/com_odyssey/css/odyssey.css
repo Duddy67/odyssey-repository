@@ -14,18 +14,25 @@
 
 .addon-step {
   padding: 5px;
-  border: 1px solid blue;
+  border: 1px solid #4d4d33;
+  border-radius: 5px;
+  margin-bottom: 20px;
 }
 
 .addon-group {
   padding: 5px;
-  border: 1px solid green;
+  border: 1px solid #999966;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 .addon,
-.addon-option {
+.addon-option,
+.addon-options {
   padding: 5px;
-  border: 1px solid red;
+  border: 1px solid #ccccb3;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 .addon-title {

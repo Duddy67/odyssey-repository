@@ -30,7 +30,7 @@ $session = JFactory::getSession();
 $travel = $session->get('travel', array(), 'odyssey'); 
 $settings = $session->get('settings', array(), 'odyssey'); 
 //echo '<pre>';
-//var_dump($this->addonData['addon_option_prules']);
+//var_dump($addons);
 //echo '</pre>';
 
 ?>
@@ -45,19 +45,17 @@ $settings = $session->get('settings', array(), 'odyssey');
 
   <form action="index.php?option=com_odyssey&task=addons.setAddons" method="post" name="addons" id="addons">
   <?php
-  $stepIds = array();
 
   foreach($addons as $key => $addon) {
-    //Create an opening div for each step.
-    if(!in_array($addon['step_id'], $stepIds)) {
-      $stepIds[] = $addon['step_id'];
-
-      //Close the previous div (unless we're dealing with the very first div).
-      if(count($stepIds) > 1) {
-	echo '</div>';
-      }
-
+    //Create an opening div for each new step.
+    if($key == 0) {
       echo '<div class="addon-step">';
+      echo '<h3>'.$addon['step_name'].'</h3>';
+    }
+    //Close the previous step and create an opening div for the new one.
+    elseif($key > 0 && $addon['step_id'] != $addons[$key - 1]['step_id']) {
+      echo '</div><div class="addon-step">';
+      echo '<h3>'.$addon['step_name'].'</h3>';
     }
 
     $normalPrice = $price = $addon['price'];
@@ -191,14 +189,16 @@ $settings = $session->get('settings', array(), 'odyssey');
       echo '</div>'; //Close the addon div.
 
       //The current addon is the last addon of the group.
-      if(!isset($addons[$key + 1]) || $addons[$key + 1]['group_nb'] != $addon['group_nb']) {
+      if(!isset($addons[$key + 1]) || $addons[$key + 1]['step_id'] != $addon['step_id'] || $addons[$key + 1]['group_nb'] != $addon['group_nb']) {
 	echo '</div>'; //Close the addon group div.
       }
     }
+
+    //The current step is the last one.
+    if(!isset($addons[$key + 1])) {
+      echo '</div>'; //Close the step div.
+    }
   }
-
-  echo '</div>'; //Close the last addon step div.
-
   ?>
     <div id="btn-message">
       <input type="submit" class="btn btn-warning" onclick="hideButton('btn')" value="<?php echo JText::_('COM_ODYSSEY_BUTTON_NEXT'); ?>" />
