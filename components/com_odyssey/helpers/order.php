@@ -15,12 +15,21 @@ class OrderHelper
   public static function storeOrder($travel, $addons, $settings)
   {
     $user = JFactory::getUser();
-    $orderDetails = '<table class="order-details table"><tr><th>'.JText::_('COM_ODYSSEY_HEADING_NAME').'</th><th>'.
+    $orderDetails = '<table class="order-details table" style="width:100%;"><tr><th>'.JText::_('COM_ODYSSEY_HEADING_NAME').'</th><th>'.
                      JText::_('COM_ODYSSEY_HEADING_TYPE').'</th><th>'.JText::_('COM_ODYSSEY_HEADING_PRICE').'</th></tr>';
     $currency = $settings['currency'];
 
     //Build the order details html table.
     foreach($addons as $addon) {
+      //Check for price rules and display names.
+      if(isset($addon['pricerules'])) {
+	foreach($addon['pricerules'] as $priceRule) {
+	  $orderDetails .= '<tr class="addon-pricerules"><td>'.$priceRule['name'].'</td><td>'.
+	                    JText::_('COM_ODYSSEY_HEADING_ADDON_PRICERULE').'</td>';
+	  $orderDetails .= '<td>'.UtilityHelper::formatPriceRule($priceRule['operation'], $priceRule['value']).'</td></tr>';
+	}
+      }
+
       $orderDetails .= '<tr><td>'.$addon['name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_ADDON').'</td>';
 
       if($addon['price'] > 0) {
@@ -39,6 +48,15 @@ class OrderHelper
       }
 
       foreach($addon['options'] as $option) {
+	//Check for price rules and display names.
+	if(isset($option['pricerules'])) {
+	  foreach($option['pricerules'] as $priceRule) {
+	    $orderDetails .= '<tr class="addon-option-pricerules"><td>'.$priceRule['name'].'</td><td>'.
+	                      JText::_('COM_ODYSSEY_HEADING_ADDON_OPTION_PRICERULE').'</td>';
+	    $orderDetails .= '<td>'.UtilityHelper::formatPriceRule($priceRule['operation'], $priceRule['value']).'</td></tr>';
+	  }
+	}
+
 	$orderDetails .= '<tr><td>'.$option['name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_ADDON_OPTION').'</td>';
 
 	if($option['price'] > 0) {
@@ -67,7 +85,7 @@ class OrderHelper
 	  $jtext = JText::_('COM_ODYSSEY_HEADING_TRAVEL_COUPON');
 	}
 
-	$orderDetails .= '<tr><td>'.$priceRule['name'].'</td><td>'.$jtext.'</td>';
+	$orderDetails .= '<tr class="travel-pricerules"><td>'.$priceRule['name'].'</td><td>'.$jtext.'</td>';
 	$orderDetails .= '<td>'.UtilityHelper::formatPriceRule($priceRule['operation'], $priceRule['value']).'</td></tr>';
       }
     }

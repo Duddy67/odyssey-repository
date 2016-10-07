@@ -21,13 +21,6 @@ class PriceruleHelper
     $now = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
     $catalogPrules = array();
 
-    //Collect all the departure ids of the travel.
-    //Is it really needed ?
-    /*$dptIds = array();
-    foreach($travel as $departure) {
-      $dptIds[] = $departure['dpt_id'];
-    }*/
-
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
     //Get the price rules linked to the travel.
@@ -39,7 +32,6 @@ class PriceruleHelper
 	  ->join('INNER', '#__odyssey_prule_recipient AS prr ON (pr.recipient="customer" AND prr.item_id='.(int)$user->get('id').')'.
 	                  ' OR (pr.recipient="customer_group" AND prr.item_id IN ('.implode(',', $groups).'))')
 	  ->where('pr.prule_type="catalog" AND pr.target="travel" AND tpr.travel_id='.(int)$travelId)
-	  //->where('tpr.dpt_id IN('.implode(',', $dptIds).')')
 	  ->where('prr.prule_id=pr.id AND pr.published=1')
 	  //Check against publication dates (start and stop).
 	  ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
@@ -677,7 +669,6 @@ class PriceruleHelper
 	  ->where('('.$db->quote($now).' > pr.publish_up OR pr.publish_up = "0000-00-00 00:00:00")')
 	  ->order('ap.step_id, ap.addon_id, prt.prule_id, pr.ordering, ap.dpt_id, ap.psgr_nb');
     $db->setQuery($query);
-    //echo $query;
     $results = $db->loadAssocList();
 
     //Build id path arrays from which all price rules can be easily retrieved.

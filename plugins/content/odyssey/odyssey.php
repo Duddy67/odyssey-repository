@@ -189,6 +189,12 @@ class plgContentOdyssey extends JPlugin
       $travelPrices = $addonPrices = $addonOptionPrices = $transCityPrices = array();
 
       foreach($post as $key => $value) {
+	//Clean up the price value.
+	$value = trim($value);
+	if(empty($value)) {
+	  $value = '0.00';
+	}
+
 	//Get the travel prices by passenger number for each departure: price_psgr_[psgr_nb]_[dpt_id]
 	if(preg_match('#^price_psgr_([0-9]+)_([0-9]+)$#', $key, $matches)) {
 	  $psgrNb = $matches[1];
