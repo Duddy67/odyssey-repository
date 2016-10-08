@@ -4,12 +4,82 @@
  * @license GNU General Public License version 3, or later
  */
 
+.travel-selection {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.departure-dates,
+.nb-passengers {
+  float: left;
+  margin-right: 20px;
+}
+
+.select-item {
+  display: block;
+  margin-bottom: 3px;
+  font-weight: bold;
+}
+
+.departure-cities {
+  margin-right: 20px;
+}
+
 .datepicker {
   /*border: 1px solid blue !important;*/
 }
 
+.price-psgr,
+.normal-price-psgr,
+.transitcity-price-psgr {
+  padding: 5px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.transitcity-price-psgr {
+  font-size: 14px;
+}
+
+.normal-price-psgr {
+  margin-bottom: 0;
+  padding-left: 40px;
+  color: #fa5858;
+}
+
+.currency,
+.price {
+  font-weight: bold;
+}
+
+.price,
+.normal-price {
+  margin: 0 5px 0 5px;
+}
+
 .normal-price {
   text-decoration: line-through;
+}
+
+.pricerule-name {
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.pricerule-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fa5858;
+}
+
+.coupon-information {
+  font-weight: bold;
+}
+
+.coupon-code {
+  margin: 10px 10px 0 0;
 }
 
 .addon-step {

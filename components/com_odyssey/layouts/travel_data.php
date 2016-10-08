@@ -45,14 +45,25 @@ function checkForm() {
 
 <form action="index.php?option=com_odyssey&task=travel.setTravel" method="post" name="travel" id="travel" onsubmit="return checkForm();" >
   <div class="travel-selection">
-    <select name="departures" id="departures">
-    </select>
+    <h3 class=""><?php echo JText::_('COM_ODYSSEY_BOOK_YOUR_TRAVEL'); ?></h3>
 
-    <select name="nb_psgr" id="nb-psgr">
-    </select>
+    <div class="departure-dates">
+      <span class="select-item"><?php echo JText::_('COM_ODYSSEY_SELECT_DEPARTURE_DATES'); ?></span>
+      <select name="departures" id="departures">
+      </select>
+    </div>
 
-    <select name="dpt_cities" id="dpt-cities">
-    </select>
+    <div class="nb-passengers">
+      <span class="select-item"><?php echo JText::_('COM_ODYSSEY_SELECT_NB_PASSENGERS'); ?></span>
+      <select name="nb_psgr" id="nb-psgr">
+      </select>
+    </div>
+
+    <div class="departure-cities">
+      <span class="select-item"><?php echo JText::_('COM_ODYSSEY_SELECT_DEPARTURE_CITIES'); ?></span>
+      <select name="dpt_cities" id="dpt-cities">
+      </select>
+    </div>
   </div>
 
   <input type="text" name="datepicker" class="datepicker" readonly id="datepicker">
@@ -98,8 +109,10 @@ function checkForm() {
 		$price = PriceruleHelper::computePriceRule($travelPrule['operation'], $travelPrule['dpt_ids'][$data['dpt_id']][$psgrNb], $price);
 		
 		if($travelPrule['show_rule']) {
+		  $value = $travelPrule['dpt_ids'][$data['dpt_id']][$psgrNb];
 		  echo '<div class="pricerule-name" id="pricerule-name-'.$psgrNb.'-'.$data['dpt_id'].'-'.$travelPrule['prule_id'].'">'.
-		        $travelPrule['name'].'</div>';
+		        $travelPrule['name'].' <span class="pricerule-value">'.
+			UtilityHelper::formatPriceRule($travelPrule['operation'], $value).'</span></div>';
 		  $isPriceRule = true;
 		}
 		else { //Hidden price rule.
@@ -113,17 +126,17 @@ function checkForm() {
 	    }
 
 	    if($isPriceRule) {
-	      echo '<div id="normal-price-psgr-'.$psgrNb.'-'.$data['dpt_id'].'"><span class="normal-price">'.
+	      echo '<div id="normal-price-psgr-'.$psgrNb.'-'.$data['dpt_id'].'" class="normal-price-psgr"><span class="normal-price">'.
 		    $normalPrice.'</span><span class="currency">'.$item->currency.'</span></div>';
 	    }
 
-	    echo '<div id="price-psgr-'.$psgrNb.'-'.$data['dpt_id'].'">'.JText::_('COM_ODYSSEY_PRICE').'<span class="price">'.
+	    echo '<div id="price-psgr-'.$psgrNb.'-'.$data['dpt_id'].'" class="price-psgr">'.JText::_('COM_ODYSSEY_PRICE').'<span class="price">'.
 		  $price.'</span><span class="currency">'.$item->currency.'</span></div>';
 	  }
 
 	  foreach($transitCities as $transitCity) { //Display transit city prices per passenger.
 	    if($transitCity['dpt_id'] == $data['dpt_id']) {
-	      echo '<div id="transitcity-'.$data['dpt_id'].'-'.$transitCity['city_id'].'">';
+	      echo '<div id="transitcity-'.$data['dpt_id'].'-'.$transitCity['city_id'].'" class="transitcity">';
 	      foreach($transitCity['price_per_psgr'] as $psgrNb => $price) {
 		//In case allotment is lower than max passengers we don't go further.
 		if($psgrNb > $data['allotment']) {
@@ -131,7 +144,8 @@ function checkForm() {
 		}
 
 		if($price > 0) {
-		  echo '<div id="transitcity-price-psgr-'.$psgrNb.'-'.$data['dpt_id'].'-'.$transitCity['city_id'].'">'.
+		  echo '<div id="transitcity-price-psgr-'.$psgrNb.'-'.$data['dpt_id'].'-'.$transitCity['city_id'].
+		       '" class="transitcity-price-psgr">'.
 		       JText::_('COM_ODYSSEY_EXTRA').'<span class="price">'.
 		       $price.'</span><span class="currency">'.$item->currency.'</span></div>';
 		}
@@ -149,8 +163,7 @@ function checkForm() {
   <input type="hidden" name="travel_id" value="<?php echo $item->id; ?>" />
   <input type="hidden" name="dpt_step_id" value="<?php echo $item->dpt_step_id; ?>" />
   <div id="btn-message">
-    <input type="submit" class="btn btn-warning" value="<?php echo
-    JText::_('COM_ODYSSEY_BUTTON_BOOK'); ?>" />
+    <input type="submit" class="btn btn-warning" value="<?php echo JText::_('COM_ODYSSEY_BUTTON_BOOK'); ?>" />
   </div>
 </form>
 

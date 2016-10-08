@@ -29,9 +29,9 @@ foreach($addons as $addon) {
 $session = JFactory::getSession();
 $travel = $session->get('travel', array(), 'odyssey'); 
 $settings = $session->get('settings', array(), 'odyssey'); 
-//echo '<pre>';
-//var_dump($addons);
-//echo '</pre>';
+echo '<pre>';
+var_dump($addons);
+echo '</pre>';
 
 ?>
 
@@ -47,7 +47,7 @@ $settings = $session->get('settings', array(), 'odyssey');
   <?php
 
   foreach($addons as $key => $addon) {
-    //Create an opening div for each new step.
+    //Create an opening div for the very first step.
     if($key == 0) {
       echo '<div class="addon-step">';
       echo '<h3>'.$addon['step_name'].'</h3>';
