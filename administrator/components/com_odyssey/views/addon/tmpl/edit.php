@@ -16,7 +16,7 @@ JHtml::_('formbehavior.chosen', 'select');
 Joomla.submitbutton = function(task)
 {
   //If addon options are added check that an option type has been selected.
-  var addonOptions = document.getElementsByClassName('addon-item');
+  var addonOptions = document.getElementsByClassName('option-item');
   var optionType = document.getElementById('jform_option_type');
   if(addonOptions.length > 0 && optionType.value == '') {
     alert('<?php echo JText::_('COM_ODYSSEY_ERROR_NO_OPTION_TYPE_SELECTED'); ?>');

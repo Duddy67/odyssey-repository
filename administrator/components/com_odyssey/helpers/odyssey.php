@@ -407,6 +407,10 @@ class OdysseyHelper
     $db->setQuery($query);
     $old = $db->loadColumn();
 
+    if(empty($old) && empty($addonOptions)) {
+      return;
+    }
+
     $values = $whens = $optionIds = array();
     foreach($addonOptions as $addonOption) {
       if(empty($addonOption['id'])) { //insert

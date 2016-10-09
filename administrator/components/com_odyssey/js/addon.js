@@ -53,6 +53,11 @@
     var properties = {'type':'text', 'name':'option_name_'+idNb, 'id':'option-name-'+idNb, 'value':data.option_name};
     $('#option-item-'+idNb).createHTMLTag('<input>', properties, 'item-name');
 
+    //Create the "published" label.
+    properties = {'title':Joomla.JText._('COM_ODYSSEY_PUBLISHED_TITLE')};
+    $('#option-item-'+idNb).createHTMLTag('<span>', properties, 'published-label');
+    $('#option-item-'+idNb+' .published-label').text(Joomla.JText._('COM_ODYSSEY_PUBLISHED_LABEL'));
+
     //Create the "published" checkbox.
     var properties = {'type':'checkbox', 'name':'published_'+idNb, 'id':'published-'+idNb, 'value':idNb};
     $('#option-item-'+idNb).createHTMLTag('<input>', properties, 'option-name-item');

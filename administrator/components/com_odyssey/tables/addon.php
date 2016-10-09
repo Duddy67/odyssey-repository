@@ -51,7 +51,7 @@ class OdysseyTableAddon extends JTable
     }
 
     //Check that the group number is no yet used with another addon type.
-    if($this->addon_type != 'addon_option' && $this->group_nb != 'none') {
+    if($this->group_nb != 'none') {
       $query = $this->_db->getQuery(true)
 		    ->select('COUNT(*)')
 		    ->from($this->_db->quoteName('#__odyssey_addon'))
@@ -64,34 +64,32 @@ class OdysseyTableAddon extends JTable
 	$this->setError(JText::_('COM_ODYSSEY_ERROR_GROUP_NB_ALREADY_USED'));
 	return false;
       }
+    }
 
-      $post = JFactory::getApplication()->input->post->getArray();
-      $optionIds = array();
+    //Check for options.
+    //Note: This is not the part of the code where the options are stored.
+    //      It's just a checking to ensure the option_type attribute is properly set. 
+    $post = JFactory::getApplication()->input->post->getArray();
+    $optionIds = array();
 
-      foreach($post as $key => $value) {
+    foreach($post as $key => $value) {
+      if(preg_match('#^option_name_([0-9]+)$#', $key, $matches) && !empty($value)) {
+	$idNb = $matches[1];
+
 	//Check for option type.
-	if(preg_match('#^addon_id_([0-9]+)$#', $key, $matches) && !empty($value) && $this->option_type == '') {
+	if($this->option_type == '') {
 	  $this->setError(JText::_('COM_ODYSSEY_ERROR_NO_OPTION_TYPE_SELECTED'));
 	  return false;
 	}
 
-	//Check for possible duplicate entry of option.
-	if(preg_match('#^addon_id_([0-9]+)$#', $key)) {
-	  if(in_array($value, $optionIds)) {
-	    $this->setError(JText::_('COM_ODYSSEY_ERROR_OPTION_DUPLICATE_ENTRY'));
-	    return false;
-	  }
-	  else {
-	    $optionIds[] = $value;
-	  }
-	}
+	$optionIds[] = $post['option_id_'.$idNb]; 
       }
+    }
 
-      //If no option is set, reset the option_type attribute value as 
-      //it is used as a flag on frontend.
-      if(empty($optionIds)) {
-	$this->option_type = '';
-      }
+    //If no option is set, reset the option_type attribute value as 
+    //it is used as a flag on frontend.
+    if(empty($optionIds)) {
+      $this->option_type = '';
     }
 
     return parent::store($updateNulls);

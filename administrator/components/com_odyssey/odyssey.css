@@ -132,11 +132,20 @@
 .item-amount-label,
 .item-quantity-label,
 .departures-label,
+.published-label,
 .departure-number,
 .item-name-label {
   margin: 5px 5px 0 5px;
   font-weight: bold;
   color: #404040;
+}
+
+.published-label {
+  margin-left: 8px;
+}
+
+.option-name-item {
+  margin: 0 !important;
 }
 
 .departures-label,

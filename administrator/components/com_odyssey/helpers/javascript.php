@@ -41,6 +41,8 @@ class JavascriptHelper
   {
     JText::script('COM_ODYSSEY_ITEM_NAME_LABEL'); 
     JText::script('COM_ODYSSEY_ITEM_NAME_TITLE'); 
+    JText::script('COM_ODYSSEY_PUBLISHED_LABEL'); 
+    JText::script('COM_ODYSSEY_PUBLISHED_TITLE'); 
     JText::script('COM_ODYSSEY_CITY_LABEL'); 
     JText::script('COM_ODYSSEY_CITY_TITLE'); 
     JText::script('COM_ODYSSEY_ITEM_QUANTITY_LABEL'); 
