@@ -30,7 +30,7 @@ $session = JFactory::getSession();
 $travel = $session->get('travel', array(), 'odyssey'); 
 $settings = $session->get('settings', array(), 'odyssey'); 
 //echo '<pre>';
-//var_dump($addons);
+//var_dump($addonOptions);
 //echo '</pre>';
 
 ?>
@@ -72,10 +72,16 @@ $settings = $session->get('settings', array(), 'odyssey');
 	  //the scope.
 	  if(isset($priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']])) {
 	    //Add another price rule name.
-	    $priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']] .= '<div class="pricerule-name">'.$addonPrule['name'].'</div>';
+	    $priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']] .= '<div class="pricerule-name">'.$addonPrule['name'].
+	                                                                 ' <span class="pricerule-value">'.
+									  UtilityHelper::formatPriceRule($addonPrule['operation'], 
+									                                 $addonPrule['value']).'</span></div>';
 	  }
 	  else {
-	    $priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']] = '<div class="pricerule-name">'.$addonPrule['name'].'</div>';
+	    $priceRuleNames[$addon['step_id'].'-'.$addon['addon_id']] = '<div class="pricerule-name">'.$addonPrule['name'].
+	                                                                ' <span class="pricerule-value">'.
+									 UtilityHelper::formatPriceRule($addonPrule['operation'], 
+									                                $addonPrule['value']).'</span></div>';
 	  }
 
 	  $isPriceRule = true;

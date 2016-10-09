@@ -13,11 +13,8 @@ $addonOptions = $displayData['addon_options'];
 $addonOptionPrules = $displayData['addon_option_prules'];
 $addon = $displayData['addon'];
 $currency = $displayData['currency'];
-$countAddonOptions = count($addonOptions);
 
-if($countAddonOptions) {
-  echo '<div class="addon-options">';
-}
+echo '<div class="addon-options">';
 
 foreach($addonOptions as $key => $addonOption) {
   //Check that the addon option belongs to the current addon.
@@ -42,7 +39,8 @@ foreach($addonOptions as $key => $addonOption) {
 	$price = PriceruleHelper::computePriceRule($addonOptionPrule['operation'], $addonOptionPrule['psgr_nb'], $price);
 
 	if($addonOptionPrule['show_rule']) {
-	  echo '<div class="pricerule-name">'.$addonOptionPrule['name'].'</div>';
+	  echo '<div class="pricerule-name">'.$addonOptionPrule['name'].' <span class="pricerule-value">'.
+	        UtilityHelper::formatPriceRule($addonOptionPrule['operation'], $addonOptionPrule['value']).'</span></div>';
 	  $isPriceRule = true;
 	}
 	else { //Hidden price rule.
@@ -85,9 +83,7 @@ foreach($addonOptions as $key => $addonOption) {
   }
 }
 
-if($countAddonOptions) {
-  echo '</div>';
-}
+echo '</div>';
 ?>
 
 

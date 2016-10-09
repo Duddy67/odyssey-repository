@@ -86,6 +86,12 @@ class OdysseyTableAddon extends JTable
 	  }
 	}
       }
+
+      //If no option is set, reset the option_type attribute value as 
+      //it is used as a flag on frontend.
+      if(empty($optionIds)) {
+	$this->option_type = '';
+      }
     }
 
     return parent::store($updateNulls);
