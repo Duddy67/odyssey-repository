@@ -66,8 +66,11 @@ function checkForm() {
     </div>
   </div>
 
-  <input type="text" name="datepicker" class="datepicker" readonly id="datepicker">
-  <input type="hidden" name="date_picker" id="date-picker">
+  <div id="datepicker-wrapping">
+    <span class="select-item"><?php echo JText::_('COM_ODYSSEY_DATEPICKER_DESC'); ?></span>
+    <input type="text" name="datepicker" class="datepicker" readonly id="datepicker">
+    <input type="hidden" name="date_picker" id="date-picker">
+  </div>
 
   <div id="travel-prices">
   <?php //Display all the price data for each departure at once. Some Javascript functions

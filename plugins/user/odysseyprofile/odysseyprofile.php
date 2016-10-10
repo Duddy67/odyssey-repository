@@ -466,6 +466,43 @@ class PlgUserOdysseyprofile extends JPlugin
     $session = JFactory::getSession();
     $location = $session->get('location', '', 'odyssey'); 
 
+    //The user is booking a travel.
+    if($location == 'passengers') {
+      $user = JFactory::getUser();
+      $groups = JAccess::getGroupsByUser($user->get('id'));
+      //Get current date and time (equal to NOW() in SQL).
+      $now = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+
+      $filteredGroups = array();
+      foreach($groups as $groupId) {
+	//Rule out Public (1) and Guest (9) groups from the list.
+	if($groupId != 1 && $groupId != 9) {
+	  $filteredGroups[] = $groupId;
+	}
+      }
+
+      //Check if some price rules are linked to the user's account or to a group he
+      //belongs to.
+      $db = JFactory::getDbo();
+      $query = $db->getQuery(true);
+      $query->select('COUNT(pr.id)')
+	    ->from('#__odyssey_pricerule AS pr')
+	    ->join('INNER', '#__odyssey_prule_recipient AS prr ON prr.prule_id=pr.id')
+	    ->where('pr.published=1')
+	    ->where('((pr.recipient="customer" AND prr.item_id='.$user->get('id').') OR '.
+		    '(pr.recipient="customer_group" AND prr.item_id IN('.implode(',', $filteredGroups).')))')
+	    //Check against publication dates (start and stop).
+	    ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
+	    ->where('('.$db->quote($now).' > pr.publish_up OR pr.publish_up = "0000-00-00 00:00:00")');
+      $db->setQuery($query);
+      $result = $db->loadResult();
+
+      //Inform the user that some price rules have been detected.
+      if($result) {
+	JFactory::getApplication()->enqueueMessage(JText::_('PLUG_USER_ODYSSEY_MESSAGE_PRICERULE_DETECTED'), 'message');
+      }
+    }
+
     //Redirect the user to the location he was before log in (when purchasing a travel).
     if(!empty($location)) {
       JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_odyssey&view='.$location, false));

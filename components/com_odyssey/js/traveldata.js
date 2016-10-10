@@ -47,7 +47,8 @@
     }
     else {
       //Date picker is not used with standard date type.
-      $('#datepicker').css({'visibility':'hidden','display':'none'});
+      //$('#datepicker').css({'visibility':'hidden','display':'none'});
+      $('#datepicker-wrapping').css({'visibility':'hidden','display':'none'});
     }
 
     $.fn.setNbPsgr(dptId);
