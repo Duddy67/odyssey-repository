@@ -345,7 +345,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 	      '&LOCALECODE='.$countryCode.
 	      '&PAYMENTREQUEST_0_PAYMENTACTION=Sale'.
 	      '&PAYMENTREQUEST_0_CUSTOM=123456789'; //Add custom parameter.
-file_put_contents('debog_paypal.txt', print_r($query, true));
+//file_put_contents('debog_paypal.txt', print_r($query, true));
     return $query;
   }
 
@@ -418,8 +418,9 @@ file_put_contents('debog_paypal.txt', print_r($query, true));
 		    //'&L_PAYMENTREQUEST_0_DESC0='.urlencode(JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_INCL_TAX', $travel['tax_rate']));
 
     //Now move to the addons.
-    $id = 1;
+    $id = 0;
     foreach($addons as $addon) {
+      $id++;
       $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode($addon['name']).
 	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
 		      '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($addon['price']);
@@ -430,8 +431,6 @@ file_put_contents('debog_paypal.txt', print_r($query, true));
 			'&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
 			'&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($option['price']);
       }
-
-      $id++;
     }
 
     //Check if some travel price rules have been applied on the travel price.
@@ -447,6 +446,7 @@ file_put_contents('debog_paypal.txt', print_r($query, true));
     //Add the sum of the price rules applied to the travel as an item.
     //Paypal will substract or add this value.
     if($travelPruleAmount) {
+      $id = $id + 1;
       $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_PRICERULES')).
 	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
 	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($travelPruleAmount);
@@ -484,7 +484,7 @@ file_put_contents('debog_paypal.txt', print_r($query, true));
       //Convert positive value into negative.
       $sumToSubtract = $sumToSubtract - ($sumToSubtract * 2);
 
-      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_REMAINING_AMOUNT')).
+      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_DEPOSIT_ALREADY_PAID')).
 	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
 	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($sumToSubtract);
     }
@@ -496,7 +496,7 @@ file_put_contents('debog_paypal.txt', print_r($query, true));
 
     //Display the final amount.
     $detailOrder .= '&PAYMENTREQUEST_0_AMT='.UtilityHelper::formatNumber($finalAmount);
-
+file_put_contents('debog_paypal.txt', print_r($detailOrder, true));
     return $detailOrder;
   }
 

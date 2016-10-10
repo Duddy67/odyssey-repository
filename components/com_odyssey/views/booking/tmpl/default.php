@@ -21,7 +21,7 @@ if($travel['date_type'] == 'period') {
   $date = $travel['date_picker'].' 12:00';
 }
 
-$finalAmount = UtilityHelper::formatNumber(TravelHelper::getFinalAmount($travel, $addons), $settings['digits_precision']);
+$finalAmount = TravelHelper::getFinalAmount($travel, $addons, $settings['digits_precision']);
 
 $allowOption = $allowDeposit = false;
 //Get the remaining time until the departure.
@@ -34,7 +34,6 @@ if($days >= $this->params->get('option_time_limit')) {
 if($days >= $this->params->get('deposit_time_limit')) {
   $allowDeposit = true;
   $depositAmount = $finalAmount * ($settings['deposit_rate'] / 100);
-  $depositAmount = UtilityHelper::roundNumber($depositAmount, $settings['rounding_rule'], $settings['digits_precision']);
   $depositAmount = UtilityHelper::formatNumber($depositAmount, $settings['digits_precision']);
 }
 

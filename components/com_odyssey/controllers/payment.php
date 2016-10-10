@@ -41,11 +41,13 @@ class OdysseyControllerPayment extends JControllerForm
       //he will come back later). 
       if(!isset($travel['final_amount'])) {
 	//Compute the final amount for this travel.
-	$travel['final_amount'] = UtilityHelper::roundNumber(TravelHelper::getFinalAmount($travel, $addons), $settings['rounding_rule'], $settings['digits_precision']);
+	$travel['final_amount'] = TravelHelper::getFinalAmount($travel, $addons, $settings['digits_precision']);
       }
 
       if($travel['booking_option'] == 'deposit') {
 	$travel['deposit_amount'] = $travel['final_amount'] * ((int)$settings['deposit_rate'] / 100);
+	$travel['deposit_amount'] = UtilityHelper::formatNumber($travel['deposit_amount'], $settings['digits_precision']);
+file_put_contents('debog_rounding.txt', print_r($travel['deposit_amount'], true));
       }
 
       //It's the first booking for this travel so the order must be stored in database.

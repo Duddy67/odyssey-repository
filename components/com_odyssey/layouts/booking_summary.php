@@ -26,7 +26,9 @@ if($travel['date_type'] == 'period') {
 }
 
 $currency = $settings['currency'];
-$finalAmount = $travel['travel_price'];
+//To avoid rounding number problems during the calculation, all figures are formated
+//according to the digits precision parameter.
+$finalAmount = UtilityHelper::formatNumber($travel['travel_price'], $settings['digits_precision']);
 ?>
 
 <div class="booking-summary">
@@ -52,6 +54,7 @@ foreach($addons as $addon) {
 
   if($addon['price'] > 0) {
     $bookingDetails .= '<td>';
+    $addonPrice = UtilityHelper::formatNumber($addon['price'], $settings['digits_precision']);
 
     //Check for price rules.
     if(isset($addon['pricerules'])) {
@@ -60,7 +63,8 @@ foreach($addons as $addon) {
     }
 
     $bookingDetails .= UtilityHelper::formatNumber($addon['price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
-    $finalAmount = $finalAmount + $addon['price'];
+    $finalAmount += $addonPrice;
+    $finalAmount = UtilityHelper::formatNumber($finalAmount, $settings['digits_precision']);
   }
   else {
     $bookingDetails .= '<td>'.JText::_('COM_ODYSSEY_HEADING_INCLUDED').'</td></tr>';
@@ -71,6 +75,7 @@ foreach($addons as $addon) {
 
     if($option['price'] > 0) {
       $bookingDetails .= '<td>';
+      $optionPrice = UtilityHelper::formatNumber($option['price'], $settings['digits_precision']);
 
       //Check for price rules.
       if(isset($option['pricerules'])) {
@@ -79,7 +84,8 @@ foreach($addons as $addon) {
       }
 
       $bookingDetails .= UtilityHelper::formatNumber($option['price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
-      $finalAmount = $finalAmount + $option['price'];
+      $finalAmount += $optionPrice;
+      $finalAmount = UtilityHelper::formatNumber($finalAmount, $settings['digits_precision']);
     }
     else {
       $bookingDetails .= '<td>'.JText::_('COM_ODYSSEY_HEADING_INCLUDED').'</td></tr>';
@@ -98,9 +104,12 @@ if(isset($travel['pricerules'])) {
 $bookingDetails .= UtilityHelper::formatNumber($travel['travel_price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
 
 if($travel['transit_price'] > 0) {
+  $transitPrice = UtilityHelper::formatNumber($travel['transit_price'], $settings['digits_precision']);
+
   $bookingDetails .= '<tr><td>'.$travel['dpt_city_name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_TRANSIT_CITY').'</td><td>'.
 		    UtilityHelper::formatNumber($travel['transit_price'], $settings['digits_precision']).' '.$currency.'</td></tr>';
-  $finalAmount = $finalAmount + $travel['transit_price'];
+  $finalAmount += $transitPrice;
+  $finalAmount = UtilityHelper::formatNumber($finalAmount, $settings['digits_precision']);
 }
 
 $bookingDetails .= '<tr><td></td><td></td><td>'.

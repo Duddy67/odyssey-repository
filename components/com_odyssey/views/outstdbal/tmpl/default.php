@@ -21,7 +21,6 @@ $allowDeposit = false;
 if($travel['outstanding_balance'] == $travel['final_amount']) {
   $allowDeposit = true;
   $depositAmount = $finalAmount * ($settings['deposit_rate'] / 100);
-  $depositAmount = UtilityHelper::roundNumber($depositAmount, $settings['rounding_rule'], $settings['digits_precision']);
   $depositAmount = UtilityHelper::formatNumber($depositAmount, $settings['digits_precision']);
 }
 

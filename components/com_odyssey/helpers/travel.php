@@ -334,27 +334,39 @@ class TravelHelper
 
   /**
    * Compute the final amount of the travel.
+   * To avoid rounding number problems during the calculation, all figures are formated
+   * according to the digits precision parameter.
+   * eg: With 2 as digits precision 25.816 becomes 25.81
    *
-   * @param	array	$travel		data of the travel selected by the customer.
-   *		array	$addons		data of the addons selected by the customer.
+   * @param	array	$travel			data of the travel selected by the customer.
+   *		array	$addons			data of the addons selected by the customer.
+   *		integer $digitsPrecision	Number of digits.
    *
    * @return	float	The final amount.
    */
-  public static function getFinalAmount($travel, $addons)
+  public static function getFinalAmount($travel, $addons, $digitsPrecision = 2)
   {
     $finalAmount = 0;
     foreach($addons as $addon) {
-      $finalAmount += $addon['price'];
+      $addonPrice = UtilityHelper::formatNumber($addon['price'], $digitsPrecision);
+      $finalAmount += $addonPrice;
+      $finalAmount = UtilityHelper::formatNumber($finalAmount, $digitsPrecision);
 
       foreach($addon['options'] as $option) {
-	$finalAmount += $option['price'];
+	$optionPrice = UtilityHelper::formatNumber($option['price'], $digitsPrecision);
+	$finalAmount += $optionPrice;
+	$finalAmount = UtilityHelper::formatNumber($finalAmount, $digitsPrecision);
       }
     }
 
-    $finalAmount += $travel['travel_price'];
-    $finalAmount += $travel['transit_price'];
+    $travelPrice = UtilityHelper::formatNumber($travel['travel_price'], $digitsPrecision);
+    $transitPrice = UtilityHelper::formatNumber($travel['transit_price'], $digitsPrecision);
 
-    return $finalAmount;
+    $finalAmount += $travelPrice;
+    $finalAmount = UtilityHelper::formatNumber($finalAmount, $digitsPrecision);
+    $finalAmount += $transitPrice;
+
+    return UtilityHelper::formatNumber($finalAmount, $digitsPrecision);
   }
 
 
