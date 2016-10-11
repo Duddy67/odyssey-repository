@@ -80,7 +80,8 @@ Joomla.submitbutton = function(task)
 
 	<?php if($this->remainingPayment) : //There is something left to pay. ?>
 	  <div id="btn-message">
-	    <a class="btn btn-warning" onclick="hideButton('btn')" href="<?php echo JRoute::_('index.php?option=com_odyssey&view=outstdbal'); ?>">
+	    <a class="btn btn-warning" onclick="hideButton('btn')"
+	       href="<?php echo JRoute::_('index.php?option=com_odyssey&task=order.pay&o_id='.$this->item->id); ?>">
 	    <?php echo JText::_('COM_ODYSSEY_PAY'); ?></a>
 	  </div>
 	<?php endif; ?>

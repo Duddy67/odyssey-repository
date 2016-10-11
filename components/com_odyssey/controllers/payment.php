@@ -47,7 +47,6 @@ class OdysseyControllerPayment extends JControllerForm
       if($travel['booking_option'] == 'deposit') {
 	$travel['deposit_amount'] = $travel['final_amount'] * ((int)$settings['deposit_rate'] / 100);
 	$travel['deposit_amount'] = UtilityHelper::formatNumber($travel['deposit_amount'], $settings['digits_precision']);
-file_put_contents('debog_rounding.txt', print_r($travel['deposit_amount'], true));
       }
 
       //It's the first booking for this travel so the order must be stored in database.

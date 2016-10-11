@@ -116,11 +116,11 @@ class OrderHelper
       $dptDate = $travel['date_picker'];
     }
 
-    $columns = array('customer_id','payment_status','order_status',
+    $columns = array('order_nb','customer_id','payment_status','order_status',
 	             'outstanding_balance','deposit_rate','final_amount','departure_date','nb_psgr','order_details',
 		     'currency_code','rounding_rule','digits_precision','created');
 
-    $values = (int)$user->get('id').','.$db->quote('pending').','.$db->quote('pending').','.
+    $values = $db->quote('undefined').','.(int)$user->get('id').','.$db->quote('pending').','.$db->quote('pending').','.
 	      (float)$travel['final_amount'].','.(int)$settings['deposit_rate'].','.(float)$travel['final_amount'].','.
 	      $db->quote($dptDate).','.(int)$travel['nb_psgr'].','.$db->quote($orderDetails).','.$db->quote($settings['currency_code']).','.
 	      $db->quote($settings['rounding_rule']).','.(int)$settings['digits_precision'].','.$nowDate;

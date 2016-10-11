@@ -482,7 +482,8 @@ class plgOdysseypaymentPaypal extends JPlugin
       $finalAmount = $travel['outstanding_balance'];
       $sumToSubtract = $travel['final_amount'] - $travel['outstanding_balance'];
       //Convert positive value into negative.
-      $sumToSubtract = $sumToSubtract - ($sumToSubtract * 2);
+      //$sumToSubtract = $sumToSubtract - ($sumToSubtract * 2);
+      $sumToSubtract = '-'.(string)$sumToSubtract;
 
       $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_DEPOSIT_ALREADY_PAID')).
 	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 

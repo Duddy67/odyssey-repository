@@ -89,8 +89,8 @@ class OdysseyControllerEnd extends JControllerForm
       }
 
       TravelHelper::clearSession();
-      //Redirect the customer in his customer area.
-      $this->setRedirect(JRoute::_('index.php?option=com_odyssey&view=order&layout=edit&o_id='.(int)$travel['order_id'], false));
+      //Redirect the customer in his order customer area.
+      $this->setRedirect(JRoute::_('index.php?option=com_odyssey&task=order.edit&o_id='.(int)$travel['order_id'], false));
 
       return true;
     }
