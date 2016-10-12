@@ -36,7 +36,7 @@ foreach($addonOptions as $key => $addonOption) {
     if(isset($addonOptionPrules[$addonOption['step_id']][$addonOption['addon_id']][$addonOption['addon_option_id']])) {
       foreach($addonOptionPrules[$addonOption['step_id']][$addonOption['addon_id']][$addonOption['addon_option_id']] as $addonOptionPrule) {
 	//Get the new price. 
-	$price = PriceruleHelper::computePriceRule($addonOptionPrule['operation'], $addonOptionPrule['psgr_nb'], $price);
+	$price = PriceruleHelper::computePriceRule($addonOptionPrule['operation'], $addonOptionPrule['value'], $price);
 
 	if($addonOptionPrule['show_rule']) {
 	  echo '<div class="pricerule-name">'.$addonOptionPrule['name'].' <span class="pricerule-value">'.
@@ -47,7 +47,7 @@ foreach($addonOptions as $key => $addonOption) {
 	  //We applied the hidden price rule values to the normal 
 	  //price so that there is no misunderstanding about the 
 	  //computing price in case other price rules are shown.
-	  $normalPrice = PriceruleHelper::computePriceRule($addonOptionPrule['operation'], $addonOptionPrule['psgr_nb'], $normalPrice);
+	  $normalPrice = PriceruleHelper::computePriceRule($addonOptionPrule['operation'], $addonOptionPrule['value'], $normalPrice);
 	}
 
 	//Don't go further in case of Exclusive price rule.

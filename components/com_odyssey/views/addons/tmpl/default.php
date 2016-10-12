@@ -30,7 +30,7 @@ $session = JFactory::getSession();
 $travel = $session->get('travel', array(), 'odyssey'); 
 $settings = $session->get('settings', array(), 'odyssey'); 
 //echo '<pre>';
-//var_dump($addonOptions);
+//var_dump($addonPrules);
 //echo '</pre>';
 
 ?>
@@ -65,7 +65,7 @@ $settings = $session->get('settings', array(), 'odyssey');
     if(isset($addonPrules[$addon['step_id']][$addon['addon_id']])) {
       foreach($addonPrules[$addon['step_id']][$addon['addon_id']] as $addonPrule) {
 	//Get the new price. 
-	$price = PriceruleHelper::computePriceRule($addonPrule['operation'], $addonPrule['psgr_nb'], $price);
+	$price = PriceruleHelper::computePriceRule($addonPrule['operation'], $addonPrule['value'], $price);
 
 	if($addonPrule['show_rule']) {
 	  //Store the price rule names in an array so that they can be displayed out of
@@ -90,7 +90,7 @@ $settings = $session->get('settings', array(), 'odyssey');
 	  //We applied the hidden price rule values to the normal 
 	  //price so that there is no misunderstanding about the 
 	  //computing price in case other price rules are shown.
-	  $normalPrice = PriceruleHelper::computePriceRule($addonPrule['operation'], $addonPrule['psgr_nb'], $normalPrice);
+	  $normalPrice = PriceruleHelper::computePriceRule($addonPrule['operation'], $addonPrule['value'], $normalPrice);
 	}
 
 	//Don't go further in case of Exclusive price rule.

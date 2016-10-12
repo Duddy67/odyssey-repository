@@ -437,7 +437,8 @@ class plgOdysseypaymentPaypal extends JPlugin
     if(isset($travel['normal_price']) && $travel['travel_price'] < $travel['normal_price']) {
       $travelPruleAmount = $travel['normal_price'] - $travel['travel_price'];
       //Convert positive value into negative.
-      $travelPruleAmount = $travelPruleAmount - ($travelPruleAmount * 2);
+      //$travelPruleAmount = $travelPruleAmount - ($travelPruleAmount * 2);
+      $travelPruleAmount = '-'.(string)$travelPruleAmount;
     }
     elseif(isset($travel['normal_price']) && $travel['travel_price'] > $travel['normal_price']) { //Check for raise.
       $travelPruleAmount = $travel['travel_price'] - $travel['normal_price'];
@@ -471,9 +472,10 @@ class plgOdysseypaymentPaypal extends JPlugin
       $finalAmount = $travel['deposit_amount'];
       $sumToSubtract = $travel['final_amount'] - $travel['deposit_amount'];
       //Convert positive value into negative.
-      $sumToSubtract = $sumToSubtract - ($sumToSubtract * 2);
+      //$sumToSubtract = $sumToSubtract - ($sumToSubtract * 2);
+      $sumToSubtract = '-'.(string)$sumToSubtract;
 
-      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_DEPOSIT_AMOUNT')).
+      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_SUBTRACTED_AMOUNT')).
 	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
 	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($sumToSubtract);
     }

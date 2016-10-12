@@ -760,7 +760,7 @@ class PriceruleHelper
       if(isset($addonPrules[$addon['step_id']][$addon['addon_id']])) {
 	foreach($addonPrules[$addon['step_id']][$addon['addon_id']] as $addonPrule) {
 	  //Get the new price. 
-	  $price = PriceruleHelper::computePriceRule($addonPrule['operation'], $addonPrule['psgr_nb'], $price);
+	  $price = PriceruleHelper::computePriceRule($addonPrule['operation'], $addonPrule['value'], $price);
 	  $prules[] = $addonPrule;
 
 	  //Don't go further in case of Exclusive price rule.
@@ -787,7 +787,7 @@ class PriceruleHelper
 	  if(isset($addonOptionPrules[$addon['step_id']][$addon['addon_id']][$option['addon_option_id']])) {
 	    foreach($addonOptionPrules[$addon['step_id']][$addon['addon_id']][$option['addon_option_id']] as $addonOptionPrule) {
 	      //Get the new price. 
-	      $price = PriceruleHelper::computePriceRule($addonOptionPrule['operation'], $addonOptionPrule['psgr_nb'], $price);
+	      $price = PriceruleHelper::computePriceRule($addonOptionPrule['operation'], $addonOptionPrule['value'], $price);
 	      $prules[] = $addonOptionPrule;
 
 	      //Don't go further in case of Exclusive price rule.
