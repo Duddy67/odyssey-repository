@@ -41,6 +41,26 @@
 	       description="COM_ODYSSEY_FIELD_DESCRIPTION_DESC"
 	       filter="JComponentHelper::filterText" buttons="true" />
 
+	<field name="extra_desc_1" type="editor"
+	       label="COM_ODYSSEY_FIELD_EXTRA_DESCRIPTION_1_LABEL"
+	       description="COM_ODYSSEY_FIELD_EXTRA_DESCRIPTION_1_DESC"
+	       filter="JComponentHelper::filterText" buttons="false" />
+
+	<field name="extra_desc_2" type="editor"
+	       label="COM_ODYSSEY_FIELD_EXTRA_DESCRIPTION_2_LABEL"
+	       description="COM_ODYSSEY_FIELD_EXTRA_DESCRIPTION_2_DESC"
+	       filter="JComponentHelper::filterText" buttons="false" />
+
+	<field name="extra_desc_3" type="editor"
+	       label="COM_ODYSSEY_FIELD_EXTRA_DESCRIPTION_3_LABEL"
+	       description="COM_ODYSSEY_FIELD_EXTRA_DESCRIPTION_3_DESC"
+	       filter="JComponentHelper::filterText" buttons="false" />
+
+	<field name="extra_desc_4" type="editor"
+	       label="COM_ODYSSEY_FIELD_EXTRA_DESCRIPTION_4_LABEL"
+	       description="COM_ODYSSEY_FIELD_EXTRA_DESCRIPTION_4_DESC"
+	       filter="JComponentHelper::filterText" buttons="false" />
+
 	<!-- layout: title_alias -->
 	<field name="name" type="text"
 	       label="COM_ODYSSEY_FIELD_NAME_LABEL"

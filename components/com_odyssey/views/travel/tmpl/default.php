@@ -62,6 +62,8 @@ $item = $this->item;
     <?php echo JLayoutHelper::render('addons', $this->item->addons, JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
   <?php endif; ?>
 
+  <?php echo JLayoutHelper::render('extra_desc', $this->item, JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
+
   <?php echo JLayoutHelper::render('travel_data', array('travel_data' => $this->travelData, 'item' => $item, 'params' => $params, 'now_date' => $this->nowDate), JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
 </div>
 

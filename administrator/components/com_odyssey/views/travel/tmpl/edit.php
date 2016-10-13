@@ -102,6 +102,19 @@ Joomla.submitbutton = function(task)
 	</div>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
 
+      <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'travel-extradescriptions', JText::_('COM_ODYSSEY_TAB_EXTRA_DESCRIPTIONS')); ?>
+	<div class="row-fluid">
+	  <div class="span8 form-vertical">
+	    <?php
+		  echo $this->form->getControlGroup('extra_desc_1');
+		  echo $this->form->getControlGroup('extra_desc_2');
+		  echo $this->form->getControlGroup('extra_desc_3');
+		  echo $this->form->getControlGroup('extra_desc_4');
+	    ?>
+	  </div>
+	</div>
+      <?php echo JHtml::_('bootstrap.endTab'); ?>
+
       <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'publishing', JText::_('JGLOBAL_FIELDSET_PUBLISHING', true)); ?>
       <div class="row-fluid form-horizontal-desktop">
 	<div class="span6">
