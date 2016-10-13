@@ -58,6 +58,10 @@ $item = $this->item;
     <?php echo JLayoutHelper::render('steps', array('steps' => $this->steps, 'item' => $this->item), JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
   <?php endif; ?>
 
+  <?php if(!empty($this->item->addons)) : ?>
+    <?php echo JLayoutHelper::render('addons', $this->item->addons, JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
+  <?php endif; ?>
+
   <?php echo JLayoutHelper::render('travel_data', array('travel_data' => $this->travelData, 'item' => $item, 'params' => $params, 'now_date' => $this->nowDate), JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
 </div>
 

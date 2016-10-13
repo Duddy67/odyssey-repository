@@ -19,7 +19,7 @@ foreach($steps as $step) {
     //Display step name and description.
     echo '<div class="step">'.
 	 '<h2 class="step-title">'.$this->escape($step['name']).'</h2>';
-    echo '<div class="step-description">'.$step['description'].'</div>';
+    echo '<div class="step-description">'.$step['description'].'</div></div>';
   }
 }
 

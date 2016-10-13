@@ -7,6 +7,7 @@
 
 defined('_JEXEC') or die;
 require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/utility.php';
+require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/step.php';
 
 
 class TravelHelper
@@ -158,6 +159,53 @@ class TravelHelper
     }
 
     return $paymentModes;
+  }
+
+
+  /**
+   * Get all the addons linked to a given step sequence.
+   * Note: If no addon type is given all of the addon types are retrieved.
+   *
+   * @param integer  The departure step id
+   * @param integer  The departure number (based on chronological order).
+   * @param array  The addon types to be retrieved.
+   *
+   * @return array An array of addons.
+   */
+  public static function getAddons($dptStepId, $departureNb, $addonType = array())
+  {
+    $stepSequence = StepHelper::getStepSequence($dptStepId, $departureNb);
+
+    if(empty($stepSequence)) {
+      return $stepSequence;
+    }
+
+    //Collect all the step ids of the step sequence.
+    $stepIds = array();
+    foreach($stepSequence as $step) {
+      $stepIds[] = $step['step_id'];
+    }
+
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    //Get addons linked to the given step sequence.
+    $query->select('a.name, a.description, a.addon_type')
+	  ->from('#__odyssey_addon AS a')
+	  ->join('INNER', '#__odyssey_step_addon_map AS am ON am.addon_id=a.id')
+	  ->where('am.step_id IN('.implode(',', $stepIds).') AND a.published=1');
+
+    if(!empty($addonType) && is_array($addonType)) {
+      //Note: Quote the array values during the implode.
+      $query->where('a.addon_type IN("'.implode('","', $addonType).'")');
+    }
+
+    $query->group('a.id')
+	  ->order('a.addon_type');
+    $db->setQuery($query);
+    $addons = $db->loadAssocList();
+
+    return $addons;
   }
 
 

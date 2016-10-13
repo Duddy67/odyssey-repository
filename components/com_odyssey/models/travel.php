@@ -144,6 +144,9 @@ class OdysseyModelTravel extends JModelItem
       $data->tags = new JHelperTags;
       $data->tags->getItemTags('com_odyssey.travel', $data->id);
 
+      //Get the names and descriptions of the addons linked to this travel.
+      $data->addons = TravelHelper::getAddons($data->dpt_step_id, $data->departure_number, array('excursion','hosting'));
+
       $this->_item[$pk] = $data;
     }
 
