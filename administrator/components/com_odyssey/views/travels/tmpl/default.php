@@ -1,7 +1,8 @@
 <?php
 /**
- * @package JooShop
- * @copyright Copyright (c)2012 - 2015 Lucas Sanner
+/**
+ * @package Odyssey
+ * @copyright Copyright (c) 2016 Lucas Sanner
  * @license GNU General Public License version 3, or later
  */
 
@@ -24,10 +25,18 @@ if($saveOrder) {
   $saveOrderingUrl = 'index.php?option=com_odyssey&task=travels.saveOrderAjax&tmpl=component';
   JHtml::_('sortablelist.sortable', 'travelList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
+
+// Check if only the tag filter is selected.
+$tagFilter = $tagId = 0;
+if (OdysseyHelper::checkSelectedFilter('tag', true)) {
+  $post = JFactory::getApplication()->input->post->getArray();
+  $tagId = $post['filter']['tag'];
+  $tagFilter = true;
+}
 ?>
 
 <script type="text/javascript">
-/*Joomla.orderTable = function()
+Joomla.orderTable = function()
 {
   table = document.getElementById("sortTable");
   direction = document.getElementById("directionTable");
@@ -41,7 +50,7 @@ if($saveOrder) {
   }
 
   Joomla.tableOrdering(order, dirn, '');
-}*/
+}
 </script>
 
 
@@ -112,9 +121,19 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
       $canEditOwn = $user->authorise('core.edit.own', 'com_odyssey.travel.'.$item->id) && $item->created_by == $userId;
       $canCheckin = $user->authorise('core.manage','com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
       $canChange = ($user->authorise('core.edit.state','com_odyssey.travel.'.$item->id) && $canCheckin) || $canEditOwn; 
+
+      // Set the sortable group id according to the
+      // filter selection.
+
+      // Group id by default.
+      $sortableGroupId = $item->catid;
+      if ($tagFilter) {
+	// Group by tag id.
+	$sortableGroupId = $tagId;
+      }
       ?>
 
-      <tr class="row<?php echo $i % 2; ?>">
+      <tr class="row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $sortableGroupId; ?>">
 	<td class="order nowrap center hidden-phone">
 	  <?php
 	  $iconClass = '';

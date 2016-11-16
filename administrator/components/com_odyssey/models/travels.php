@@ -197,10 +197,10 @@ class OdysseyModelTravels extends JModelList
     $orderDirn = $this->state->get('list.direction'); //asc or desc
 
     //In case only the tag filter is selected we want the travels to be displayed according
-    //to our mapping table ordering.
+    //to the mapping table ordering.
     if(is_numeric($tagId) && OdysseyHelper::checkSelectedFilter('tag', true) && $orderCol == 't.ordering') {
       //Join over the travel/tag mapping table.
-      $query->select('tm.ordering AS tm_ordering')
+      $query->select('ISNULL(tm.ordering), tm.ordering AS tm_ordering')
 	    ->join('LEFT', '#__odyssey_travel_tag_map AS tm ON t.id=tm.travel_id AND tm.tag_id='.(int)$tagId);
 
       //Switch to the mapping table ordering.

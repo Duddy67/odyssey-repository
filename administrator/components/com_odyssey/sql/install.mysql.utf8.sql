@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS `#__odyssey_travel_tag_map`;
 CREATE TABLE `#__odyssey_travel_tag_map` (
   `travel_id` INT UNSIGNED NOT NULL ,
   `tag_id` INT UNSIGNED NOT NULL ,
-  `ordering` INT NOT NULL ,
+  `ordering` INT NOT NULL DEFAULT NULL ,
   INDEX `idx_travel_id` (`travel_id` ASC) ,
   INDEX `idx_cat_id` (`tag_id` ASC) )
 ENGINE = MyISAM DEFAULT CHARSET=utf8;

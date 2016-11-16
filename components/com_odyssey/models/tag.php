@@ -143,6 +143,11 @@ class OdysseyModelTag extends JModelList
   {
     // Invoke the parent getItems method (using the getListQuery method) to get the main list
     $items = parent::getItems();
+
+    if(!$items) {
+      return array();
+    }
+
     $input = JFactory::getApplication()->input;
 
     //Get some user data.
@@ -502,9 +507,9 @@ class OdysseyModelTag extends JModelList
 
 
   /**
-   * Increment the hit counter for the category.
+   * Increment the hit counter for the tag.
    *
-   * @param   int  $pk  Optional primary key of the category to increment.
+   * @param   int  $pk  Optional primary key of the tag to increment.
    *
    * @return  boolean True if successful; false otherwise and internal error set.
    *
@@ -516,9 +521,9 @@ class OdysseyModelTag extends JModelList
     $hitcount = $input->getInt('hitcount', 1);
 
     if($hitcount) {
-      $pk = (!empty($pk)) ? $pk : (int) $this->getState('category.id');
+      $pk = (!empty($pk)) ? $pk : (int) $this->getState('tag.id');
 
-      $table = JTable::getInstance('Category', 'JTable');
+      $table = JTable::getInstance('Tag', 'JTable');
       $table->load($pk);
       $table->hit($pk);
     }
