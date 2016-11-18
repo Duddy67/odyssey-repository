@@ -204,7 +204,8 @@ class OdysseyModelTravels extends JModelList
 	    ->join('LEFT', '#__odyssey_travel_tag_map AS tm ON t.id=tm.travel_id AND tm.tag_id='.(int)$tagId);
 
       //Switch to the mapping table ordering.
-      $orderCol = 'tm_ordering';
+      //Note: Travels with NULL ordering are placed at the end of the list.
+      $orderCol = 'ISNULL(tm.ordering) ASC, tm_ordering';
     }
 
     $query->order($db->escape($orderCol.' '.$orderDirn));

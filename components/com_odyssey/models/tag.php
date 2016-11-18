@@ -372,6 +372,18 @@ class OdysseyModelTag extends JModelList
       $orderBy = OdysseyHelperQuery::orderbySecondary($filterOrdering, $travelOrderDate);
     }
 
+    //Ordering songs against the travel/tag mapping table.
+    if(preg_match('#^tm.ordering( DESC)?$#', $orderBy, $matches)) {
+      //Note: travels with NULL order value are placed at the end of the list.
+      $query->select('ISNULL(tm.ordering), tm.ordering AS tm_ordering');
+      $orderBy = 'ISNULL(tm.ordering) ASC, tm_ordering';
+
+      //Check for DESC direction.
+      if(isset($matches[1])) {
+        $orderBy .= $matches[1]; 
+      }   
+    }   
+
     $query->order($orderBy);
 //echo $query;
     return $query;
