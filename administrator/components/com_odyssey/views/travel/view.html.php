@@ -17,6 +17,7 @@ class OdysseyViewTravel extends JViewLegacy
   protected $item;
   protected $form;
   protected $state;
+  protected $config;
 
   //Display the view.
   public function display($tpl = null)
@@ -34,6 +35,9 @@ class OdysseyViewTravel extends JViewLegacy
     JavascriptHelper::getButtonText();
     JavascriptHelper::getCommonText();
     JavascriptHelper::getTravelText();
+
+    $this->config = JComponentHelper::getParams('com_odyssey');
+    JavascriptHelper::loadFunctions(array('country', 'region', 'city'));
 
     //Display the toolbar.
     $this->addToolBar();

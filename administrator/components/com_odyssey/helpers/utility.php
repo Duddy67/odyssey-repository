@@ -271,12 +271,11 @@ class UtilityHelper
       $date->sub(new DateInterval('P'.$nbDays.'D'));
     }
 
-    if($format == 'at') {
-      //Return date time formated for the at Linux command.
-      return $date->format('H:i Y-m-d');
+    if(empty($format)) {
+      $format = 'Y-m-d H:i';
     }
 
-    return $date->format('Y-m-d H:i');
+    return $date->format($format);
   }
 }
 

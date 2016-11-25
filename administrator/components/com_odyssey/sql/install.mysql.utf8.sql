@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS `#__odyssey_travel_tag_map`;
 CREATE TABLE `#__odyssey_travel_tag_map` (
   `travel_id` INT UNSIGNED NOT NULL ,
   `tag_id` INT UNSIGNED NOT NULL ,
-  `ordering` INT NOT NULL DEFAULT NULL ,
+  `ordering` INT NULL DEFAULT NULL ,
   INDEX `idx_travel_id` (`travel_id` ASC) ,
   INDEX `idx_cat_id` (`tag_id` ASC) )
 ENGINE = MyISAM DEFAULT CHARSET=utf8;
@@ -120,6 +120,20 @@ CREATE TABLE `#__odyssey_transit_city_price` (
   `price` DECIMAL(14,5) UNSIGNED NOT NULL DEFAULT 0 ,
   INDEX `idx_travel_id` (`travel_id` ASC) ,
   INDEX `idx_city_id` (`city_id` ASC) )
+ENGINE = MyISAM DEFAULT CHARSET=utf8;
+
+
+-- -----------------------------------------------------
+-- Table `#__odyssey_search_filter`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `#__odyssey_search_filter`;
+CREATE TABLE `#__odyssey_search_filter` (
+  `travel_id` INT UNSIGNED NOT NULL ,
+  `country_code` CHAR(2) NULL DEFAULT NULL ,
+  `region_code` CHAR(6) NULL DEFAULT NULL ,
+  `city_id` INT UNSIGNED NULL DEFAULT NULL ,
+  INDEX `idx_travel_id` (`travel_id` ASC) ,
+  INDEX `idx_country_code` (`country_code` ASC) )
 ENGINE = MyISAM DEFAULT CHARSET=utf8;
 
 

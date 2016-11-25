@@ -50,6 +50,19 @@
 		<option value="3">3</option>
 	</field>
 
+	<field name="search_filters" type="list"
+		label="COM_ODYSSEY_FIELD_SEARCH_FILTERS_LABEL"
+		description="COM_ODYSSEY_FIELD_SEARCH_FILTERS_DESC"
+		size="1" default="country" >
+		<option value="all">JALL</option>
+		<option value="country">COM_ODYSSEY_OPTION_COUNTRY</option>
+		<option value="region">COM_ODYSSEY_OPTION_REGION</option>
+		<option value="city">COM_ODYSSEY_OPTION_CITY</option>
+		<option value="country_region">COM_ODYSSEY_OPTION_COUNTRY_REGION</option>
+		<option value="country_city">COM_ODYSSEY_OPTION_COUNTRY_CITY</option>
+		<option value="region_city">COM_ODYSSEY_OPTION_REGION_CITY</option>
+	</field>
+
 	<field name="spacer1" type="spacer" hr="true" />
 
 	<field name="option_time_limit"

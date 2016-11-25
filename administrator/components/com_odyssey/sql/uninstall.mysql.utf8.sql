@@ -34,3 +34,4 @@ DROP TABLE IF EXISTS `#__odyssey_order_pricerule`;
 DROP TABLE IF EXISTS `#__odyssey_payment_mode`;
 DROP TABLE IF EXISTS `#__odyssey_customer`;
 DROP TABLE IF EXISTS `#__odyssey_passenger`;
+DROP TABLE IF EXISTS `#__odyssey_search_filter`;

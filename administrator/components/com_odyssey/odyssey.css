@@ -11,6 +11,9 @@
 .transitcity-item,
 .addon-item,
 .option-item,
+.countryfilter-item,
+.regionfilter-item,
+.cityfilter-item,
 .sequence-item {
   float: left;
   margin-bottom: 10px !important;
@@ -23,6 +26,13 @@
 .condition-item,
 .target-item {
   width: 100%;
+}
+
+.countryfilter-item,
+.regionfilter-item,
+.cityfilter-item {
+  float: none;
+  width: 30%;
 }
 
 .wrap-dpt-row {
@@ -76,6 +86,9 @@
 .departure-item .btn-wrapper, 
 .option-item .btn-wrapper, 
 .city-item .btn-wrapper,
+.countryfilter-item .btn-wrapper,
+.regionfilter-item .btn-wrapper,
+.cityfilter-item .btn-wrapper,
 .transitcity-item .btn-wrapper {
   float: right;
   margin-left: 20px;

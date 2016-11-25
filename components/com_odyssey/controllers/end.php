@@ -233,8 +233,8 @@ class OdysseyControllerEnd extends JControllerForm
     $task2 = 'cancelling_option';
 
     if($subject == 'take_option') {
-      $reminderDate = UtilityHelper::getLimitDate($settings['option_reminder'], '', true, 'at');
-      $limitDate = UtilityHelper::getLimitDate($settings['option_validity_period'], '', true, 'at');
+      $reminderDate = UtilityHelper::getLimitDate($settings['option_reminder'], '', true, 'H:i Y-m-d');
+      $limitDate = UtilityHelper::getLimitDate($settings['option_validity_period'], '', true, 'H:i Y-m-d');
     }
     elseif($subject == 'deposit') {
       //Set the proper departure date according to the date type.
@@ -243,8 +243,8 @@ class OdysseyControllerEnd extends JControllerForm
 	$departureDate = $travel['date_picker'];
       }
 
-      $reminderDate = UtilityHelper::getLimitDate($settings['deposit_reminder'], $departureDate, false, 'at');
-      $limitDate = UtilityHelper::getLimitDate($settings['finalize_time_limit'], $departureDate, false, 'at');
+      $reminderDate = UtilityHelper::getLimitDate($settings['deposit_reminder'], $departureDate, false, 'H:i Y-m-d');
+      $limitDate = UtilityHelper::getLimitDate($settings['finalize_time_limit'], $departureDate, false, 'H:i Y-m-d');
       $task1 = 'deposit_reminder';
       $task2 = 'warning_payment';
     }

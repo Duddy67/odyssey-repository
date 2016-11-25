@@ -20,14 +20,32 @@ $mainframe->initialise();
 
 //Get the required variables.
 $travelId = JFactory::getApplication()->input->get->get('travel_id', 0, 'uint');
-$dptStepId = JFactory::getApplication()->input->get->get('dpt_step_id', 0, 'uint');
+//$dptStepId = JFactory::getApplication()->input->get->get('dpt_step_id', 0, 'uint');
+
+//Create mapping between search filter and column names.
+$filters = array('country' => 'country_code', 'region' => 'region_code', 'city' => 'city_id');
 
 $data = array();
 
 $db = JFactory::getDbo();
 $query = $db->getQuery(true);
 
-$query->select('ts.dpt_step_id, ts.ordering AS sequence_ordering, s.name AS sequence_name')
+//Run a query for each filter type. It allows to get the result properly ordered according
+//to the type.
+foreach($filters as $filter => $column) {
+  $query->clear()
+	->select($column)
+	->from('#__odyssey_search_filter')
+	->where('travel_id='.(int)$travelId)
+	->where($column.' IS NOT NULL')
+	->order($column);
+  $db->setQuery($query);
+  $results = $db->loadColumn();
+
+  $data[$filter] = $results;
+}
+
+/*$query->select('ts.dpt_step_id, ts.ordering AS sequence_ordering, s.name AS sequence_name')
       ->from('#__odyssey_travel_dpt_step_map AS ts')
       ->join('LEFT', '#__odyssey_step AS s ON s.id=ts.dpt_step_id')
       ->where('ts.travel_id='.(int)$travelId)
@@ -35,8 +53,7 @@ $query->select('ts.dpt_step_id, ts.ordering AS sequence_ordering, s.name AS sequ
 $db->setQuery($query);
 $sequences = $db->loadAssocList();
 
-$data['sequence'] = $sequences;
-
+$data['sequence'] = $sequences;*/
 
 echo json_encode($data);
 

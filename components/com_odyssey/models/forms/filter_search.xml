@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter">
+		<field
+			name="search"
+			type="text"
+		        label="COM_ODYSSEY_SEARCH_IN_TITLE"
+			hint="JSEARCH_FILTER"
+			class="js-stools-search-string"
+		/>
+		<field name="country"
+			type="countryfilterlist"
+			onchange="this.form.submit();" >
+		</field>
+		<field name="region"
+			type="regionfilterlist"
+			onchange="this.form.submit();" >
+		</field>
+		<field name="city"
+			type="cityfilterlist"
+			onchange="this.form.submit();" >
+		</field>
+		<field name="date"
+			type="datefilterlist"
+			onchange="this.form.submit();" >
+		</field>
+		<field
+			name="payment_status"
+			type="list"
+			onchange="this.form.submit();" >
+			<option value="">COM_ODYSSEY_SELECT_PAYMENT_STATUS</option>
+			<option value="deposit">COM_ODYSSEY_OPTION_DEPOSIT_STATUS</option>
+			<option value="completed">COM_ODYSSEY_OPTION_COMPLETED_STATUS</option>
+			<option value="pending">COM_ODYSSEY_OPTION_PENDING_STATUS</option>
+			<option value="error">COM_ODYSSEY_OPTION_ERROR_STATUS</option>
+			<option value="unfinished">COM_ODYSSEY_OPTION_UNFINISHED_STATUS</option>
+		</field>
+	</fields>
+	<fields name="list">
+		<field
+			name="limit"
+			type="limitbox"
+			class="inputbox input-mini"
+			default="25"
+			label="COM_ODYSSEY_LIST_LIMIT"
+			description="COM_ODYSSEY_LIST_LIMIT_DESC"
+			onchange="this.form.submit();"
+		/>
+	</fields>
+</form>

@@ -15,6 +15,8 @@ JHtml::_('behavior.modal');
 
 //Prevent params layout (layouts/joomla/edit/params.php) to display twice some fieldsets.
 $this->ignore_fieldsets = array('details', 'permissions', 'jmetadata');
+//Get the the search filters to use set in global config.
+$searchFilters = $this->config->get('search_filters');
 ?>
 
 <script type="text/javascript">
@@ -49,15 +51,13 @@ Joomla.submitbutton = function(task)
     <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'details', JText::_('COM_ODYSSEY_TAB_DETAILS')); ?>
 
       <div class="row-fluid">
-	<div class="span9">
-	    <div class="form-vertical">
-	      <?php
-		    echo $this->form->getControlGroup('show_steps');
-		    echo $this->form->getControlGroup('show_grouped_steps');
-		    echo $this->form->getControlGroup('departure_number');
-		    echo $this->form->getControlGroup('traveltext');
-	      ?>
-	    </div>
+	<div class="span9 form-vertical">
+	  <?php
+		echo $this->form->getControlGroup('show_steps');
+		echo $this->form->getControlGroup('show_grouped_steps');
+		echo $this->form->getControlGroup('departure_number');
+		echo $this->form->getControlGroup('traveltext');
+	  ?>
 	</div>
 	<div class="span3">
 	  <?php echo JLayoutHelper::render('joomla.edit.global', $this); ?>
@@ -115,6 +115,39 @@ Joomla.submitbutton = function(task)
 	</div>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
 
+      <?php if($searchFilters != 'region' && $searchFilters != 'city' && $searchFilters != 'region_city') : ?>
+	<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'travel-countryfilter', JText::_('COM_ODYSSEY_TAB_COUNTRY_SEARCH_FILTER')); ?>
+	  <div class="row-fluid">
+	    <div class="span12 form-horizontal">
+	      <div id="countryfilter">
+	      </div>
+	    </div>
+	  </div>
+	<?php echo JHtml::_('bootstrap.endTab'); ?>
+      <?php endif; ?>
+
+      <?php if($searchFilters != 'country' && $searchFilters != 'city' && $searchFilters != 'country_city') : ?>
+	<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'travel-regionfilter', JText::_('COM_ODYSSEY_TAB_REGION_SEARCH_FILTER')); ?>
+	  <div class="row-fluid">
+	    <div class="span12 form-horizontal">
+	      <div id="regionfilter">
+	      </div>
+	    </div>
+	  </div>
+	<?php echo JHtml::_('bootstrap.endTab'); ?>
+      <?php endif; ?>
+
+      <?php if($searchFilters != 'country' && $searchFilters != 'region' && $searchFilters != 'country_region') : ?>
+	<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'travel-cityfilter', JText::_('COM_ODYSSEY_TAB_CITY_SEARCH_FILTER')); ?>
+	  <div class="row-fluid">
+	    <div class="span12 form-horizontal">
+	      <div id="cityfilter">
+	      </div>
+	    </div>
+	  </div>
+	<?php echo JHtml::_('bootstrap.endTab'); ?>
+      <?php endif; ?>
+
       <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'publishing', JText::_('JGLOBAL_FIELDSET_PUBLISHING', true)); ?>
       <div class="row-fluid form-horizontal-desktop">
 	<div class="span6">
@@ -134,6 +167,7 @@ Joomla.submitbutton = function(task)
       <?php echo JHtml::_('bootstrap.endTab'); ?>
   </div>
 
+  <input type="hidden" name="search_filters" id="search-filters" value="<?php echo $searchFilters; ?>" />
   <input type="hidden" name="task" value="" />
   <?php echo JHtml::_('form.token'); ?>
 </form>

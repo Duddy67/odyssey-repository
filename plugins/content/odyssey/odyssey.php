@@ -131,7 +131,9 @@ class plgContentOdyssey extends JPlugin
       $this->setOrderByTag($context, $data, $isNew);
 
       $post = JFactory::getApplication()->input->post->getArray();
-      $travelPrices = $addonPrices = $addonOptionPrices = $transCityPrices = array();
+      $travelPrices = $addonPrices = $addonOptionPrices = $transCityPrices = $filters = $country = $region = $city = array();
+      //Create a mapping between filter and column names.
+      $filterMapping = array('country' => 'country_code', 'region' => 'region_code', 'city' => 'city_id');
 
       foreach($post as $key => $value) {
 	//Clean up the price value.
@@ -204,6 +206,13 @@ class plgContentOdyssey extends JPlugin
 
 	  $transCityPrices[] = $row;
 	}
+
+	//Get the countries, regions or cities linked to the travel to be used as search filters. 
+	//Note: Don't set the value row now as the different filter values must be get together. 
+	if(preg_match('#^(country|region|city)_(code|id)_([0-9]+)$#', $key, $matches) && !empty($value)) {
+	  //Use dynamical variable to set the corresponding array.
+	  ${$matches[1]}[] = $value;
+	}
       }
 
       $columns = array('travel_id','dpt_step_id','dpt_id','psgr_nb','price');
@@ -217,6 +226,34 @@ class plgContentOdyssey extends JPlugin
 
       $columns = array('travel_id','dpt_step_id','city_id','dpt_id','psgr_nb','price');
       OdysseyHelper::updateMappingTable('#__odyssey_transit_city_price', $columns, $transCityPrices, array($data->id));
+
+      //Move on to the filter values.
+      //First we need to know which filter has the highest number of items.
+      $maxFilters = 0;
+      //Note: Use dynamical variables to get the corresponding array.
+      foreach($filterMapping as $filter => $column) {
+	if($maxFilters < count(${$filter})) {
+	  $maxFilters = count(${$filter});
+	}
+      }
+
+      //Get the filter values together an set the row. 
+      for($i = 0; $i < $maxFilters; $i++) {
+	$row = new JObject;
+
+	foreach($filterMapping as $filter => $column) {
+	  //Set to null in case no item is defined for this filter.
+	  $row->$column = null;
+	  if(isset(${$filter}[$i])) {
+	    $row->$column = ${$filter}[$i];
+	  }
+	}
+
+	$filters[] = $row;
+      }
+
+      $columns = array('travel_id','country_code','region_code','city_id');
+      OdysseyHelper::updateMappingTable('#__odyssey_search_filter', $columns, $filters, array($data->id));
 
       return true;
     }
@@ -635,7 +672,6 @@ class plgContentOdyssey extends JPlugin
 	$currentNbPsgr--;
       }
 
-//file_put_contents('debog_order.txt', print_r($data, true));
       //Update passenger data for this order.
       OrderHelper::setPassengers($passengers, $data->id);
 

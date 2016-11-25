@@ -228,10 +228,11 @@ class OdysseyHelper
    * @param array  Array of table's column, (primary key name must be set as the first array's element).
    * @param array  Array of JObject containing the column values, (values order must match the column order).
    * @param array  Array containing the ids of the items to update.
+   * @param string Extra WHERE clause.
    *
    * @return void
    */
-  public static function updateMappingTable($table, $columns, $data, $ids)
+  public static function updateMappingTable($table, $columns, $data, $ids, $where = '')
   {
     //Ensure we have a valid primary key.
     if(isset($columns[0]) && !empty($columns[0])) {
@@ -248,6 +249,11 @@ class OdysseyHelper
     //Delete all the previous items linked to the primary id(s).
     $query->delete($db->quoteName($table));
     $query->where($pk.' IN('.implode(',', $ids).')');
+
+    if(!empty($where)) {
+      $query->where($where);
+    }
+
     $db->setQuery($query);
     $db->execute();
 
@@ -267,12 +273,16 @@ class OdysseyHelper
 	  $row = $id.',';
 
 	  foreach($itemValues as $key => $value) {
-	    //No integer values must be quoted.
-	    if(!in_array($key, $integers)) {
-	      $row .= $db->Quote($value).',';
+	    //Handle the null value.
+	    if($value === null) {
+	      $row .= 'NULL,';
 	    }
-	    else { //Don't quote the numerical values.
+	    //No numerical values must be quoted.
+	    elseif(in_array($key, $integers)) {
 	      $row .= $value.',';
+	    }
+	    else { //Quote the other value types.
+	      $row .= $db->Quote($value).',';
 	    }
 	  }
 
