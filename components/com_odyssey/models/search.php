@@ -38,7 +38,7 @@ class OdysseyModelSearch extends JModelList
     }
 
     //Get and set the default filter type set in the component global configuration.
-    $this->setState('search.filter_type', JComponentHelper::getParams('com_odyssey')->get('search_filter_type'));
+    $this->setState('search.filters', JComponentHelper::getParams('com_odyssey')->get('search_filters'));
 
     //Get the state values set by the user.
     $search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
@@ -84,7 +84,7 @@ class OdysseyModelSearch extends JModelList
     $db = $this->getDbo();
     $query = $db->getQuery(true);
 
-    $filterType = $this->getState('search.filter_type');
+    $filterType = $this->getState('search.filters');
 
     // Select the required fields from the table.
     $query->select($this->getState('list.select', 't.name'));

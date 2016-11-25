@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 <?php
 // Search tools bar 
 //echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
-echo JLayoutHelper::render('search_filters', array('view' => $this), JPATH_SITE.'/components/com_odyssey/layouts/');
+echo JLayoutHelper::render('search_filters', array('view' => $this, 'search_filters' => $this->state->get('search.filters')), JPATH_SITE.'/components/com_odyssey/layouts/');
 ?>
 
 

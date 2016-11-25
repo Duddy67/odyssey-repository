@@ -25,11 +25,11 @@ class JFormFieldCityfilterList extends JFormFieldList
   {
     $options = array();
       
-    //Get the country names.
+    //Get the city names.
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
     $query->select('id,name,lang_var')
-	  ->from('#__odyssey_country')
+	  ->from('#__odyssey_city')
 	  //Get only the cities defined in the search filter table.
 	  ->join('INNER', '#__odyssey_search_filter ON city_id=id')
 	  ->where('published=1')

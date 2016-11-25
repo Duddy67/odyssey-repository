@@ -35,6 +35,7 @@ class OdysseyViewSearch extends JViewLegacy
       return false;
     }
 
+
     parent::display($tpl);
   }
 
