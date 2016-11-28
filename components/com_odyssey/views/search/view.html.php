@@ -20,6 +20,9 @@ class OdysseyViewSearch extends JViewLegacy
   protected $items;
   protected $state;
   protected $pagination;
+  public $config;
+  public $currency;
+
 
   public function display($tpl = null)
   {
@@ -35,6 +38,10 @@ class OdysseyViewSearch extends JViewLegacy
       return false;
     }
 
+    $this->config = JComponentHelper::getParams('com_odyssey');
+    $this->currency = UtilityHelper::getCurrency();
+
+    //$this->setDocument();
 
     parent::display($tpl);
   }
@@ -44,7 +51,7 @@ class OdysseyViewSearch extends JViewLegacy
   {
     //Include css files (if needed).
     $doc = JFactory::getDocument();
-    $doc->addStyleSheet(JURI::base().'components/com_odyssey/css/odyssey.css');
+    //$doc->addStyleSheet(JURI::base().'components/com_odyssey/css/odyssey.css');
   }
 }
 

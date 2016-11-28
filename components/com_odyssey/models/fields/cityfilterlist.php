@@ -24,22 +24,47 @@ class JFormFieldCityfilterList extends JFormFieldList
   protected function getOptions()
   {
     $options = array();
+    $post = JFactory::getApplication()->input->post->getArray();
+    $country = $region = '';
+
+    if(isset($post['filter']['country'])) {
+      $country = $post['filter']['country'];
+    }
+      
+    if(isset($post['filter']['region'])) {
+      $region = $post['filter']['region'];
+    }
       
     //Get the city names.
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
-    $query->select('id,name,lang_var')
-	  ->from('#__odyssey_city')
+    $query->select('c.id,c.name,c.lang_var')
+	  ->from('#__odyssey_city AS c')
 	  //Get only the cities defined in the search filter table.
-	  ->join('INNER', '#__odyssey_search_filter ON city_id=id')
-	  ->where('published=1')
-	  ->group('city_id')
-	  ->order('city_id');
+	  ->join('INNER', '#__odyssey_search_filter AS sf_ci ON sf_ci.city_id=c.id');
+
+    //Display only the cities linked to travels which have the same filter region or country. 
+    if(!empty($country) || !empty($region)) {
+      $column = 'country';
+      $filter = $country;
+
+      if(empty($country)) {
+	$column = 'region';
+	$filter = $region;
+      }
+
+      $query->join('INNER', '#__odyssey_search_filter AS sf ON sf.'.$column.'_code='.$db->Quote($filter))
+	    ->where('sf_ci.travel_id=sf.travel_id');
+    }
+
+    $query->where('c.published=1')
+	  ->group('sf_ci.city_id')
+	  ->order('sf_ci.city_id');
     $db->setQuery($query);
     $cities = $db->loadObjectList();
 
     //Build the first option.
-    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT'));
+    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT_CITY'));
 
     //Build the select options.
     foreach($cities as $city) {

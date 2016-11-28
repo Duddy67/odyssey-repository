@@ -26,6 +26,20 @@ class JFormFieldDatefilterList extends JFormFieldList
   {
     $options = $dates = array();
     $nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+    $post = JFactory::getApplication()->input->post->getArray();
+    $country = $region = $city = '';
+
+    if(isset($post['filter']['country'])) {
+      $country = $post['filter']['country'];
+    }
+
+    if(isset($post['filter']['region'])) {
+      $region = $post['filter']['region'];
+    }
+
+    if(isset($post['filter']['city'])) {
+      $city = $post['filter']['city'];
+    }
       
     //Get departure dates
     //Note: Get only the date part, (ie: yyyy-mm-dd).
@@ -33,9 +47,26 @@ class JFormFieldDatefilterList extends JFormFieldList
     $query = $db->getQuery(true);
     $query->select('SUBSTRING(ds.date_time, 1, 10) AS date_time, SUBSTRING(ds.date_time_2, 1, 10) AS date_time_2')
 	  ->from('#__odyssey_departure_step_map AS ds')
-	  ->join('INNER', '#__odyssey_travel AS t ON t.dpt_step_id=ds.step_id')
-	  ->where('t.published=1')
-	  ->where('ds.date_time > '.$db->Quote($nowDate).' OR date_time_2 > '.$db->Quote($nowDate))
+	  ->join('INNER', '#__odyssey_travel AS t ON t.dpt_step_id=ds.step_id');
+
+    //Get only departure linked to the selected country, region, or city.
+    if(!empty($country)) {
+      $query->join('INNER', '#__odyssey_search_filter AS sf_co ON sf_co.travel_id=t.id')
+	    ->where('sf_co.country_code='.$db->Quote($country));
+    }
+
+    if(!empty($region)) {
+      $query->join('INNER', '#__odyssey_search_filter AS sf_re ON sf_re.travel_id=t.id')
+	    ->where('sf_re.region_code='.$db->Quote($region));
+    }
+
+    if(!empty($city)) {
+      $query->join('INNER', '#__odyssey_search_filter AS sf_ci ON sf_ci.travel_id=t.id')
+	    ->where('sf_ci.city_id='.(int)$city);
+    }
+
+    $query->where('t.published=1')
+	  ->where('(ds.date_time > '.$db->Quote($nowDate).' OR date_time_2 > '.$db->Quote($nowDate).')')
 	  ->order('ds.date_time');
     $db->setQuery($query);
     $results = $db->loadObjectList();
@@ -80,7 +111,7 @@ class JFormFieldDatefilterList extends JFormFieldList
     }
 
     //Build the first option.
-    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT'));
+    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT_DEPARTURE'));
 
     //Build the select options.
     foreach($dates as $date) {

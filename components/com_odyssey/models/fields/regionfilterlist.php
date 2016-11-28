@@ -5,7 +5,6 @@
  * @license GNU General Public License version 3, or later
  */
 
-
 defined('_JEXEC') or die;
 
 jimport('joomla.html.html');
@@ -24,21 +23,34 @@ class JFormFieldRegionfilterList extends JFormFieldList
   protected function getOptions()
   {
     $options = array();
-      
+    $post = JFactory::getApplication()->input->post->getArray();
+    $country = '';
+
+    if(isset($post['filter']['country'])) {
+      $country = $post['filter']['country'];
+    }
+
     //Get the region names.
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
-    $query->select('id_code,lang_var')
-	  ->from('#__odyssey_region')
+    $query->select('r.id_code,r.lang_var')
+	  ->from('#__odyssey_region AS r')
 	  //Get only the regions defined in the search filter table.
-	  ->join('INNER', '#__odyssey_search_filter ON region_code=id_code')
-	  ->group('id_code')
-	  ->order('id_code');
+	  ->join('INNER', '#__odyssey_search_filter AS sf_re ON sf_re.region_code=r.id_code');
+
+    //Display only the regions linked to travels which have the same filter country. 
+    if(!empty($country)) {
+      $query->join('INNER', '#__odyssey_search_filter AS sf_co ON sf_co.country_code='.$db->Quote($country))
+	    ->where('sf_re.travel_id=sf_co.travel_id');
+    }
+
+    $query->group('r.id_code')
+	  ->order('r.id_code');
     $db->setQuery($query);
     $regions = $db->loadObjectList();
 
     //Build the first option.
-    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT'));
+    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT_REGION'));
 
     //Build the select options.
     foreach($regions as $region) {

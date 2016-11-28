@@ -39,7 +39,7 @@ class JFormFieldCountryfilterList extends JFormFieldList
     $countries = $db->loadObjectList();
 
     //Build the first option.
-    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT'));
+    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT_COUNTRY'));
 
     //Build the select options.
     foreach($countries as $country) {

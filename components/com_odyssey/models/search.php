@@ -19,6 +19,7 @@ class OdysseyModelSearch extends JModelList
       $config['filter_fields'] = array(
 	      'id', 't.id',
 	      'name', 't.name',
+	      'price'
       );
     }
 
@@ -76,24 +77,24 @@ class OdysseyModelSearch extends JModelList
 
   protected function getListQuery()
   {
-    //Get the default currency display.
-    $parameters = JComponentHelper::getParams('com_odyssey');
-    $display = $parameters->get('currency_display');
-
     //Create a new JDatabaseQuery object.
     $db = $this->getDbo();
     $query = $db->getQuery(true);
-
-    $filterType = $this->getState('search.filters');
+    $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
 
     // Select the required fields from the table.
-    $query->select($this->getState('list.select', 't.name'));
-
-    $query->from('#__odyssey_travel AS t')
-	  ->join('INNER', '#__odyssey_search_filter AS sf ON sf.travel_id=t.id');
+    $query->select($this->getState('list.select', 't.name, MIN(tp.price) AS price'))
+	  ->from('#__odyssey_travel AS t')
+	  //Get the lowest price for each travel.
+	  ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id')
+	  ->join('INNER', '#__odyssey_travel_price AS tp ON tp.travel_id=t.id')
+	  //Don't get the old departures of the travel.
+	  ->where('(ds.date_time > '.$nowDate.' OR ds.date_time_2 > '.$nowDate.')')
+	  ->where('tp.dpt_step_id=t.dpt_step_id AND tp.psgr_nb=1');
 
     //Display only published travels.
     $query->where('t.published=1');
+    $query->group('t.id');
 
     //Filter by title search.
     $search = $this->getState('filter.search');
@@ -110,19 +111,22 @@ class OdysseyModelSearch extends JModelList
     //Filter by country.
     $country = $this->getState('filter.country');
     if(!empty($country)) {
-      $query->where('sf.country_code='.$db->Quote($country));
+      $query->join('INNER', '#__odyssey_search_filter AS sf_co ON sf_co.travel_id=t.id')
+	    ->where('sf_co.country_code='.$db->Quote($country));
     }
 
     //Filter by region.
     $region = $this->getState('filter.region');
     if(!empty($region)) {
-      $query->where('sf.region_code='.$db->Quote($region));
+      $query->join('INNER', '#__odyssey_search_filter AS sf_re ON sf_re.travel_id=t.id')
+	    ->where('sf_re.region_code='.$db->Quote($region));
     }
 
     //Filter by city.
     $city = $this->getState('filter.city');
     if(is_numeric($city)) {
-      $query->where('sf.city_id='.$city);
+      $query->join('INNER', '#__odyssey_search_filter AS sf_ci ON sf_ci.travel_id=t.id')
+	    ->where('sf_ci.city_id='.(int)$city);
     }
 
     //Add the list to the sort.
@@ -130,7 +134,7 @@ class OdysseyModelSearch extends JModelList
     $orderDirn = $this->state->get('list.direction'); //asc or desc
 
     $query->order($db->escape($orderCol.' '.$orderDirn));
-
+//echo $query;
     return $query;
   }
 }
