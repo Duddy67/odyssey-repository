@@ -14,6 +14,7 @@ jimport('joomla.form.formfield');
 jimport('joomla.form.helper');
 JFormHelper::loadFieldClass('list');
 require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/utility.php';
+require_once JPATH_ROOT.'/components/com_odyssey/models/search.php';
 
 
 //Script which build the select html tag containing the available departure dates.
@@ -27,7 +28,7 @@ class JFormFieldDatefilterList extends JFormFieldList
     $options = $dates = array();
     $nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
     $post = JFactory::getApplication()->input->post->getArray();
-    $country = $region = $city = '';
+    $country = $region = $city = $duration = '';
 
     if(isset($post['filter']['country'])) {
       $country = $post['filter']['country'];
@@ -41,6 +42,10 @@ class JFormFieldDatefilterList extends JFormFieldList
       $city = $post['filter']['city'];
     }
       
+    if(isset($post['filter']['duration'])) {
+      $duration = $post['filter']['duration'];
+    }
+
     //Get departure dates
     //Note: Get only the date part, (ie: yyyy-mm-dd).
     $db = JFactory::getDbo();
@@ -65,6 +70,11 @@ class JFormFieldDatefilterList extends JFormFieldList
 	    ->where('sf_ci.city_id='.(int)$city);
     }
 
+    //Display only departures linked to travels which match the given duration.
+    if(!empty($duration)) {
+      $query->where('t.travel_duration='.$db->Quote($duration));
+    }
+
     $query->where('t.published=1')
 	  ->where('(ds.date_time > '.$db->Quote($nowDate).' OR date_time_2 > '.$db->Quote($nowDate).')')
 	  ->order('ds.date_time');
@@ -74,22 +84,10 @@ class JFormFieldDatefilterList extends JFormFieldList
     foreach($results as $result) {
       //Departure per period.
       if($result->date_time_2 > 0) { 
-	$startingDate = $result->date_time;
-
-	//In case the starting date is up to date we use the current date instead.
-	if($nowDate > $startingDate) {
-	  //Remove the time part as we don't need it during comparisons.
-	  $startingDate = substr($nowDate, 0, 10);
-	}
-
-	//Get all dates contained in the period.
-	while($startingDate < $result->date_time_2) {
-	  //Get the starting date plus one day.
-	  $startingDate = UtilityHelper::getLimitDate(1, $startingDate, true, 'Y-m-d');
-
-	  if(!in_array($startingDate, $dates)) {
-	    $dates[] = $startingDate;
-	  }
+	//Join the 2 dates with an underscore.
+	$period = $result->date_time.'_'.$result->date_time_2;
+	if(!in_array($period, $dates)) {
+	  $dates[] = $period;
 	}
       }
       //Standard departure.
@@ -115,7 +113,17 @@ class JFormFieldDatefilterList extends JFormFieldList
 
     //Build the select options.
     foreach($dates as $date) {
-      $options[] = JHtml::_('select.option', $date, JHtml::_('date', $date, JText::_('DATE_FORMAT_LC3')));
+      //Departure per period.
+      if(preg_match('#^([0-9]{4}-[0-9]{2}-[0-9]{2})_([0-9]{4}-[0-9]{2}-[0-9]{2})$#', $date, $matches)) {
+	//Format the 2 dates.
+	$date1 = JHtml::_('date', $matches[1], JText::_('DATE_FORMAT_LC3'));
+	$date2 = JHtml::_('date', $matches[2], JText::_('DATE_FORMAT_LC3'));
+	$options[] = JHtml::_('select.option', $date, JText::_('COM_ODYSSEY_PERIOD_FROM').$date1.' '.JText::_('COM_ODYSSEY_PERIOD_TO').$date2);
+      }
+      //Standard departure.
+      else {
+	$options[] = JHtml::_('select.option', $date, JHtml::_('date', $date, JText::_('DATE_FORMAT_LC3')));
+      }
     }
 
     // Merge any additional options in the XML definition.

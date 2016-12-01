@@ -36,6 +36,19 @@
 	       maxlength="3"
 	       default="1" />
 
+	<field name="travel_duration" type="list"
+		label="COM_ODYSSEY_FIELD_TRAVEL_DURATION_LABEL"
+		description="COM_ODYSSEY_FIELD_TRAVEL_DURATION_DESC"
+		class="input" required="true" default="">
+		<option value="">JSELECT</option>
+		<option value="1_3">COM_ODYSSEY_OPTION_TRAVEL_DURATION_1_3</option>
+		<option value="4_7">COM_ODYSSEY_OPTION_TRAVEL_DURATION_4_7</option>
+		<option value="7_14">COM_ODYSSEY_OPTION_TRAVEL_DURATION_7_14</option>
+		<option value="14_21">COM_ODYSSEY_OPTION_TRAVEL_DURATION_14_21</option>
+		<option value="21_31">COM_ODYSSEY_OPTION_TRAVEL_DURATION_21_31</option>
+		<option value="31_62">COM_ODYSSEY_OPTION_TRAVEL_DURATION_31_62</option>
+	</field>
+
 	<field name="traveltext" type="editor"
 	       label="COM_ODYSSEY_FIELD_DESCRIPTION_LABEL"
 	       description="COM_ODYSSEY_FIELD_DESCRIPTION_DESC"

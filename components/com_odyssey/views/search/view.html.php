@@ -38,6 +38,11 @@ class OdysseyViewSearch extends JViewLegacy
       return false;
     }
 
+    // Compute the travel slugs.
+    foreach($this->items as $item) {
+      $item->slug = $item->alias ? ($item->id.':'.$item->alias) : $item->id;
+    }
+
     $this->config = JComponentHelper::getParams('com_odyssey');
     $this->currency = UtilityHelper::getCurrency();
 

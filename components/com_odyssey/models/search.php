@@ -19,7 +19,8 @@ class OdysseyModelSearch extends JModelList
       $config['filter_fields'] = array(
 	      'id', 't.id',
 	      'name', 't.name',
-	      'price'
+	      'price',
+	      'travel_duration', 't.travel_duration'
       );
     }
 
@@ -57,6 +58,9 @@ class OdysseyModelSearch extends JModelList
     $date = $app->getUserStateFromRequest($this->context.'.filter.date', 'filter_date');
     $this->setState('filter.date', $date);
 
+    $duration = $app->getUserStateFromRequest($this->context.'.filter.duration', 'filter_duration');
+    $this->setState('filter.duration', $duration);
+
     // List state information.
     parent::populateState('t.name', 'asc');
   }
@@ -69,6 +73,7 @@ class OdysseyModelSearch extends JModelList
     $id .= ':'.$this->getState('filter.country');
     $id .= ':'.$this->getState('filter.region');
     $id .= ':'.$this->getState('filter.city');
+    $id .= ':'.$this->getState('filter.duration');
     $id .= ':'.$this->getState('filter.date');
 
     return parent::getStoreId($id);
@@ -83,7 +88,7 @@ class OdysseyModelSearch extends JModelList
     $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
 
     // Select the required fields from the table.
-    $query->select($this->getState('list.select', 't.name, MIN(tp.price) AS price'))
+    $query->select($this->getState('list.select', 't.id, t.alias, t.name, MIN(tp.price) AS price, t.travel_duration, t.catid'))
 	  ->from('#__odyssey_travel AS t')
 	  //Get the lowest price for each travel.
 	  ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id')
@@ -127,6 +132,24 @@ class OdysseyModelSearch extends JModelList
     if(is_numeric($city)) {
       $query->join('INNER', '#__odyssey_search_filter AS sf_ci ON sf_ci.travel_id=t.id')
 	    ->where('sf_ci.city_id='.(int)$city);
+    }
+
+    //Filter by duration.
+    $duration = $this->getState('filter.duration');
+    if(!empty($duration)) {
+      $query->where('t.travel_duration='.$db->Quote($duration));
+    }
+
+    //Filter by departure date.
+    $date = $this->getState('filter.date');
+    if(!empty($date)) {
+      if(preg_match('#^([0-9]{4}-[0-9]{2}-[0-9]{2})_([0-9]{4}-[0-9]{2}-[0-9]{2})$#', $date, $matches)) {
+	$query->where('ds.date_time LIKE '.$db->Quote($matches[1].'%').' AND ds.date_time_2 LIKE '.$db->Quote($matches[2].'%'));
+      }
+      //Standard departure.
+      else {
+	$query->where('ds.date_time LIKE '.$db->Quote($date.'%'));
+      }
     }
 
     //Add the list to the sort.

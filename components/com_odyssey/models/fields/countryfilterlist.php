@@ -24,17 +24,31 @@ class JFormFieldCountryfilterList extends JFormFieldList
   protected function getOptions()
   {
     $options = array();
+    $post = JFactory::getApplication()->input->post->getArray();
+    $duration = '';
+
+    if(isset($post['filter']['duration'])) {
+      $duration = $post['filter']['duration'];
+    }
+
       
     //Get the country names.
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
-    $query->select('alpha_2,name,lang_var')
-	  ->from('#__odyssey_country')
+    $query->select('c.alpha_2,c.name,c.lang_var')
+	  ->from('#__odyssey_country AS c')
 	  //Get only the countries defined in the search filter table.
-	  ->join('INNER', '#__odyssey_search_filter ON country_code=alpha_2')
-	  ->where('published=1')
-	  ->group('alpha_2')
-	  ->order('alpha_3');
+	  ->join('INNER', '#__odyssey_search_filter AS sf_co ON sf_co.country_code=c.alpha_2');
+
+    //Display only countries linked to travels which match the given duration.
+    if(!empty($duration)) {
+      $query->join('INNER', '#__odyssey_travel AS t ON sf_co.travel_id=t.id')
+	    ->where('t.travel_duration='.$db->Quote($duration));
+    }
+
+    $query->where('c.published=1')
+	  ->group('c.alpha_2')
+	  ->order('c.alpha_3');
     $db->setQuery($query);
     $countries = $db->loadObjectList();
 

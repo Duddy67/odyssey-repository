@@ -25,7 +25,7 @@ class JFormFieldCityfilterList extends JFormFieldList
   {
     $options = array();
     $post = JFactory::getApplication()->input->post->getArray();
-    $country = $region = '';
+    $country = $region = $duration = '';
 
     if(isset($post['filter']['country'])) {
       $country = $post['filter']['country'];
@@ -35,6 +35,10 @@ class JFormFieldCityfilterList extends JFormFieldList
       $region = $post['filter']['region'];
     }
       
+    if(isset($post['filter']['duration'])) {
+      $duration = $post['filter']['duration'];
+    }
+
     //Get the city names.
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
@@ -48,13 +52,20 @@ class JFormFieldCityfilterList extends JFormFieldList
       $column = 'country';
       $filter = $country;
 
-      if(empty($country)) {
+      //If it set, use region over country.
+      if(!empty($region)) {
 	$column = 'region';
 	$filter = $region;
       }
 
       $query->join('INNER', '#__odyssey_search_filter AS sf ON sf.'.$column.'_code='.$db->Quote($filter))
 	    ->where('sf_ci.travel_id=sf.travel_id');
+    }
+
+    //Display only cities linked to travels which match the given duration.
+    if(!empty($duration)) {
+      $query->join('INNER', '#__odyssey_travel AS t ON sf_ci.travel_id=t.id')
+	    ->where('t.travel_duration='.$db->Quote($duration));
     }
 
     $query->where('c.published=1')

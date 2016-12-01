@@ -24,10 +24,14 @@ class JFormFieldRegionfilterList extends JFormFieldList
   {
     $options = array();
     $post = JFactory::getApplication()->input->post->getArray();
-    $country = '';
+    $country = $duration = '';
 
     if(isset($post['filter']['country'])) {
       $country = $post['filter']['country'];
+    }
+
+    if(isset($post['filter']['duration'])) {
+      $duration = $post['filter']['duration'];
     }
 
     //Get the region names.
@@ -42,6 +46,12 @@ class JFormFieldRegionfilterList extends JFormFieldList
     if(!empty($country)) {
       $query->join('INNER', '#__odyssey_search_filter AS sf_co ON sf_co.country_code='.$db->Quote($country))
 	    ->where('sf_re.travel_id=sf_co.travel_id');
+    }
+
+    //Display only regions linked to travels which match the given duration.
+    if(!empty($duration)) {
+      $query->join('INNER', '#__odyssey_travel AS t ON sf_re.travel_id=t.id')
+	    ->where('t.travel_duration='.$db->Quote($duration));
     }
 
     $query->group('r.id_code')
