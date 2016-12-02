@@ -10,6 +10,7 @@ defined('_JEXEC') or die;
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
+
 $digitsPrecision = $this->config->get('digits_precision');
 $nbItems = count($this->items);
 ?>
@@ -17,8 +18,7 @@ $nbItems = count($this->items);
 <form action="<?php echo JRoute::_('index.php?option=com_odyssey&view=search');?>" method="post" name="adminForm" id="adminForm">
 <?php
 // Search tools bar 
-//echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
-echo JLayoutHelper::render('search_filters', array('view' => $this, 'search_filters' => $this->state->get('search.filters')), JPATH_SITE.'/components/com_odyssey/layouts/');
+echo JLayoutHelper::render('default', array('view' => $this, 'search_filters' => $this->state->get('search.filters')), JPATH_SITE.'/components/com_odyssey/layouts/search/');
 ?>
 
   <table class="table table-striped">
@@ -62,64 +62,8 @@ echo JLayoutHelper::render('search_filters', array('view' => $this, 'search_filt
 <?php echo JHtml::_('form.token'); ?>
 </form>
 
-<script type="text/javascript">
-
-(function($) {
-
-  //Run a function when the page is fully loaded including graphics.
-  $(window).load(function() {
-    $('#search-btn-clear').click( function() { $.fn.clearFilters(); });
-    $.fn.setFilters($('#nb-items').val());
-  });
-
-  $.fn.clearFilters = function() {
-    //Empty drop down lists.
-    $('#filter_country').val('');
-    $('#filter_region').val('');
-    $('#filter_city').val('');
-    $('#filter_duration').val('');
-    $('#filter_date').val('');
-    //Reload the form.
-    $('#adminForm').submit();
-  };
-
-
-  $.fn.setFilters = function(nbItems) {
-    //Get filter values.
-    var country = $('#filter_country').val();
-    var region = $('#filter_region').val();
-    var city = $('#filter_city').val();
-    var duration = $('#filter_duration').val();
-    var departure = $('#filter_date').val();
-
-    if(region !== undefined && region !== '') {
-      $('#filter_country').css({'visibility':'hidden','display':'none'});
-    }
-
-    if(city !== undefined && city !== '') {
-      $('#filter_country').css({'visibility':'hidden','display':'none'});
-      $('#filter_region').css({'visibility':'hidden','display':'none'});
-    }
-
-    if(country === '' && region === '' && city === '') {
-      //Don't display departure filter as long as no filter value above is set.
-      $('#filter_date').css({'visibility':'hidden','display':'none'});
-    }
-
-    if($('#filter_duration').children('option').length == 2) {
-      //If there is only 1 value left (plus the select value) there is no need to 
-      //show the filter. Duration value can be read in the result array.
-      $('#filter_duration').css({'visibility':'hidden','display':'none'});
-    }
-
-    //Single result.
-    if(nbItems == 1) {
-      $('#filter_date option[value=""]').text('- Next departures -');
-      //Prevent from loading the form again.
-      $('#filter_date').removeAttr('onchange');
-    }
-  };
-})(jQuery);
-
-</script>
+<?php
+//Load the jQuery script.
+$doc = JFactory::getDocument();
+$doc->addScript(JURI::base().'components/com_odyssey/js/search.js');
 
