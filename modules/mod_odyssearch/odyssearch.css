@@ -1,0 +1,15 @@
+.moduletable_odyssearch {
+  overflow: hidden;
+}
+
+.odyssearch-module {
+  border: 1px solid #ebebe0;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.odyssearch-module .chzn-container {
+  display: block !important;
+  margin-bottom: 10px;
+}
+

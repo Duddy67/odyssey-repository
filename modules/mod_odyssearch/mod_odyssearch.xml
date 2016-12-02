@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.1.0" client="site" method="upgrade">
+    <name>Odyssearch</name> 
+    <author>Lucas Sanner</author> 
+    <creationDate>2016-11-28</creationDate> 
+    <license>GNU General Public License version 2 or later http://www.gnu.org/licenses/gpl.html</license>
+    <authorEmail>lucas.sanner@gmail.com</authorEmail> 
+    <version>1.0</version> 
+    <description>MOD_ODYSSEARCH_XML_DESCRIPTION</description>
+    <files>
+    <!-- The "module" attribute signifies that this is the main controller file -->
+	    <filename module="mod_odyssearch">mod_odyssearch.php</filename>
+	    <filename>index.html</filename>
+	    <filename>odyssearch.css</filename>
+	    <filename>mod_odyssearch.xml</filename>
+	    <folder>tmpl</folder>
+	    <folder>language</folder>
+    </files>
+	<!-- Optional parameters -->
+      <config>
+	<fields name="params">
+	  <fieldset name="advanced">
+	    <field name="moduleclass_sfx" type="text" default=""
+		   label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+		   description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+	    </fieldset>
+	</fields>
+      </config>
+
+</extension>
+

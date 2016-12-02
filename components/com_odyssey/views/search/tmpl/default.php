@@ -7,6 +7,7 @@
 
 // no direct access
 defined('_JEXEC') or die;
+//JHtml::_('formbehavior.chosen', 'select');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
@@ -21,40 +22,46 @@ $nbItems = count($this->items);
 echo JLayoutHelper::render('default', array('view' => $this, 'search_filters' => $this->state->get('search.filters')), JPATH_SITE.'/components/com_odyssey/layouts/search/');
 ?>
 
-  <table class="table table-striped">
-    <thead>
-      <th width="25%">
-	<?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_NAME', 't.name', $listDirn, $listOrder); ?>
-      </th>
-      <th width="15%">
-	<?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_PRICE_STARTING_AT', 'price', $listDirn, $listOrder); ?>
-      </th>
-      <th width="15%">
-	<?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_TRAVEL_DURATION', 't.travel_duration', $listDirn, $listOrder); ?>
-      </th>
-    </thead>
+  <?php if (empty($this->items)) : ?>
+    <div class="alert alert-no-items">
+	<?php echo JText::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
+    </div>
+  <?php else : ?>
+    <table class="table table-striped">
+      <thead>
+	<th width="25%">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_NAME', 't.name', $listDirn, $listOrder); ?>
+	</th>
+	<th width="15%">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_PRICE_STARTING_AT', 'price', $listDirn, $listOrder); ?>
+	</th>
+	<th width="15%">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_TRAVEL_DURATION', 't.travel_duration', $listDirn, $listOrder); ?>
+	</th>
+      </thead>
 
-    <tbody>
-    <?php foreach ($this->items as $i => $item) : ?>
+      <tbody>
+      <?php foreach ($this->items as $i => $item) : ?>
 
-    <tr class="row-<?php echo $i % 2; ?>">
-      <td>
-        <a href="<?php echo JRoute::_(OdysseyHelperRoute::getTravelRoute($item->slug, $item->catid)); ?>">
-	<?php echo $this->escape($item->name); ?></a>
-      </td>
-      <td>
-	<?php echo UtilityHelper::formatNumber($item->price, $digitsPrecision).' '.$this->currency; ?>
-      </td>
-      <td class="small">
-	<?php echo JText::_('COM_ODYSSEY_OPTION_TRAVEL_DURATION_'.strtoupper($item->travel_duration)); ?>
-      </td>
+      <tr class="row-<?php echo $i % 2; ?>">
+	<td>
+	  <a href="<?php echo JRoute::_(OdysseyHelperRoute::getTravelRoute($item->slug, $item->catid)); ?>">
+	  <?php echo $this->escape($item->name); ?></a>
+	</td>
+	<td>
+	  <?php echo UtilityHelper::formatNumber($item->price, $digitsPrecision).' '.$this->currency; ?>
+	</td>
+	<td class="small">
+	  <?php echo JText::_('COM_ODYSSEY_OPTION_TRAVEL_DURATION_'.strtoupper($item->travel_duration)); ?>
+	</td>
+	</tr>
+      <?php endforeach; ?>
+      <tr>
+	  <td colspan="3"><?php echo $this->pagination->getListFooter(); ?></td>
       </tr>
-    <?php endforeach; ?>
-    <tr>
-	<td colspan="3"><?php echo $this->pagination->getListFooter(); ?></td>
-    </tr>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  <?php endif; ?>
 
 <input type="hidden" name="nb_items" id="nb-items" value="<?php echo $nbItems; ?>" />
 <input type="hidden" name="option" value="com_odyssey" />
