@@ -116,38 +116,29 @@ Joomla.submitbutton = function(task)
 	</div>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
 
-      <?php if($searchFilters != 'region' && $searchFilters != 'city' && $searchFilters != 'region_city') : ?>
-	<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'travel-countryfilter', JText::_('COM_ODYSSEY_TAB_COUNTRY_SEARCH_FILTER')); ?>
+	<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'travel-countryfilter', JText::_('COM_ODYSSEY_TAB_SEARCH_FILTERS')); ?>
 	  <div class="row-fluid">
 	    <div class="span12 form-horizontal">
+	    <?php if($searchFilters != 'region' && $searchFilters != 'city' && $searchFilters != 'region_city') : ?>
 	      <div id="countryfilter">
+		<div class="search-filter-title"><?php echo JText::_('COM_ODYSSEY_SEARCH_FILTER_COUNTRIES'); ?></div>
 	      </div>
-	    </div>
-	  </div>
-	<?php echo JHtml::_('bootstrap.endTab'); ?>
-      <?php endif; ?>
+	    <?php endif; ?>
 
-      <?php if($searchFilters != 'country' && $searchFilters != 'city' && $searchFilters != 'country_city') : ?>
-	<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'travel-regionfilter', JText::_('COM_ODYSSEY_TAB_REGION_SEARCH_FILTER')); ?>
-	  <div class="row-fluid">
-	    <div class="span12 form-horizontal">
+	    <?php if($searchFilters != 'country' && $searchFilters != 'city' && $searchFilters != 'country_city') : ?>
 	      <div id="regionfilter">
+		<div class="search-filter-title"><?php echo JText::_('COM_ODYSSEY_SEARCH_FILTER_REGIONS'); ?></div>
 	      </div>
-	    </div>
-	  </div>
-	<?php echo JHtml::_('bootstrap.endTab'); ?>
-      <?php endif; ?>
+	    <?php endif; ?>
 
-      <?php if($searchFilters != 'country' && $searchFilters != 'region' && $searchFilters != 'country_region') : ?>
-	<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'travel-cityfilter', JText::_('COM_ODYSSEY_TAB_CITY_SEARCH_FILTER')); ?>
-	  <div class="row-fluid">
-	    <div class="span12 form-horizontal">
+	    <?php if($searchFilters != 'country' && $searchFilters != 'region' && $searchFilters != 'country_region') : ?>
 	      <div id="cityfilter">
+		<div class="search-filter-title"><?php echo JText::_('COM_ODYSSEY_SEARCH_FILTER_CITIES'); ?></div>
 	      </div>
+	    <?php endif; ?>
 	    </div>
 	  </div>
 	<?php echo JHtml::_('bootstrap.endTab'); ?>
-      <?php endif; ?>
 
       <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'publishing', JText::_('JGLOBAL_FIELDSET_PUBLISHING', true)); ?>
       <div class="row-fluid form-horizontal-desktop">

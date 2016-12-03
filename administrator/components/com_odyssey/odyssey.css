@@ -28,11 +28,32 @@
   width: 100%;
 }
 
+#countryfilter,
+#regionfilter,
+#cityfilter {
+  float: left;
+  border-right: 1px solid #8a8a5c;
+  width: 22%;
+  padding-right: 10px;
+  margin-right: 10px;
+}
+
 .countryfilter-item,
 .regionfilter-item,
 .cityfilter-item {
   float: none;
-  width: 30%;
+}
+
+.countryfilter-item .chzn-container, 
+.regionfilter-item .chzn-container,
+.cityfilter-item .chzn-container {
+  width: 180px !important;
+}
+
+.search-filter-title {
+  font-weight: bold;
+  color: #404040;
+  margin-bottom: 20px;
 }
 
 .wrap-dpt-row {
@@ -92,7 +113,6 @@
 .transitcity-item .btn-wrapper {
   float: right;
   margin-left: 20px;
-  /*border: 1px solid #c0c0c0;*/
 }
 
 .sequence-item .item-ordering, 
