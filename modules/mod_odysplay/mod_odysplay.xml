@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.1.0" client="site" method="upgrade">
+    <name>Odysplay</name> 
+    <author>Lucas Sanner</author> 
+    <creationDate>2016-12-09</creationDate> 
+    <license>GNU General Public License version 2 or later http://www.gnu.org/licenses/gpl.html</license>
+    <authorEmail>lucas.sanner@gmail.com</authorEmail> 
+    <version>1.0</version> 
+    <description>MOD_ODYSPLAY_XML_DESCRIPTION</description>
+    <files>
+    <!-- The "module" attribute signifies that this is the main controller file -->
+	    <filename module="mod_odysplay">mod_odysplay.php</filename>
+	    <filename>helper.php</filename>
+	    <filename>index.html</filename>
+	    <filename>odysplay.css</filename>
+	    <filename>camera-icon.jpg</filename>
+	    <filename>mod_odysplay.xml</filename>
+	    <folder>tmpl</folder>
+	    <folder>language</folder>
+    </files>
+	<!-- Optional parameters -->
+      <config>
+	<fields name="params">
+	  <fieldset name="basic">
+	     <field name="travel_ids" type="text" 
+		    label="MOD_ODYSPLAY_FIELD_TRAVEL_IDS_LABEL"
+		    description="MOD_ODYSPLAY_FIELD_TRAVEL_IDS_DESC" />
+
+	    <field name="ordering" type="list"
+		    default="t.publish_up"
+		    label="MOD_ODYSPLAY_FIELD_ORDERING_LABEL"
+		    description="MOD_ODYSPLAY_FIELD_ORDERING_DESC">
+		<option value="t.publish_up">MOD_ODYSPLAY_OPTION_ORDERING_PUBLISHED_DATE</option>
+		<option value="t.created">MOD_ODYSPLAY_OPTION_ORDERING_CREATED_DATE</option>
+		<option value="ids">MOD_ODYSPLAY_OPTION_ORDERING_IDS</option>
+		<option value="rand()">MOD_ODYSPLAY_OPTION_ORDERING_RANDOM</option>
+	    </field>
+
+          <field name="show_image" type="radio" class="btn-group" default="1"
+		 label="MOD_ODYSPLAY_FIELD_SHOW_IMAGE_LABEL"
+		 description="MOD_ODYSPLAY_FIELD_SHOW_IMAGE_DESC">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+          </field>
+
+          <field name="show_introtext" type="radio" class="btn-group" default="1"
+		 label="MOD_ODYSPLAY_FIELD_SHOW_INTROTEXT_LABEL"
+		 description="MOD_ODYSPLAY_FIELD_SHOW_INTROTEXT_DESC">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+          </field>
+
+	  <field name="img_reduction_rate" type="list"
+		  label="MOD_ODYSPLAY_FIELD_IMAGE_REDUCTION_RATE_LABEL"
+		  description="MOD_ODYSPLAY_FIELD_IMAGE_REDUCTION_RATE_DESC"
+		  class="inputbox" size="1" default="0">
+		  <option value="0">0 %</option>
+		  <option value="10">10 %</option>
+		  <option value="20">20 %</option>
+		  <option value="30">30 %</option>
+		  <option value="40">40 %</option>
+		  <option value="50">50 %</option>
+		  <option value="60">60 %</option>
+		  <option value="70">70 %</option>
+		  <option value="80">80 %</option>
+		  <option value="90">90 %</option>
+	  </field>
+	  </fieldset>
+	  <fieldset name="advanced">
+	    <field name="moduleclass_sfx" type="text" default=""
+		   label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+		   description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+	  </fieldset>
+	</fields>
+      </config>
+
+</extension>
+

@@ -53,7 +53,7 @@
 	<field name="search_filters" type="list"
 		label="COM_ODYSSEY_FIELD_SEARCH_FILTERS_LABEL"
 		description="COM_ODYSSEY_FIELD_SEARCH_FILTERS_DESC"
-		size="1" default="country" >
+		size="1" default="all" >
 		<option value="all">JALL</option>
 		<option value="country">COM_ODYSSEY_OPTION_COUNTRY</option>
 		<option value="region">COM_ODYSSEY_OPTION_REGION</option>

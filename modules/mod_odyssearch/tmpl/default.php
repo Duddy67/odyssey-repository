@@ -6,6 +6,7 @@
  */
 
 defined('_JEXEC') or die; // No direct access.
+JHtml::_('formbehavior.chosen', 'select');
 
 //Include css file.
 $css = JFactory::getDocument();

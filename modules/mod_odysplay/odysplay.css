@@ -1,0 +1,40 @@
+.moduletable_odysplay {
+  overflow: hidden;
+}
+
+.odysplay-module {
+  overflow: hidden;
+  border: 1px solid #ebebe0;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 10px 0 10px 0;
+}
+
+.odysplay-travel {
+  float: left;
+  width: 30%;
+  border: 1px solid #ebebe0;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.travel-name {
+  margin-left: 10px;
+}
+
+.travel-image {
+  display: block;
+  margin: auto;
+}
+
+.travel-text {
+  margin: 10px;
+}
+
+.travel-price {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 10px;
+}
+
+

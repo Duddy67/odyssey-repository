@@ -104,6 +104,9 @@ function OdysseyParseRoute($segments)
     case 'orders':
 	   $vars['view'] = 'orders';
 	   break;
+    case 'search':
+	   $vars['view'] = 'search';
+	   break;
   }
 
   return $vars;
