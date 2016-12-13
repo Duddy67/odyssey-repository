@@ -31,10 +31,18 @@
   margin: 10px;
 }
 
+.travel-duration {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 10px;
+  color: #58d3f7
+}
+
 .travel-price {
   font-size: 14px;
   font-weight: bold;
   margin: 10px;
+  color: #fe2e2e
 }
 
 .normal-price {
