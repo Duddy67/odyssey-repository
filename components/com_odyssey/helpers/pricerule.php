@@ -417,17 +417,25 @@ class PriceruleHelper
    * Applies price rules accordingly and returns the lowest price for each travel.
    *
    * @param array  An array of travel ids.
-   * @param integer  The id of the category the travels are linked to.
+   * @param mixed  The category id(s) which are linked to the travels.
+                   Type can be an integer or an array of integers.
+   *
    *
    * @return array  An array containing the lowest price for each given travel.
    */
-  public static function getPricesStartingAt($travelIds, $catId)
+  public static function getPricesStartingAt($travelIds, $catIds)
   {
     $user = JFactory::getUser();
     //Get user group ids to which the user belongs to.
     $groups = JAccess::getGroupsByUser($user->get('id'));
     //Get current date and time (equal to NOW() in SQL).
     $now = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+
+    if(!is_array($catIds)) {
+      //Put the integer into an array.
+      $catId = (int)$catIds;
+      $catIds = array($catId);
+    }
 
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
@@ -483,7 +491,7 @@ class PriceruleHelper
 	  ->join('INNER', '#__odyssey_travel_price AS tp ON tp.travel_id=t.id AND tp.psgr_nb=1')
 	  ->join('INNER', '#__odyssey_prule_recipient AS prr ON (pr.recipient="customer" AND prr.item_id='.(int)$user->get('id').')'.
 	                  ' OR (pr.recipient="customer_group" AND prr.item_id IN ('.implode(',', $groups).'))')
-	  ->where('pr.prule_type="catalog" AND pr.target="travel_cat" AND prt.item_id='.(int)$catId)
+	  ->where('pr.prule_type="catalog" AND pr.target="travel_cat" AND prt.item_id IN('.implode(',', $catIds).')')
 	  //Don't collect price rules related to coupon.
 	  ->where('(pr.behavior="XOR" OR pr.behavior= "AND")')
 	  //Get only price rules set for the first passenger.

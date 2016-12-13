@@ -38,7 +38,16 @@ $css->addStyleSheet(JURI::base().'modules/mod_odysplay/odysplay.css');
     <?php endif; ?>
 
     <div class="travel-price">
-      <?php echo UtilityHelper::formatNumber($travel->starting_price, $digitsPrecision).' '.$currency; ?>
+      <span class="item-field"><?php echo JText::_('MOD_ODYSPLAY_PRICE_STARTING_AT'); ?></span>
+      <?php if(isset($travel->price_starting_at_prules) && $travel->price_starting_at_prules['price'] < $travel->price_starting_at) : ?>
+	<span class="normal-price">
+	  <?php echo UtilityHelper::formatNumber($travel->price_starting_at_prules['normal_price'], $digitsPrecision); ?></span>
+	<span class="price-starting-at">
+	  <?php echo UtilityHelper::formatNumber($travel->price_starting_at_prules['price'], $digitsPrecision); ?></span>
+      <?php else : ?>
+	<span class="price-starting-at"><?php echo UtilityHelper::formatNumber($travel->price_starting_at, $digitsPrecision); ?></span>
+      <?php endif; ?>
+      <span class="currency"><?php echo $currency; ?></span>
     </div>
   </div>
 <?php endforeach; ?>

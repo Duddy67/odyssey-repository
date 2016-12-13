@@ -32,11 +32,11 @@ class ModOdysplayHelper {
 	  }
 
     $results = $db->setQuery($query)
-		->loadObjectList();
-//echo $query->__toString();
+		  ->loadObjectList();
 
     $travels = array();
     if($params->get('ordering') == 'ids') {
+      //Order the travels according to the id order set in the travel_ids field. (ie: 5;2;9).
       foreach($travelIds as $travelId) {
 	foreach($results as $result) {
 	  if($result->id == $travelId) {
@@ -50,10 +50,12 @@ class ModOdysplayHelper {
     }
 
     //Get the starting prices of the travels.
-    $startingPrices = TravelHelper::getPricesStartingAt($travelIds);
+    $pricesStartingAt = TravelHelper::getPricesStartingAt($travelIds);
+    $catIds = array();
 
     foreach($travels as $travel) {
       $travel->slug = $travel->alias ? ($travel->id.':'.$travel->alias) : $travel->id;
+      $catIds[] = $travel->catid;
 
       //Set the default image.
       $travel->image = 'modules/mod_odysplay/camera-icon.jpg';
@@ -76,9 +78,21 @@ class ModOdysplayHelper {
       $travel->img_width = $size['width'];
       $travel->img_height = $size['height'];
 
-      foreach($startingPrices as $id => $startingPrice) {
-        if($id == $travel->id) {
-	  $travel->starting_price = $startingPrice;
+      //Set the starting price for each travel.
+      foreach($pricesStartingAt as $travelId => $priceStartingAt) {
+	if($travelId == $travel->id) {
+	  $travel->price_starting_at = $priceStartingAt;
+	}
+      }
+    }
+
+    //Get possible price rules.
+    $pricesStartingAtPrules = PriceruleHelper::getPricesStartingAt($travelIds, $catIds);
+    foreach($travels as $travel) {
+      //Set the possible price rules for each travel.
+      foreach($pricesStartingAtPrules as $travelId => $priceStartingAtPrules) {
+	if($travelId == $travel->id) {
+	  $travel->price_starting_at_prules = $priceStartingAtPrules;
 	}
       }
     }
