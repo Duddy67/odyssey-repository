@@ -26,6 +26,7 @@ class ModOdysplayHelper {
 	  ->where('(t.publish_down = '.$nullDate.' OR t.publish_down >= '.$nowDate.')')
 	  ->where('t.id IN('.implode(',', $travelIds).')');
 
+	  //Id order is computed in a different way.
 	  if($params->get('ordering') != 'ids') {
 	    $query->order($params->get('ordering'));
 	  }
@@ -68,6 +69,8 @@ class ModOdysplayHelper {
 	$travel->image = $matches[1];
       }
 
+      //Get the image width and height then retrieve the new image size according to the
+      //reduction rate.
       $imageSize = getimagesize($travel->image);
       $size = ModOdysplayHelper::getThumbnailSize($imageSize[0], $imageSize[1], $params->get('img_reduction_rate'));
       $travel->img_width = $size['width'];

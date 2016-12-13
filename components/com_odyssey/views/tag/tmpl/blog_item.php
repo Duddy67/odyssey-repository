@@ -55,5 +55,24 @@ $params = $this->item->params;
 	<?php echo JLayoutHelper::render('readmore', array('item' => $this->item, 'params' => $params, 'link' => $link)); ?>
 
   <?php endif; ?>
+
+  <span class="item-field"><?php echo JText::_('COM_ODYSSEY_NEXT_DEPARTURE'); ?></span>
+
+  <?php if($this->item->date_type == 'period' && $this->item->date_time >= $this->item->now_date) : ?>
+    <span class="item-field"><?php echo JText::_('COM_ODYSSEY_DEPARTURES_UNTIL'); ?></span>
+    <span class="next-departure"><?php echo $this->item->date_time_2; ?></span>
+  <?php else : ?>
+    <span class="next-departure"><?php echo $this->item->date_time; ?></span>
+  <?php endif; ?>
+
+  <span class="item-field"><?php echo JText::_('COM_ODYSSEY_PRICE_STARTING_AT'); ?></span>
+  <?php if(isset($this->pricesStartingAtPrules[$this->item->id]) &&
+	    $this->pricesStartingAtPrules[$this->item->id]['price'] < $this->pricesStartingAt[$this->item->id]) : ?>
+    <span class="normal-price"><?php echo UtilityHelper::formatNumber($this->pricesStartingAtPrules[$this->item->id]['normal_price']); ?></span>
+    <span class="price-starting-at"><?php echo UtilityHelper::formatNumber($this->pricesStartingAtPrules[$this->item->id]['price']); ?></span>
+  <?php else : ?>
+    <span class="price-starting-at"><?php echo UtilityHelper::formatNumber($this->pricesStartingAt[$this->item->id]); ?></span>
+  <?php endif; ?>
+  <span class="currency"><?php echo $this->item->currency; ?></span>
 </div>
 

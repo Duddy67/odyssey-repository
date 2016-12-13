@@ -8,6 +8,9 @@
 defined('_JEXEC') or die;
 
 use Joomla\Registry\Registry;
+require_once JPATH_COMPONENT_SITE.'/helpers/travel.php';
+require_once JPATH_COMPONENT_SITE.'/helpers/pricerule.php';
+require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/utility.php';
 
 /**
  * HTML View class for the Odyssey component.
@@ -107,6 +110,10 @@ class OdysseyViewTag extends JViewLegacy
     //Get the user object and the current url, (needed in the travel edit layout).
     $this->user = JFactory::getUser();
     $this->uri = JUri::getInstance();
+    //Get the default currency.
+    $currency = UtilityHelper::getCurrency();
+    $nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+    $itemIds = array();
 
     // Prepare the data.
     // Compute the travel slugs.
@@ -118,6 +125,17 @@ class OdysseyViewTag extends JViewLegacy
       if($item->parent_alias == 'root') {
 	$item->parent_slug = null;
       }
+
+      //Set some useful data.
+      $item->currency = $currency;
+      $item->now_date = $nowDate;
+      //Store all the item ids.
+      $itemIds[] = $item->id;
+    }
+
+    if(!empty($itemIds)) {
+      $this->pricesStartingAt = TravelHelper::getPricesStartingAt($itemIds);
+      $this->pricesStartingAtPrules = PriceruleHelper::getPricesStartingAt($itemIds, $this->items[0]->catid);
     }
 
     // Check for layout override only if this is not the active menu item
@@ -241,7 +259,7 @@ class OdysseyViewTag extends JViewLegacy
     $this->nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
 
 //file_put_contents('debog_file.txt', print_r($this->params, true));
-    //$this->setDocument();
+    $this->setDocument();
 
     return parent::display($tpl);
   }
@@ -250,7 +268,7 @@ class OdysseyViewTag extends JViewLegacy
   protected function setDocument() 
   {
     //Include css file (if needed).
-    //$doc = JFactory::getDocument();
-    //$doc->addStyleSheet(JURI::base().'components/com_odyssey/css/odyssey.css');
+    $doc = JFactory::getDocument();
+    $doc->addStyleSheet(JURI::base().'components/com_odyssey/css/odyssey.css');
   }
 }

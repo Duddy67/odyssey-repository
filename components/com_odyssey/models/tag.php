@@ -276,6 +276,10 @@ class OdysseyModelTag extends JModelList
     $db = $this->getDbo();
     $query = $db->getQuery(true);
 
+    //Set dates.
+    $nullDate = $db->quote($db->getNullDate());
+    $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
+
     // Select required fields from the categories.
     $query->select($this->getState('list.select', 't.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,'.
 	                           'tm.tag_id,t.published,t.checked_out,t.checked_out_time,t.created,'.
@@ -313,12 +317,24 @@ class OdysseyModelTag extends JModelList
     $query->select('al.title AS access_level');
     $query->join('LEFT', '#__viewlevels AS al ON al.id = t.access');
 
+    //Join over the step table to get the date type.
+    $query->select('s.date_type');
+    $query->join('LEFT', '#__odyssey_step AS s ON s.id=t.dpt_step_id');
+
     // Filter by access level.
     if($access = $this->getState('filter.access')) {
       $query->where('t.access IN ('.$groups.')')
 	    //Category access is also taken in account.
 	    ->where('ca.access IN ('.$groups.')');
     }
+
+    //Travels are displayed only if they have one or more scheduled departures after the now date.
+
+    //Note: Use MIN to get the next departure for each travel.
+    $query->select('MIN(ds.date_time) AS date_time, MIN(ds.date_time_2) AS date_time_2')
+	  ->join('INNER', '#__odyssey_departure_step_map AS ds ON t.dpt_step_id=ds.step_id')
+	  ->where('(ds.date_time >= '.$nowDate.' OR ds.date_time_2 >= '.$nowDate.')')
+	  ->group('t.id');
 
     // Filter by state
     $published = $this->getState('filter.published');
@@ -336,9 +352,6 @@ class OdysseyModelTag extends JModelList
     //Do not show expired travels to users who are not Root.
     if($this->getState('filter.publish_date')) {
       // Filter by start and end dates.
-      $nullDate = $db->quote($db->getNullDate());
-      $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
-
       $query->where('(t.publish_up = '.$nullDate.' OR t.publish_up <= '.$nowDate.')')
 	    ->where('(t.publish_down = '.$nullDate.' OR t.publish_down >= '.$nowDate.')');
     }
