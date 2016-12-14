@@ -51,6 +51,22 @@ $css->addStyleSheet(JURI::base().'modules/mod_odysplay/odysplay.css');
       <div class="travel-text"><?php echo ModOdysplayHelper::getMaxCharacters($travel->intro_text, $params->get('text_max_char')); ?></div>
     <?php endif; ?>
 
+    <?php if($params->get('show_category')) : ?>
+      <div class="travel-category">
+        <?php echo JText::_('MOD_ODYSPLAY_CATEGORY_TITLE'); ?>
+	<a href="<?php echo JRoute::_(OdysseyHelperRoute::getCategoryRoute($travel->catslug)); ?>" itemprop="genre">
+	<?php echo $travel->category_title; ?></a>
+      </div>
+    <?php endif; ?>
+
+    <?php if($params->get('show_tags')) : ?>
+      <div class="travel-tags">
+      <?php foreach($travel->tags->itemTags as $tag) : ?> 
+	<a href="<?php echo JRoute::_(OdysseyHelperRoute::getTagRoute($tag->tag_id));?>" class="label label-success"><?php echo $tag->title; ?></a>
+      <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+
     <?php if($params->get('show_travel_duration')) : ?>
       <div class="travel-duration"><?php echo JText::_('MOD_ODYSPLAY_OPTION_TRAVEL_DURATION_'.$travel->travel_duration); ?></div>
     <?php endif; ?>

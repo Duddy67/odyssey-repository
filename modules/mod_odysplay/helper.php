@@ -55,24 +55,27 @@ class ModOdysplayHelper {
       $travels = $results;
     }
 
-    //Get the starting prices of the travels.
-    $pricesStartingAt = TravelHelper::getPricesStartingAt($travelIds);
     $catIds = array();
 
     foreach($travels as $travel) {
+      // Compute the travel slugs.
       $travel->slug = $travel->alias ? ($travel->id.':'.$travel->alias) : $travel->id;
+      $travel->catslug = $travel->category_alias ?  ($travel->catid.':'.$travel->category_alias) : $travel->catid;
+      //Collect the category ids.
       $catIds[] = $travel->catid;
 
       //Set the default image.
       $travel->image = 'modules/mod_odysplay/camera-icon.jpg';
 
       //Get the first image (if any) detected in the intro text.
-      if($params->get('get_image_from') == 'introtext' && preg_match('#<img.* src="(.+)"#iU', $travel->intro_text, $matches)) {
+      if($params->get('show_image') && $params->get('get_image_from') == 'introtext' &&
+	 preg_match('#<img.* src="(.+)"#iU', $travel->intro_text, $matches)) {
 	$travel->image = $matches[1];
       }
 
       //Get the first image (if any) detected in the full text.
-      if($params->get('get_image_from') == 'fulltext' && preg_match('#<img.* src="(.+)"#iU', $travel->full_text, $matches)) {
+      if($params->get('show_image') && $params->get('get_image_from') == 'fulltext' &&
+	 preg_match('#<img.* src="(.+)"#iU', $travel->full_text, $matches)) {
 	$travel->image = $matches[1];
       }
 
@@ -81,18 +84,13 @@ class ModOdysplayHelper {
 	$travel->intro_text = preg_replace('#<img .+>#iU', '', $travel->intro_text);
       }
 
-      //Get the image width and height then retrieve the new image size according to the
-      //reduction rate.
-      $imageSize = getimagesize($travel->image);
-      $size = ModOdysplayHelper::getThumbnailSize($imageSize[0], $imageSize[1], $params->get('img_reduction_rate'));
-      $travel->img_width = $size['width'];
-      $travel->img_height = $size['height'];
-
-      //Set the starting price for each travel.
-      foreach($pricesStartingAt as $travelId => $priceStartingAt) {
-	if($travelId == $travel->id) {
-	  $travel->price_starting_at = $priceStartingAt;
-	}
+      if($params->get('show_image')) {
+	//Get the image width and height then retrieve the new image size according to the
+	//reduction rate.
+	$imageSize = getimagesize($travel->image);
+	$size = ModOdysplayHelper::getThumbnailSize($imageSize[0], $imageSize[1], $params->get('img_reduction_rate'));
+	$travel->img_width = $size['width'];
+	$travel->img_height = $size['height'];
       }
 
       // Get the tags
@@ -100,13 +98,25 @@ class ModOdysplayHelper {
       $travel->tags->getItemTags('com_odyssey.travel', $travel->id);
     }
 
-    //Get possible price rules.
-    $pricesStartingAtPrules = PriceruleHelper::getPricesStartingAt($travelIds, $catIds);
-    foreach($travels as $travel) {
-      //Set the possible price rules for each travel.
-      foreach($pricesStartingAtPrules as $travelId => $priceStartingAtPrules) {
-	if($travelId == $travel->id) {
-	  $travel->price_starting_at_prules = $priceStartingAtPrules;
+    if($params->get('show_price')) {
+      //Get the starting prices of the travels.
+      $pricesStartingAt = TravelHelper::getPricesStartingAt($travelIds);
+      //Get possible price rules.
+      $pricesStartingAtPrules = PriceruleHelper::getPricesStartingAt($travelIds, $catIds);
+      //Set prices.
+      foreach($travels as $travel) {
+	//Set the starting price for each travel.
+	foreach($pricesStartingAt as $travelId => $priceStartingAt) {
+	  if($travelId == $travel->id) {
+	    $travel->price_starting_at = $priceStartingAt;
+	  }
+	}
+
+	//Set the possible price rules for each travel.
+	foreach($pricesStartingAtPrules as $travelId => $priceStartingAtPrules) {
+	  if($travelId == $travel->id) {
+	    $travel->price_starting_at_prules = $priceStartingAtPrules;
+	  }
 	}
       }
     }
@@ -139,7 +149,7 @@ class ModOdysplayHelper {
 
   public static function getMaxCharacters($text, $limit)
   {
-    if(strlen($text) <= $limit) {
+    if(!ctype_digit($limit) || strlen($text) <= $limit) {
       return $text;
     }
 

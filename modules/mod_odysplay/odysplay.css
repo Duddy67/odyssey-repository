@@ -31,6 +31,15 @@
   margin: 10px;
 }
 
+.travel-category {
+  margin: 10px;
+  font-weight: bold;
+}
+
+.travel-tags {
+  margin: 10px;
+}
+
 .travel-duration {
   font-size: 14px;
   font-weight: bold;
