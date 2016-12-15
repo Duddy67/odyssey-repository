@@ -53,6 +53,7 @@ Joomla.submitbutton = function(task)
       <div class="row-fluid">
 	<div class="span9 form-vertical">
 	  <?php
+		echo $this->form->getControlGroup('image');
 		echo $this->form->getControlGroup('travel_duration');
 		echo $this->form->getControlGroup('show_steps');
 		echo $this->form->getControlGroup('show_grouped_steps');

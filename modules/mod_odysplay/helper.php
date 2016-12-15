@@ -16,7 +16,7 @@ class ModOdysplayHelper {
     $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
 
     $query->select('t.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,'.
-		   't.published,t.travel_duration,t.created,'.
+		   't.image,t.published,t.travel_duration,t.created,'.
 		   't.created_by,t.access,t.params,t.metadata,t.metakey,t.metadesc,t.hits,'.
 		   't.publish_up,t.publish_down,t.language,t.modified,t.modified_by')
 	  ->from($db->qn('#__odyssey_travel').' AS t');
@@ -64,19 +64,9 @@ class ModOdysplayHelper {
       //Collect the category ids.
       $catIds[] = $travel->catid;
 
-      //Set the default image.
-      $travel->image = 'modules/mod_odysplay/camera-icon.jpg';
-
-      //Get the first image (if any) detected in the intro text.
-      if($params->get('show_image') && $params->get('get_image_from') == 'introtext' &&
-	 preg_match('#<img.* src="(.+)"#iU', $travel->intro_text, $matches)) {
-	$travel->image = $matches[1];
-      }
-
-      //Get the first image (if any) detected in the full text.
-      if($params->get('show_image') && $params->get('get_image_from') == 'fulltext' &&
-	 preg_match('#<img.* src="(.+)"#iU', $travel->full_text, $matches)) {
-	$travel->image = $matches[1];
+      if(empty($travel->image) || !is_file($travel->image)) {
+	//Set the default image.
+	$travel->image = 'modules/mod_odysplay/camera-icon.jpg';
       }
 
       if($params->get('show_introtext')) {

@@ -34,15 +34,8 @@
 		  <option value="t.publish_up DESC">MOD_ODYSPLAY_OPTION_ORDERING_PUBLISHED_DATE_DESC</option>
 		  <option value="t.created ASC">MOD_ODYSPLAY_OPTION_ORDERING_CREATED_DATE_ASC</option>
 		  <option value="t.created DESC">MOD_ODYSPLAY_OPTION_ORDERING_CREATED_DATE_DESC</option>
-		  <option value="ids">MOD_ODYSPLAY_OPTION_ORDERING_IDS</option>
+		  <option value="ids">MOD_ODYSPLAY_OPTION_ORDERING_ID</option>
 		  <option value="rand()">MOD_ODYSPLAY_OPTION_ORDERING_RANDOM</option>
-	      </field>
-
-	      <field name="get_image_from" type="list" default="introtext"
-		     label="MOD_ODYSPLAY_FIELD_GET_IMAGE_FROM_LABEL"
-		     description="MOD_ODYSPLAY_FIELD_GET_IMAGE_FROM_DESC">
-		<option value="introtext">MOD_ODYSPLAY_OPTION_INTROTEXT</option>
-		<option value="fulltext">MOD_ODYSPLAY_OPTION_FULLTEXT</option>
 	      </field>
 
 	      <field name="show_name" type="radio" class="btn-group" default="1"
