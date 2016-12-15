@@ -11,9 +11,11 @@ defined('_JEXEC') or die; // No direct access.
 $parameters = JComponentHelper::getParams('com_odyssey');
 $digitsPrecision = $parameters->get('digits_precision');
 
-//Include css file.
-$css = JFactory::getDocument();
-$css->addStyleSheet(JURI::base().'modules/mod_odysplay/odysplay.css');
+//Include css files.
+$doc = JFactory::getDocument();
+$doc->addStyleSheet(JURI::base().'modules/mod_odysplay/css/odysplay.css');
+$doc->addStyleSheet(JURI::base().'modules/mod_odysplay/css/owl.carousel.css');
+$doc->addStyleSheet(JURI::base().'modules/mod_odysplay/css/owl.theme.default.css');
 ?>
 
 <div class="odysplay-module">
@@ -21,9 +23,9 @@ $css->addStyleSheet(JURI::base().'modules/mod_odysplay/odysplay.css');
   <h1 class="module-title"><?php echo $module->title; ?></h1>
 <?php endif; ?>
 
+<div class="owl-carousel">
 <?php foreach($travels as $travel) : 
 	$link = JRoute::_(OdysseyHelperRoute::getTravelRoute($travel->slug, $travel->catid, $travel->language));
-	//var_dump($travel->tags);
 ?>
   <div class="odysplay-travel">
     <?php if($params->get('show_name')) : ?>
@@ -88,4 +90,10 @@ $css->addStyleSheet(JURI::base().'modules/mod_odysplay/odysplay.css');
   </div>
 <?php endforeach; ?>
 </div>
+</div>
+
+<?php 
+//Add Owl carousel scripts.
+$doc->addScript(JURI::base().'modules/mod_odysplay/js/owl.carousel.min.js');
+$doc->addScript(JURI::base().'modules/mod_odysplay/js/carousel.js');
 
