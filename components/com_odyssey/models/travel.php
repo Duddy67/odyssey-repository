@@ -38,6 +38,15 @@ class OdysseyModelTravel extends JModelItem
     $params = $app->getParams();
     $this->setState('params', $params);
 
+    //Get the current date.
+    $nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+    //Compute the date from which a customer is allowed to book a travel.
+    $bookingDate = UtilityHelper::getLimitDate($params->get('allow_booking_from'), $nowDate);
+
+    //Store dates.
+    $this->setState('now_date', $nowDate);
+    $this->setState('booking_date', $bookingDate);
+
     $this->setState('filter.language', JLanguageMultilang::isEnabled());
   }
 
@@ -102,9 +111,9 @@ class OdysseyModelTravel extends JModelItem
       if((!$user->authorise('core.edit.state', 'com_odyssey')) && (!$user->authorise('core.edit', 'com_odyssey'))) {
 	// Filter by start and end dates.
 	$nullDate = $db->quote($db->getNullDate());
-	$nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
-	$query->where('(t.publish_up = '.$nullDate.' OR t.publish_up <= '.$nowDate.')')
-	      ->where('(t.publish_down = '.$nullDate.' OR t.publish_down >= '.$nowDate.')');
+	$nowDate = $this->getState('now_date');
+	$query->where('(t.publish_up = '.$nullDate.' OR t.publish_up <= '.$db->quote($nowDate).')')
+	      ->where('(t.publish_down = '.$nullDate.' OR t.publish_down >= '.$db->quote($nowDate).')');
       }
 
       $db->setQuery($query);
@@ -162,7 +171,7 @@ class OdysseyModelTravel extends JModelItem
 
     $db = $this->getDbo();
     $query = $db->getQuery(true);
-    $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
+    $bookingDate = $this->getState('booking_date');
 
     //Get a travel price row for each departure of the step sequence multiplied with the number of passengers.
     $query->select('d.dpt_id, d.date_time, d.date_time_2, d.max_passengers, d.allotment, s.date_type, c.name AS city_name,'.
@@ -172,8 +181,8 @@ class OdysseyModelTravel extends JModelItem
 	  ->join('LEFT', '#__odyssey_step AS s ON s.id='.(int)$dptStepId)
 	  ->join('LEFT', '#__odyssey_city AS c ON c.id=d.city_id')
 	  ->where('d.step_id='.(int)$dptStepId)
-	  //Fetch only departures scheduled after the current day.
-	  ->where('(d.date_time >= '.$nowDate.' OR d.date_time_2 >= '.$nowDate.')')
+	  //Fetch only departures scheduled after the booking limit date.
+	  ->where('(d.date_time >= '.$db->quote($bookingDate).' OR d.date_time_2 >= '.$db->quote($bookingDate).')')
 	  ->order('d.date_time, p.psgr_nb');
     $db->setQuery($query);
     $results = $db->loadAssocList();
@@ -203,8 +212,8 @@ class OdysseyModelTravel extends JModelItem
 	  ->join('LEFT', '#__odyssey_city AS tcn ON tcn.id=tc.city_id')
 	  ->where('tc.dpt_id=ds.dpt_id')
 	  ->where('tc.dpt_step_id='.(int)$dptStepId)
-	  //Fetch only departures scheduled after the current day.
-	  ->where('(ds.date_time >= '.$nowDate.' OR ds.date_time_2 >= '.$nowDate.')')
+	  //Fetch only departures scheduled after the booking limit date.
+	  ->where('(ds.date_time >= '.$db->quote($bookingDate).' OR ds.date_time_2 >= '.$db->quote($bookingDate).')')
 	  //Order the result rows is required to get the combinePriceRows function work properly.
 	  ->order('tc.dpt_step_id, tc.city_id, ds.date_time, tcp.psgr_nb');
 	  //echo $query;
@@ -237,7 +246,7 @@ class OdysseyModelTravel extends JModelItem
       //Store departures.
       if($data['date_type'] == 'period') {
 	//Extract year month day from the starting date time (time value is not used with period date type).
-	preg_match('#^([0-9]{4})-([0-9]{2})-([0-9]{2}) [0-9]{2}:[0-9]{2}:[0-9]{2}$#', $data['date_time'], $matches);
+	preg_match('#^([0-9]{4})-([0-9]{2})-([0-9]{2}).*$#', $bookingDate, $matches);
 	$fromYear = $matches[1];
 	$fromMonth = $matches[2];
 	$fromDay = $matches[3];
