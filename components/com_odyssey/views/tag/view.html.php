@@ -82,7 +82,6 @@ class OdysseyViewTag extends JViewLegacy
   protected $tag;
   protected $children;
   protected $tagMaxLevel;
-  protected $nowDate;
   protected $user;
   protected $uri;
   public $params;
@@ -112,7 +111,6 @@ class OdysseyViewTag extends JViewLegacy
     $this->uri = JUri::getInstance();
     //Get the default currency.
     $currency = UtilityHelper::getCurrency();
-    $nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
     $itemIds = array();
 
     // Prepare the data.
@@ -128,7 +126,6 @@ class OdysseyViewTag extends JViewLegacy
 
       //Set some useful data.
       $item->currency = $currency;
-      $item->now_date = $nowDate;
       //Store all the item ids.
       $itemIds[] = $item->id;
     }
@@ -255,8 +252,6 @@ class OdysseyViewTag extends JViewLegacy
     $this->params->set('active_layout', $this->getLayout());
     //Set the filter_ordering parameter for the layout.
     $this->filter_ordering = $this->state->get('list.filter_ordering');
-
-    $this->nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
 
 //file_put_contents('debog_file.txt', print_r($this->params, true));
     $this->setDocument();

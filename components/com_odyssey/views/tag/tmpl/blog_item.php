@@ -13,10 +13,12 @@ $params = $this->item->params;
 //echo '<pre>';
 //var_dump($this->item->tags);
 //echo '</pre>';
+
+$nowDate = $this->state->get('now_date');
 ?>
 
 <div class="travel-item">
-  <?php echo JLayoutHelper::render('travel_title', array('item' => $this->item, 'params' => $params, 'now_date' => $this->nowDate),
+  <?php echo JLayoutHelper::render('travel_title', array('item' => $this->item, 'params' => $params, 'now_date' => $nowDate),
 				    JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
 
   <?php echo JLayoutHelper::render('icons', array('item' => $this->item, 'user' => $this->user, 'uri' => $this->uri),
@@ -58,11 +60,11 @@ $params = $this->item->params;
 
   <span class="item-field"><?php echo JText::_('COM_ODYSSEY_NEXT_DEPARTURE'); ?></span>
 
-  <?php if($this->item->date_type == 'period' && $this->item->date_time >= $this->item->now_date) : ?>
+  <?php if($this->item->date_type == 'period' && $this->item->date_time >= $nowDate) : ?>
     <span class="item-field"><?php echo JText::_('COM_ODYSSEY_DEPARTURES_UNTIL'); ?></span>
-    <span class="next-departure"><?php echo $this->item->date_time_2; ?></span>
+    <span class="next-departure"><?php echo JHtml::_('date', $this->state->get('booking_date'), JText::_('DATE_FORMAT_LC3')); ?></span>
   <?php else : ?>
-    <span class="next-departure"><?php echo $this->item->date_time; ?></span>
+    <span class="next-departure"><?php echo JHtml::_('date', $this->item->date_time, JText::_('DATE_FORMAT_LC3')); ?></span>
   <?php endif; ?>
 
   <span class="item-field"><?php echo JText::_('COM_ODYSSEY_PRICE_STARTING_AT'); ?></span>

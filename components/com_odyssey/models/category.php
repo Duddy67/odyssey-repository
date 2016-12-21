@@ -8,6 +8,7 @@
 defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT_SITE.'/helpers/query.php';
+require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/utility.php';
 
 /**
  * Odyssey Component Model
@@ -123,6 +124,15 @@ class OdysseyModelCategory extends JModelList
 
     // Load the parameters in the session.
     $this->setState('params', $mergedParams);
+
+    //Get the current date.
+    $nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+    //Compute the date from which a customer is allowed to book a travel.
+    $bookingDate = UtilityHelper::getLimitDate($mergedParams->get('allow_booking_from'), $nowDate);
+
+    //Store dates.
+    $this->setState('now_date', $nowDate);
+    $this->setState('booking_date', $bookingDate);
 
     // process show_noauth parameter
 
@@ -318,9 +328,11 @@ class OdysseyModelCategory extends JModelList
     $db = $this->getDbo();
     $query = $db->getQuery(true);
 
-    //Set dates.
+    //Set date.
     $nullDate = $db->quote($db->getNullDate());
-    $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
+    //Get dates.
+    $nowDate = $this->getState('now_date');
+    $bookingDate = $this->getState('booking_date');
 
     // Select required fields from the categories.
     $query->select($this->getState('list.select', 't.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,t.published,'.
@@ -361,7 +373,7 @@ class OdysseyModelCategory extends JModelList
     //Note: Use MIN to get the next departure for each travel.
     $query->select('MIN(ds.date_time) AS date_time, MIN(ds.date_time_2) AS date_time_2')
 	  ->join('INNER', '#__odyssey_departure_step_map AS ds ON t.dpt_step_id=ds.step_id')
-	  ->where('(ds.date_time >= '.$nowDate.' OR ds.date_time_2 >= '.$nowDate.')')
+	  ->where('(ds.date_time >= '.$db->quote($bookingDate).' OR ds.date_time_2 >= '.$db->quote($bookingDate).')')
 	  ->group('t.id');
 
     // Filter by state
@@ -380,8 +392,8 @@ class OdysseyModelCategory extends JModelList
     //Do not show expired travels to users who can't edit or edit.state.
     if($this->getState('filter.publish_date')) {
       // Filter by start and end dates.
-      $query->where('(t.publish_up = '.$nullDate.' OR t.publish_up <= '.$nowDate.')')
-	    ->where('(t.publish_down = '.$nullDate.' OR t.publish_down >= '.$nowDate.')');
+      $query->where('(t.publish_up = '.$nullDate.' OR t.publish_up <= '.$db->quote($nowDate).')')
+	    ->where('(t.publish_down = '.$nullDate.' OR t.publish_down >= '.$db->quote($nowDate).')');
     }
 
     // Filter by language

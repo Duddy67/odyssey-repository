@@ -114,6 +114,13 @@
 	       description="COM_ODYSSEY_FIELD_DEPOSIT_RATE_DESC">
 	</field>
 
+	<field name="allow_booking_from"
+	       type="text"
+	       default="3"
+	       label="COM_ODYSSEY_FIELD_ALLOW_BOOKING_FROM_LABEL"
+	       description="COM_ODYSSEY_FIELD_ALLOW_BOOKING_FROM_DESC">
+	</field>
+
 	<field name="spacer2" type="spacer" hr="true" />
 
 	<field name="run_at_command"

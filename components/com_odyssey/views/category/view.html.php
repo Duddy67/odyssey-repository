@@ -56,7 +56,6 @@ class OdysseyViewCategory extends JViewCategory
    */
   protected $extension = 'com_odyssey';
 
-  protected $nowDate;
   protected $user;
   protected $uri;
   protected $pricesStartingAt;
@@ -80,7 +79,6 @@ class OdysseyViewCategory extends JViewCategory
     $this->uri = JUri::getInstance();
     //Get the default currency.
     $currency = UtilityHelper::getCurrency();
-    $nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
     $itemIds = array();
 
     // Prepare the data.
@@ -96,7 +94,6 @@ class OdysseyViewCategory extends JViewCategory
 
       //Set some useful data.
       $item->currency = $currency;
-      $item->now_date = $nowDate;
       //Store all the item ids.
       $itemIds[] = $item->id;
     }
@@ -223,8 +220,6 @@ class OdysseyViewCategory extends JViewCategory
     $this->params->set('active_layout', $this->getLayout());
     //Set the filter_ordering parameter for the layout.
     $this->filter_ordering = $this->state->get('list.filter_ordering');
-
-    $this->nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
 
     $this->setDocument();
 
