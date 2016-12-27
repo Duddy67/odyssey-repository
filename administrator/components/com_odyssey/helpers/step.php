@@ -125,9 +125,9 @@ class StepHelper
     $dptId = $departures[$departureNb - 1]->dpt_id;
 
     //Get some departure step data.
-    //Note: name and description attributes are used on frontend.
+    //Note: name, image and description attributes are used on frontend.
     $query->clear();
-    $query->select('published, name, description')
+    $query->select('published, name, image, description')
 	  ->from('#__odyssey_step')
 	  ->where('id='.(int)$dptStepId);
     $db->setQuery($query);
@@ -135,7 +135,7 @@ class StepHelper
 
     //Get all the steps linked to the given departure step.
     $query->clear();
-    $query->select('step_id, time_gap, group_prev, name, description')
+    $query->select('step_id, time_gap, group_prev, name, image, description')
 	  ->from('#__odyssey_step')
 	  ->join('INNER', '#__odyssey_timegap_step_map ON step_id=id AND dpt_id='.(int)$dptId)
 	  ->where('dpt_step_id='.(int)$dptStepId.' AND published=1')

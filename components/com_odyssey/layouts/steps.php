@@ -16,9 +16,14 @@ echo '<div class="steps">';
 
 foreach($steps as $step) {
   if($item->show_grouped_steps || (!$item->show_grouped_steps && !$step['group_prev'])) {
-    //Display step name and description.
+    //Display step name image and description.
     echo '<div class="step">'.
 	 '<h2 class="step-title">'.$this->escape($step['name']).'</h2>';
+
+    if(!empty($step['image'])) {
+      echo '<img src="'.$step['image'].'" class="step-image" alt="'.$this->escape($step['name']).'" />';
+    }
+
     echo '<div class="step-description">'.$step['description'].'</div></div>';
   }
 }
