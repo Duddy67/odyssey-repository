@@ -79,8 +79,8 @@ class OdysseyModelTravel extends JModelItem
     if(!isset($this->_item[$pk])) {
       $db = $this->getDbo();
       $query = $db->getQuery(true);
-      $query->select($this->getState('list.select', 't.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,t.published,'.
-				     't.checked_out,t.checked_out_time,t.created,t.created_by,t.access,t.params,t.metadata,'.
+      $query->select($this->getState('list.select', 't.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,t.published,t.image,'.
+				     't.subtitle,t.checked_out,t.checked_out_time,t.created,t.created_by,t.access,t.params,t.metadata,'.
 				     't.metakey,t.metadesc,t.hits,t.publish_up,t.publish_down,t.language,t.modified,t.modified_by,'.
 				     't.dpt_step_id,t.show_steps,t.show_grouped_steps,t.departure_number,t.extra_desc_1,'.
 				     't.extra_desc_2,t.extra_desc_3,t.extra_desc_4'))

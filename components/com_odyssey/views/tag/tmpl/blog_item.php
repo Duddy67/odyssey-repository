@@ -36,6 +36,15 @@ $nowDate = $this->state->get('now_date');
     <?php echo JLayoutHelper::render('tags', array('item' => $this->item), JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
   <?php endif; ?>
 
+  <?php if(!empty($this->item->image)) : ?>
+    <?php if($params->get('link_name') && $params->get('access-view')) : ?>
+      <a href="<?php echo JRoute::_(OdysseyHelperRoute::getTravelRoute($this->item->slug, $this->item->catid)); ?>">
+	<img class="travel-image" src="<?php echo $this->item->image; ?>" alt="<?php echo $this->escape($this->item->name); ?>" /></a>
+    <?php else : ?>
+      <img class="travel-image" src="<?php echo $this->item->image; ?>" alt="<?php echo $this->escape($this->item->name); ?>" />
+    <?php endif; ?>
+  <?php endif; ?>
+
   <?php echo $this->item->intro_text; ?>
 
   <?php if(($params->get('show_tags') == 'standard' || $params->get('show_tags') == 'both') && !empty($this->item->tags->itemTags)) : ?>

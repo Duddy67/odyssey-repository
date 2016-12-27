@@ -40,5 +40,10 @@ $nowDate = $displayData['now_date'];
     <?php if ((strtotime($item->publish_down) < strtotime($nowDate)) && $item->publish_down != '0000-00-00 00:00:00') : ?>
 	    <span class="label label-warning"><?php echo JText::_('JEXPIRED'); ?></span>
     <?php endif; ?>
+
+
+    <?php if(!empty($item->subtitle)) : ?>
+      <h3><?php echo $this->escape($item->subtitle); ?></h3>
+    <?php endif; ?>
   </div>
 <?php endif; ?>

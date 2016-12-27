@@ -41,6 +41,10 @@ $item = $this->item;
     <?php echo JLayoutHelper::render('tags', array('item' => $this->item), JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
   <?php endif; ?>
 
+  <?php if(!empty($item->image)) : ?>
+    <img class="travel-image" src="<?php echo $item->image; ?>" alt="<?php echo $this->escape($item->name); ?>" />
+  <?php endif; ?>
+
   <?php if($item->params->get('show_intro')) : ?>
     <?php echo $item->intro_text; ?>
   <?php endif; ?>
