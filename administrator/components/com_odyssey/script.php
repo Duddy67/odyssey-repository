@@ -105,13 +105,29 @@ class com_odysseyInstallerScript
     if($type == 'install') {
       //The component parameters are not inserted into the table until the user open up the Options panel then click on the save button.
       //The workaround is to update manually the extensions table with the parameters just after the component is installed. 
+
+      //Get the component config xml file
+      $form = new JForm('odyssey_config');
+      //Note: The third parameter must be set or the xml file won't be loaded.
+      $form->loadFile(JPATH_ROOT.'/administrator/components/com_odyssey/config.xml', true, '/config');
+      $JsonValues = '';
+      foreach($form->getFieldsets() as $fieldset) {
+        foreach($form->getFieldset($fieldset->name) as $field) {
+	  //Concatenate every field as Json values.
+	  $JsonValues .= '"'.$field->name.'":"'.$field->getAttribute('default', '').'",';
+        } 
+      } 
+
+      //Remove comma from the end of the string.
+      $JsonValues = substr($JsonValues, 0, -1);
+
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
-      //$query->update('#__extensions');
-      //$query->set('params='.$db->Quote('{}'));
-      //$query->where('element='.$db->Quote('com_odyssey').' AND type='.$db->Quote('component'));
-      //$db->setQuery($query);
-      //$db->query();
+      $query->update('#__extensions');
+      $query->set('params='.$db->Quote('{'.$JsonValues.'}'));
+      $query->where('element='.$db->Quote('com_odyssey').' AND type='.$db->Quote('component'));
+      $db->setQuery($query);
+      $db->query();
 
       //In order to use the Joomla's tagging system we have to give to Joomla some
       //informations about the component items we want to tag.

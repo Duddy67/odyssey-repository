@@ -49,7 +49,7 @@
 	    <folder>views</folder>
     </files>
 
-     <media destination="com_odyssey" folder="media">
+     <media folder="media" destination="com_odyssey">
 	    <!-- Media Main File Copy Section -->
 	    <filename>index.html</filename>
 	    <!-- Folders  Section -->
