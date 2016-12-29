@@ -20,6 +20,10 @@ foreach($steps as $step) {
     echo '<div class="step">'.
 	 '<h2 class="step-title">'.$this->escape($step['name']).'</h2>';
 
+    if(!empty($step['subtitle'])) {
+      echo '<h3 class="step-subtitle">'.$this->escape($step['subtitle']).'</h3>';
+    }
+
     if(!empty($step['image'])) {
       echo '<img src="'.$step['image'].'" class="step-image" alt="'.$this->escape($step['name']).'" />';
     }

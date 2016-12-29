@@ -62,6 +62,7 @@ Joomla.submitbutton = function(task)
 		  echo $this->form->getControlGroup('step_type');
 		  echo $this->form->getControlGroup('locked_step_type');
 		  echo $this->form->getControlGroup('group_alias');
+		  echo $this->form->getControlGroup('subtitle');
 		  echo $this->form->getControlGroup('image');
 		  echo $this->form->getControlGroup('description');
 	      ?>

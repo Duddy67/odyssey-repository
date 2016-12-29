@@ -153,6 +153,7 @@ CREATE TABLE `#__odyssey_step` (
   `dpt_step_id` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `catid` INT UNSIGNED NOT NULL ,
   `description` TEXT NULL ,
+  `subtitle` VARCHAR(255) NOT NULL ,
   `image` VARCHAR(255) NOT NULL ,
   `published` TINYINT NOT NULL DEFAULT 0 ,
   `checked_out` INT UNSIGNED NOT NULL DEFAULT 0 ,

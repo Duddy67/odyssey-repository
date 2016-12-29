@@ -45,6 +45,11 @@
 	       description="JFIELD_CATEGORY_DESC"
 	       readonly="true" class="readonly" />
 
+	<field name="subtitle" type="text"
+	       label="COM_ODYSSEY_FIELD_SUBTITLE_LABEL"
+	       description="COM_ODYSSEY_FIELD_SUBTITLE_DESC" 
+	       class="inputbox" />
+
 	<field name="image" type="media"
 	       label="COM_ODYSSEY_FIELD_IMAGE_LABEL"
 	       description="COM_ODYSSEY_FIELD_IMAGE_DESC" />

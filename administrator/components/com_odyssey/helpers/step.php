@@ -125,9 +125,9 @@ class StepHelper
     $dptId = $departures[$departureNb - 1]->dpt_id;
 
     //Get some departure step data.
-    //Note: name, image and description attributes are used on frontend.
+    //Note: name, subtitle, image and description attributes are used on frontend.
     $query->clear();
-    $query->select('published, name, image, description')
+    $query->select('published, name, subtitle, image, description')
 	  ->from('#__odyssey_step')
 	  ->where('id='.(int)$dptStepId);
     $db->setQuery($query);
@@ -135,7 +135,7 @@ class StepHelper
 
     //Get all the steps linked to the given departure step.
     $query->clear();
-    $query->select('step_id, time_gap, group_prev, name, image, description')
+    $query->select('step_id, time_gap, group_prev, name, subtitle, image, description')
 	  ->from('#__odyssey_step')
 	  ->join('INNER', '#__odyssey_timegap_step_map ON step_id=id AND dpt_id='.(int)$dptId)
 	  ->where('dpt_step_id='.(int)$dptStepId.' AND published=1')
@@ -147,7 +147,8 @@ class StepHelper
     //Add the departure step at the beginning of the sequence.
     array_unshift($stepSequence, array('step_id' => $dptStepId, 'dpt_id' => $dptId, 'time_gap' => '000:00:00',
 				       'group_prev' => 0, 'published' => $dptStep->published, 
-				       'name' => $dptStep->name, 'description' => $dptStep->description)); 
+				       'name' => $dptStep->name, 'subtitle' => $dptStep->subtitle,
+				       'image' => $dptStep->image, 'description' => $dptStep->description)); 
 
     return $stepSequence;
   }
