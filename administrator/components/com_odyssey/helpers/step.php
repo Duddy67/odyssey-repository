@@ -221,6 +221,15 @@ class StepHelper
 	//Same principle as above but adjusted for minutes.
 	if((int)$next['minutes'] < (int)$current['minutes']) {
 	  $minutes = ($mnLimit - (int)$current['minutes']) + (int)$next['minutes'];
+
+	  if($hours == 0) {
+	    $hours = $hrLimit;
+
+	    if($days > 0) {
+	      $days = $days - 1;
+	    }
+	  }
+
 	  $hours = $hours - 1;
 	}
 	elseif((int)$next['minutes'] > (int)$current['minutes']) {

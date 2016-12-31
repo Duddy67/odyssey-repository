@@ -48,7 +48,7 @@ $travelPriceRows = UtilityHelper::combinePriceRows($results);
 //for each departure selected for this addon with an empty price field.
 $query->clear();
 $query->select('sa.step_id, s2.name AS step_name, ds.dpt_id, ds.date_time, ds.date_time_2, c.name AS city, ds.max_passengers,'.
-               'sa.addon_id, sa.ordering AS addon_ordering, a.name AS addon_name, ap.psgr_nb, ap.price')
+               'sa.addon_id, sa.ordering AS addon_ordering, a.name AS addon_name, a.global AS addon_global, ap.psgr_nb, ap.price')
       ->from('#__odyssey_step_addon_map AS sa')
       ->join('LEFT', '#__odyssey_step AS s1 ON s1.id='.(int)$dptStepId)
       ->join('LEFT', '#__odyssey_step AS s2 ON s2.group_alias=s1.group_alias')
@@ -133,7 +133,7 @@ if(!empty($addonPriceRows)) {
 	//Don't get unpublished addon options as well.
 	->where('ao.published=1')
 	->order('sa.step_id, ao.ordering, ao.addon_id, ao.id, ds.date_time, op.psgr_nb');
-  file_put_contents('debog_file.txt', print_r($query->__toString(), true));
+  //file_put_contents('debog_file.txt', print_r($query->__toString(), true));
   $db->setQuery($query);
   $results = $db->loadAssocList();
 

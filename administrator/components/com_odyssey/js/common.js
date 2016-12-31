@@ -651,10 +651,13 @@
 
   $.fn.createAddonItem = function(idNb, data) {
     var stepType = $('#jform_step_type').val();
+    var modalOption = '';
 
     if(stepType == 'link') {
       var dptStepId = $('#jform_dpt_step_id_id').val();
       var currentDptStepId = $('#current-dpt-step-id').val();
+      //Don't allow to select global addons into link steps
+      modalOption = '&modal_option=no_global';
 
       //In case the departure step is removed in a link type step.
       if(dptStepId == '') {
@@ -673,11 +676,6 @@
     var properties = {'type':'hidden', 'name':'addon_id_'+idNb, 'id':'addon-id-'+idNb, 'value':data.addon_id};
     $('#addon-item-'+idNb).createHTMLTag('<input>', properties);
 
-    var modalOption = '&modal_option=no_option';
-    if($('form[name="adminForm"]').prop('id') == 'addon-form') {
-      modalOption = '&modal_option=option_only';
-    }
-
     var linkToModal = 'index.php?option=com_odyssey&view=addons&layout=modal&tmpl=component&item_type=addon'+modalOption+'&id_nb='+idNb;
     $('#addon-item-'+idNb).createButton('select', '#', linkToModal);
 
@@ -686,8 +684,13 @@
     $('#addon-item-'+idNb).createHTMLTag('<span>', properties, 'item-name-label');
     $('#addon-item-'+idNb+' .item-name-label').text(Joomla.JText._('COM_ODYSSEY_ITEM_NAME_LABEL'));
 
+    var addonName = data.addon_name;
+    if(data.addon_name != '' && data.addon_global == 1) {
+      addonName = data.addon_name+Joomla.JText._('COM_ODYSSEY_INFO_GLOBAL_ADDON');
+    }
+
     // Create a dummy text field to store the name.
-    properties = {'type':'text', 'disabled':'disabled', 'id':'addon-name-'+idNb, 'value':data.addon_name};
+    properties = {'type':'text', 'disabled':'disabled', 'id':'addon-name-'+idNb, 'value':addonName};
     $('#addon-item-'+idNb).createHTMLTag('<input>', properties, 'item-name');
 
     //Get the number of items within the container then use it as ordering

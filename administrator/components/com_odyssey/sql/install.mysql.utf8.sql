@@ -250,6 +250,7 @@ CREATE TABLE `#__odyssey_addon` (
   `addon_type` CHAR(16) NOT NULL ,
   `group_nb` CHAR(13) NOT NULL ,
   `option_type` CHAR(10) NOT NULL ,
+  `global` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
   `description` TEXT NULL ,
   `published` TINYINT NOT NULL DEFAULT 0 ,
   `checked_out` INT UNSIGNED NOT NULL DEFAULT 0 ,

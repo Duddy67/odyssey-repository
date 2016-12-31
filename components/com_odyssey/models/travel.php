@@ -427,7 +427,7 @@ class OdysseyModelTravel extends JModelItem
     //Note: The addon prices are based on the number of passengers selected by the user.
     $query->clear();
     $query->select('sa.step_id, s.name AS step_name, sa.addon_id, IFNULL(ts.time_gap, "000:00:00") AS time_gap, a.name, a.addon_type, a.group_nb,'.
-	           'a.option_type, a.description, IFNULL(ap.price, 0) AS price, sa.ordering, h.nb_persons')
+	           'a.option_type, a.global, a.description, IFNULL(ap.price, 0) AS price, sa.ordering, h.nb_persons')
 	  ->from('#__odyssey_step_addon_map AS sa')
 	  ->join('INNER', '#__odyssey_addon AS a ON a.id=sa.addon_id')
 	  ->join('LEFT', '#__odyssey_addon_hosting AS h ON h.addon_id=a.id')
@@ -440,15 +440,22 @@ class OdysseyModelTravel extends JModelItem
 	  //Zero means no limit and IS NULL is to get the other addon types. 
 	  ->where('(h.nb_persons='.(int)$travel['nb_psgr'].' OR h.nb_persons=0 OR h.nb_persons IS NULL)')
 	  ->group('sa.step_id, sa.addon_id')
-	  ->order('ts.time_gap, sa.ordering');
+	  ->order('a.global DESC, ts.time_gap, sa.ordering');
     $db->setQuery($query);
     $addons = $db->loadAssocList();
 
     $addonIds = $addonOptions = array();
-    //Collect addon ids.
-    foreach($addons as $addon) {
+
+    foreach($addons as $key => $addon) {
+      //Collect addon ids.
       if(!in_array($addon['addon_id'], $addonIds)) {
 	$addonIds[] = $addon['addon_id'];
+      }
+
+      //Rename the step name of the global addons as they'll be separated from the
+      //addons of the departure step.
+      if($addon['global']) {
+	$addons[$key]['step_name'] = JText::_('COM_ODYSSEY_GLOBAL_ADDONS_TITLE');
       }
     }
 

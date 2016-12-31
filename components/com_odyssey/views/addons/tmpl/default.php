@@ -30,7 +30,7 @@ $session = JFactory::getSession();
 $travel = $session->get('travel', array(), 'odyssey'); 
 $settings = $session->get('settings', array(), 'odyssey'); 
 //echo '<pre>';
-//var_dump($addonPrules);
+//var_dump($addons);
 //echo '</pre>';
 
 ?>
@@ -53,7 +53,8 @@ $settings = $session->get('settings', array(), 'odyssey');
       echo '<h3>'.$addon['step_name'].'</h3>';
     }
     //Close the previous step and create an opening div for the new one.
-    elseif($key > 0 && $addon['step_id'] != $addons[$key - 1]['step_id']) {
+    //Note: Check and separate the global addons set in the departure set.
+    elseif(($key > 0 && $addon['step_id'] != $addons[$key - 1]['step_id']) || (!$addon['global'] && $addons[$key - 1]['global'])) {
       echo '</div><div class="addon-step">';
       echo '<h3>'.$addon['step_name'].'</h3>';
     }

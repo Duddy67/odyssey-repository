@@ -140,7 +140,7 @@ else { //link
 
 //Check for possible addons.
 $query->clear();
-$query->select('sa.addon_id, sa.dpt_id, sa.ordering, a.name, a.published')
+$query->select('sa.addon_id, sa.dpt_id, sa.ordering, a.name, a.published, a.global')
       ->from('#__odyssey_step_addon_map AS sa')
       ->join('LEFT', '#__odyssey_addon AS a ON a.id=sa.addon_id')
       ->where('sa.step_id='.(int)$stepId)
@@ -159,6 +159,7 @@ if(!empty($results)) {
       $addons[] = array('addon_id' => $result['addon_id'],
 			'addon_ordering' => $result['ordering'],
 			'addon_name' => $result['name'],
+			'addon_global' => $result['global'],
 			'addon_status' => $result['published'],
 			//Store the first departure id (to which this addon is linked) in an internal array.
 			'dpt_ids' => array($result['dpt_id']));

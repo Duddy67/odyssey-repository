@@ -108,14 +108,15 @@ if($modalOption != '&modal_option=option_only') {
 	  <th class="title">
 	    <?php echo JHtml::_('grid.sort', 'COM_ODYSSEY_HEADING_NAME', 'a.name', $listDirn, $listOrder); ?>
 	  </th>
-	  <?php if($modalOption != '&modal_option=option_only') : //Don't need these infos for addon options. ?>
-	    <th width="10%">
-	      <?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_ADDON_TYPE', 'a.addon_type', $listDirn, $listOrder); ?>
-	    </th>
-	    <th width="15%">
-	      <?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_GROUP_NUMBER', 'a.group_nb', $listDirn, $listOrder); ?>
-	    </th>
-	  <?php endif; ?>
+	  <th width="10%">
+	    <?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_ADDON_TYPE', 'a.addon_type', $listDirn, $listOrder); ?>
+	  </th>
+	  <th width="15%">
+	    <?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_GROUP_NUMBER', 'a.group_nb', $listDirn, $listOrder); ?>
+	  </th>
+	  <th width="8%">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_GLOBAL', 'a.global', $listDirn, $listOrder); ?>
+	  </th>
 	  <th width="10%">
 	    <?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.published', $listDirn, $listOrder); ?>
 	  </th>
@@ -136,11 +137,16 @@ if($modalOption != '&modal_option=option_only') {
       </tfoot>
 
       <tbody>
-      <?php foreach ($this->items as $i => $item) : ?>
+      <?php foreach ($this->items as $i => $item) :
+              $globalInfo = '';
+              if($item->global) {
+		$globalInfo = JText::_('COM_ODYSSEY_INFO_GLOBAL_ADDON');
+	      }
+      ?>
       <tr class="row<?php echo $i % 2; ?>">
 	<td>
 	  <div class="pull-left">
-	    <a class="pointer" style="color:#025a8d;" onclick="if(window.parent) window.parent.<?php echo $this->escape($function);?>(<?php echo $item->id; ?>, '<?php echo $this->escape(addslashes($item->name)); ?>', '<?php echo $idNb; ?>', '<?php echo $type; ?>');" ><?php echo $this->escape($item->name); ?></a>
+	    <a class="pointer" style="color:#025a8d;" onclick="if(window.parent) window.parent.<?php echo $this->escape($function);?>(<?php echo $item->id; ?>, '<?php echo $this->escape(addslashes($item->name.$globalInfo)); ?>', '<?php echo $idNb; ?>', '<?php echo $type; ?>');" ><?php echo $this->escape($item->name); ?></a>
 	  </div>
 	</td>
 	<?php if($modalOption != '&modal_option=option_only') : //Don't need these infos for addon options. ?>
@@ -150,13 +156,7 @@ if($modalOption != '&modal_option=option_only') {
 	  <td class="small hidden-phone">
 	    <?php
 		  if($item->group_nb == 'none') {
-
-		    $muted = '';
-		    if($item->addon_type == 'addon_option') {
-		      $muted = 'class="muted"';
-		    }
-
-		    echo '<span '.$muted.'>'.JText::_('COM_ODYSSEY_OPTION_NONE').'</span>';
+		    echo JText::_('COM_ODYSSEY_OPTION_NONE');
 		  }
 		  else {
 		    preg_match('#^([0-9]+):(no_sel|single_sel|multi_sel)$#', $item->group_nb, $matches);
@@ -167,6 +167,9 @@ if($modalOption != '&modal_option=option_only') {
 	    ?>
 	  </td>
 	<?php endif; ?>
+	<td class="small hidden-phone">
+	  <?php echo ($item->global) ? JText::_('JYES') : JText::_('JNO'); ?>
+	</td>
 	<td>
 	  <?php echo $this->escape(JText::_($statuses[$item->published])); ?>
 	</td>

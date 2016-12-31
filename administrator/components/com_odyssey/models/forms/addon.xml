@@ -40,6 +40,15 @@
 		<option value="multi_sel">COM_ODYSSEY_OPTION_MULTI_SELECT</option>
 	</field>
 
+	<field name="global" type="radio"
+		class="btn-group btn-group-yesno"
+		label="COM_ODYSSEY_FIELD_GLOBAL_LABEL"
+		description="COM_ODYSSEY_FIELD_GLOBAL_DESC"
+		default="0">
+		<option value="1">JYES</option>
+		<option value="0">JNO</option>
+	</field>
+
 	<field name="description" type="editor"
 		label="COM_ODYSSEY_FIELD_DESCRIPTION_LABEL"
 		description="COM_ODYSSEY_FIELD_DESCRIPTION_DESC"

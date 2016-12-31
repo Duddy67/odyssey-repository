@@ -90,6 +90,7 @@ class JavascriptHelper
     JText::script('COM_ODYSSEY_TRANSIT_CITY_LABEL');
     JText::script('COM_ODYSSEY_NO_ADDON_FOUND');
     JText::script('COM_ODYSSEY_NO_TRANSIT_CITY_FOUND');
+    JText::script('COM_ODYSSEY_INFO_GLOBAL_ADDON'); 
 
     return;
   }
@@ -154,6 +155,7 @@ class JavascriptHelper
     JText::script('COM_ODYSSEY_ERROR_NEW_DEPARTURE_STEP_NOT_SAVED'); 
     JText::script('COM_ODYSSEY_ERROR_INVALID_TIME_PERIOD'); 
     JText::script('COM_ODYSSEY_WARNING_DEPARTURE_STEP_USED_IN_TRAVEL'); 
+    JText::script('COM_ODYSSEY_INFO_GLOBAL_ADDON'); 
 
     return;
   }

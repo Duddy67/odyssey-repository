@@ -20,6 +20,7 @@ class OdysseyModelAddons extends JModelList
 	      'id', 'a.id',
 	      'addon_type', 'a.addon_type',
 	      'group_nb', 'a.group_nb',
+	      'global', 'a.global',
 	      'created', 'a.created',
 	      'created_by', 'a.created_by',
 	      'published', 'a.published',
@@ -83,7 +84,7 @@ class OdysseyModelAddons extends JModelList
     $query = $db->getQuery(true);
 
     // Select the required fields from the table.
-    $query->select($this->getState('list.select', 'a.id,a.name,a.addon_type,a.group_nb,a.created,'.
+    $query->select($this->getState('list.select', 'a.id,a.name,a.addon_type,a.group_nb,a.global,a.created,'.
 						  'a.published,a.created_by,a.checked_out,a.checked_out_time'));
 
     $query->from('#__odyssey_addon AS a');
@@ -126,7 +127,10 @@ class OdysseyModelAddons extends JModelList
     }
 
     //Get the possible option sent by a modal window.
-    //$modalOption = JFactory::getApplication()->input->get->get('modal_option', '', 'string');
+    $modalOption = JFactory::getApplication()->input->get->get('modal_option', '', 'string');
+    if($modalOption == 'no_global') {
+      $query->where('a.global=0');
+    }
 
     //Filter by addon type.
     $addonType = $this->getState('filter.addon_type');

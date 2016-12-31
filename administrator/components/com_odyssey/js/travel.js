@@ -96,10 +96,16 @@
 	      addonIds.push(result.addon_id);
 	      properties = {'id':'addon-'+result.step_id+'-'+result.addon_id};
 	      $('#step-'+result.step_id).createHTMLTag('<div>', properties, 'addon-price-rows');
+
+	      var addonName = result.addon_name;
+	      if(result.addon_name != '' && result.addon_global == 1) {
+		addonName = result.addon_name+Joomla.JText._('COM_ODYSSEY_INFO_GLOBAL_ADDON');
+	      }
+
 	      //Display the addon name.
 	      properties = {'id':'addon-title-'+result.step_id+'-'+result.addon_id};
 	      $('#addon-'+result.step_id+'-'+result.addon_id).createHTMLTag('<h3>', properties, 'addon-title');
-	      $('#addon-title-'+result.step_id+'-'+result.addon_id).html('<span class="item-label">'+Joomla.JText._('COM_ODYSSEY_ADDON_LABEL')+'</span>'+result.addon_name);
+	      $('#addon-title-'+result.step_id+'-'+result.addon_id).html('<span class="item-label">'+Joomla.JText._('COM_ODYSSEY_ADDON_LABEL')+'</span>'+addonName);
 	      //Create a table to insert the addon price rows.
 	      properties = {'id':'addon-prices-'+result.step_id+'-'+result.addon_id};
 	      $('#addon-'+result.step_id+'-'+result.addon_id).createHTMLTag('<table>', properties, 'table table-striped price-rows');

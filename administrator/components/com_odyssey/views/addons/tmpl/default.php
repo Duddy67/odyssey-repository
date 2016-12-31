@@ -68,6 +68,9 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	<th width="15%">
 	<?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_GROUP_NUMBER', 'a.group_nb', $listDirn, $listOrder); ?>
 	</th>
+	<th width="8%">
+	<?php echo JHtml::_('searchtools.sort', 'COM_ODYSSEY_HEADING_GLOBAL', 'a.global', $listDirn, $listOrder); ?>
+	</th>
 	<th width="10%" class="nowrap hidden-phone">
 	<?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_CREATED_BY', 'user', $listDirn, $listOrder); ?>
 	</th>
@@ -139,6 +142,9 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	    ?>
 	  </td>
 	  <td class="small hidden-phone">
+	    <?php echo ($item->global) ? JText::_('JYES') : JText::_('JNO'); ?>
+	  </td>
+	  <td class="small hidden-phone">
 	    <?php echo $this->escape($item->user); ?>
 	  </td>
 	  <td class="nowrap small hidden-phone">
@@ -150,7 +156,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 
       <?php endforeach; ?>
       <tr>
-	<td colspan="11"><?php echo $this->pagination->getListFooter(); ?></td>
+	<td colspan="12"><?php echo $this->pagination->getListFooter(); ?></td>
       </tr>
       </tbody>
     </table>
