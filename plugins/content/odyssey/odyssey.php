@@ -73,23 +73,15 @@ class plgContentOdyssey extends JPlugin
 	$db = JFactory::getDbo();
 	$query = $db->getQuery(true);
 
-	if($isNew) {
-	  //Set the group alias of the linked step.
-	  $query->select('catid, group_alias')
-		->from('#__odyssey_step')
-		->where('id='.(int)$data->dpt_step_id);
-	  $db->setQuery($query);
-	  $result = $db->loadObject();
+	//Set the catid and group alias of the linked step.
+	$query->select('catid, group_alias')
+	      ->from('#__odyssey_step')
+	      ->where('id='.(int)$data->dpt_step_id);
+	$db->setQuery($query);
+	$result = $db->loadObject();
 
-	  $data->catid = $result->catid;
-	  $data->group_alias = $result->group_alias;
-	}
-	else {
-	//Don't save this values as they are set according to the departure step 
-	//in the onContentAfterSave function.
-	 unset($data->catid);
-	 unset($data->group_alias);
-	}
+	$data->catid = $result->catid;
+	$data->group_alias = $result->group_alias;
 
 	return true;
       }
@@ -460,8 +452,8 @@ class plgContentOdyssey extends JPlugin
 	  $db->setQuery($query);
 	  $ids = $db->loadColumn();
 
+	  //Update the catid and group alias values of the linked steps.
 	  if(!empty($ids)) {
-	    //Update the catid and group alias values of the linked steps.
 	    $fields = array('group_alias='.$db->quote($data->group_alias),
 			    'catid='.(int)$data->catid);
 
