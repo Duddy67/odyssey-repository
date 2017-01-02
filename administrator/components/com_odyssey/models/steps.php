@@ -62,6 +62,9 @@ class OdysseyModelSteps extends JModelList
     $stepType = $this->getUserStateFromRequest($this->context.'.filter.step_type', 'filter_step_type');
     $this->setState('filter.step_type', $stepType);
 
+    $groupAlias = $this->getUserStateFromRequest($this->context.'.filter.group_alias', 'filter_group_alias');
+    $this->setState('filter.group_alias', $groupAlias);
+
     $departureData = $this->getUserStateFromRequest($this->context.'.step_sequence.departure_data', 'departure_data');
     $this->setState('step_sequence.departure_data', $departureData);
 
@@ -85,6 +88,7 @@ class OdysseyModelSteps extends JModelList
       $this->state->set('filter.published', '');
       $this->state->set('filter.category_id', '');
       $this->state->set('filter.step_type', '');
+      $this->state->set('filter.group_alias', '');
     }
   }
 
@@ -114,7 +118,7 @@ class OdysseyModelSteps extends JModelList
 
     // Select the required fields from the table.
     $query->select($this->getState('list.select', 's.id,s.name,s.created,s.group_alias,s.step_type,s.catid,'.
-				   's.published,s.created_by,s.checked_out,s.checked_out_time'));
+				   's.subtitle,s.published,s.created_by,s.checked_out,s.checked_out_time'));
     $query->from('#__odyssey_step AS s');
 
     //Get the user name.
@@ -172,6 +176,12 @@ class OdysseyModelSteps extends JModelList
     $stepType = $this->getState('filter.step_type');
     if(!empty($stepType)) {
       $query->where('s.step_type='.$db->Quote($stepType));
+    }
+
+    //Filter by group alias.
+    $groupAlias = $this->getState('filter.group_alias');
+    if(!empty($groupAlias)) {
+      $query->where('s.group_alias='.$db->Quote($groupAlias));
     }
 
     //Get the possible option sent by a link to a modal window.

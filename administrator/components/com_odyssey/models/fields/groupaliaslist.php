@@ -17,30 +17,30 @@ JFormHelper::loadFieldClass('list');
 //Script which build the select html tag containing the tax rates previously
 //defined.
 
-class JFormFieldTaxList extends JFormFieldList
+class JFormFieldGroupaliasList extends JFormFieldList
 {
-  protected $type = 'taxlist';
+  protected $type = 'groupaliaslist';
 
   protected function getOptions()
   {
     $options = array();
       
-    //Get the tax rates.
+    //Get the group alias of all the departure steps.
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
-    $query->select('id,rate')
-	  ->from('#__odyssey_tax')
-	  ->where('published=1')
-	  ->order('ordering');
+    $query->select('group_alias')
+	  ->from('#__odyssey_step')
+	  ->where('step_type="departure"')
+	  ->order('group_alias');
     $db->setQuery($query);
-    $taxes = $db->loadObjectList();
+    $groupAliases = $db->loadColumn();
 
     //Build the first option.
-    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT'));
+    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT_GROUP_ALIAS'));
 
     //Build the select options.
-    foreach($taxes as $tax) {
-      $options[] = JHtml::_('select.option', $tax->id, JText::_($tax->rate.' %'));
+    foreach($groupAliases as $groupAlias) {
+      $options[] = JHtml::_('select.option', $groupAlias, $groupAlias);
     }
 
     // Merge any additional options in the XML definition.

@@ -143,9 +143,17 @@ echo JLayoutHelper::render('list.sequencetools', array('dpt_data' => $this->stat
 	      <?php else : ?>
 		<?php echo $this->escape($item->name); ?>
 	      <?php endif; ?>
+
 	      <span class="small break-word">
 		<?php echo JText::sprintf('COM_ODYSSEY_LIST_GROUP_ALIAS'.strtoupper($muted), $this->escape($item->group_alias)); ?>
 	      </span>
+
+	      <?php if (!empty($item->subtitle)) : ?>
+		<div class="small break-word">
+		  <?php echo JText::sprintf('COM_ODYSSEY_LIST_SUBTITLE', $this->escape($item->subtitle)); ?>
+		</div>
+	      <?php endif; ?>
+
 	      <div class="small">
 		<?php echo JText::_('JCATEGORY').': <span class="'.$muted.'">'.$this->escape($item->category_title).'</span>'; ?>
 	      </div>

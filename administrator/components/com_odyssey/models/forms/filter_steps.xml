@@ -39,6 +39,10 @@
 			<option value="departure">COM_ODYSSEY_OPTION_DEPARTURE</option>
 			<option value="link">COM_ODYSSEY_OPTION_LINK</option>
 		</field>
+
+		<field name="group_alias" type="groupaliaslist"
+			onchange="this.form.submit();" >
+		</field>
 	</fields>
 	<fields name="list">
 		<field name="fullordering" type="list"
