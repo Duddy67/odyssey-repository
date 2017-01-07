@@ -15,6 +15,7 @@
 	    <filename>camera-icon.jpg</filename>
 	    <filename>mod_odysplay.xml</filename>
 	    <folder>css</folder>
+	    <folder>js</folder>
 	    <folder>language</folder>
 	    <folder>tmpl</folder>
     </files>
