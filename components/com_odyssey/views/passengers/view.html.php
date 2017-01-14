@@ -12,6 +12,7 @@ require_once JPATH_COMPONENT_SITE.'/helpers/route.php';
 require_once JPATH_COMPONENT_SITE.'/helpers/travel.php';
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/utility.php';
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/javascript.php';
+require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/odyssey.php';
 
 /**
  * HTML View class for the Odyssey component.
@@ -30,7 +31,7 @@ class OdysseyViewPassengers extends JViewLegacy
     //Create new JForm object
     $this->form = new JForm('PsgrForm');
     //Load the passenger form.
-    $this->form->loadFile(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/passenger.xml');
+    $this->form->loadFile(OdysseyHelper::getOverridedFile(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/passenger.xml'));
     //var_dump($this->get('Form'));
     //$this->customerData = $this->get('CustomerData');
     $this->customerData = TravelHelper::getCustomerData();
@@ -52,6 +53,10 @@ class OdysseyViewPassengers extends JViewLegacy
     //Load the javascript code to hide buttons.
     TravelHelper::javascriptUtilities();
     $this->setDocument();
+
+    //Check for extra language file.
+    $language = JFactory::getLanguage();
+    OdysseyHelper::addExtraLanguage($language);
 
     parent::display($tpl);
   }

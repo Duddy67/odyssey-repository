@@ -7,6 +7,7 @@
 
 
 defined('_JEXEC') or die; //No direct access to this file.
+require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/odyssey.php';
 
 
 
@@ -525,7 +526,7 @@ class JavascriptHelper
   public static function getPassengerAttributes($json = true)
   {
     //Get the passenger ini file in which some settings are defined.
-    $psgrIni = parse_ini_file(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/passenger.ini');
+    $psgrIni = parse_ini_file(OdysseyHelper::getOverridedFile(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/passenger.ini'));
     $attributes = $psgrIni['attributes'];
     $address = $result = array();
 

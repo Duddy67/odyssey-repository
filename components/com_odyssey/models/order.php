@@ -10,6 +10,7 @@ defined('_JEXEC') or die; //No direct access to this file.
 
 jimport('joomla.application.component.modeladmin');
 require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/utility.php';
+require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/odyssey.php';
 
 
 
@@ -98,7 +99,7 @@ class OdysseyModelOrder extends JModelAdmin
   public function getPassengers($id, $nbPsgr)
   {
     //Get the passenger ini file in which some settings are defined.
-    $psgrIni = parse_ini_file(JPATH_BASE.'/administrator/components/com_odyssey/models/forms/passenger.ini');
+    $psgrIni = parse_ini_file(OdysseyHelper::getOverridedFile(JPATH_BASE.'/administrator/components/com_odyssey/models/forms/passenger.ini'));
     $attributes = $psgrIni['attributes'];
     $select = '';
 

@@ -74,6 +74,7 @@
 		    <filename>index.html</filename>
 		    <!-- Folders  Section -->
 		    <folder>controllers</folder>
+		    <folder>extra</folder>
 		    <folder>helpers</folder>
 		    <folder>js</folder>
 		    <folder>language</folder>

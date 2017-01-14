@@ -509,6 +509,48 @@ class OdysseyHelper
 
     return;
   }
+
+
+  /**
+   * Check and return the path to the overrided file of a given file.
+   *
+   * @param string  The absolute path to the original file.  
+   *
+   * @return string The absolute path to the overrided file or the given path otherwise.
+   */
+  public static function getOverridedFile($path)
+  {
+    //Get the name of the file from the path.
+    $fileName = basename($path);
+
+    //Check for an overrided file in the datafiles directory.
+    if(file_exists(JPATH_ROOT.'/administrator/components/com_odyssey/extra/override/'.$fileName)) {
+      return JPATH_ROOT.'/administrator/components/com_odyssey/extra/override/'.$fileName;
+    }
+    else {
+      return $path;   
+    }
+  }  
+ 
+ 
+  /**
+   * Load an extra language file in the given language.
+   *
+   * @param JLanguage A JLanguage object instancied either in backend or in frontend.
+   *
+   * @return void
+   */
+  public static function addExtraLanguage($language)
+  {  
+    $path = JPATH_ROOT.'/administrator/components/com_odyssey/extra/language/';
+    //Check for an extra language file in the given language.
+    if(file_exists($path.$language->getTag().'/'.$language->getTag().'.com_odyssey.ini')) {
+      $language->load('com_odyssey', JPATH_ROOT.'/administrator/components/com_odyssey/extra/', $language->getTag(), true);
+    } //If the default extra language file is available we load it. 
+    elseif(file_exists($path.$language->getDefault().'/'.$language->getDefault().'.com_odyssey.ini')) {
+      $language->load('com_odyssey', JPATH_ROOT.'/administrator/components/com_odyssey/extra/', $language->getDefault(), true);
+    }
+  }
 }
 
 

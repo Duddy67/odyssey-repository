@@ -12,6 +12,7 @@ defined( '_JEXEC' ) or die; // No direct access
 jimport( 'joomla.application.component.view');
 require_once JPATH_COMPONENT.'/helpers/odyssey.php';
 require_once JPATH_COMPONENT.'/helpers/javascript.php';
+require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/odyssey.php';
 require_once JPATH_ROOT.'/components/com_odyssey/helpers/travel.php';
  
 
@@ -38,7 +39,7 @@ class OdysseyViewOrder extends JViewLegacy
     // create new JForm object
     $this->psgrForm = new JForm('PsgrForm');
     // Load any form .xml file you want (like registration.xml)
-    $this->psgrForm->loadFile(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/passenger.xml');
+    $this->psgrForm->loadFile(OdysseyHelper::getOverridedFile(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/passenger.xml'));
     //Run the required functions in order to use the preload passengers feature.
     $this->preloadPsgr = JavascriptHelper::getPassengers($this->item->customer_id, false);
     JavascriptHelper::loadFunctions(array('passengers', 'passengerAttributes'), array($this->item->customer_id));
@@ -53,6 +54,10 @@ class OdysseyViewOrder extends JViewLegacy
     $this->addToolBar();
 
     $this->setDocument();
+
+    //Check for extra language file.
+    $language = JFactory::getLanguage();
+    OdysseyHelper::addExtraLanguage($language);
 
     //Display the template.
     parent::display($tpl);

@@ -26,3 +26,4 @@ $travels = ModOdysplayHelper::getTravels($travelIds, $params);
 $currency = UtilityHelper::getCurrency();
 
 require(JModuleHelper::getLayoutPath('mod_odysplay'));
+

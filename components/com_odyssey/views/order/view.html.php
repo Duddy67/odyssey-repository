@@ -12,6 +12,7 @@ jimport( 'joomla.application.component.view');
 //require_once JPATH_ADMINISTRATOR.'/components/com_odyssey/models/order.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_odyssey/helpers/javascript.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_odyssey/helpers/utility.php';
+require_once JPATH_ADMINISTRATOR.'/components/com_odyssey/helpers/odyssey.php';
 require_once JPATH_COMPONENT_SITE.'/helpers/travel.php';
  
 
@@ -47,7 +48,7 @@ class OdysseyViewOrder extends JViewLegacy
     // create new JForm object
     $this->psgrForm = new JForm('PsgrForm');
     // Load any form .xml file you want (like registration.xml)
-    $this->psgrForm->loadFile(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/passenger.xml');
+    $this->psgrForm->loadFile(OdysseyHelper::getOverridedFile(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/passenger.xml'));
     //var_dump($this->item);
     //Run the required functions in order to use the preload passengers feature.
     $this->preloadPsgr = JavascriptHelper::getPassengers($this->item->customer_id, false);
@@ -92,6 +93,10 @@ class OdysseyViewOrder extends JViewLegacy
     }
 
     $this->setDocument();
+
+    //Check for extra language file.
+    $language = JFactory::getLanguage();
+    OdysseyHelper::addExtraLanguage($language);
 
     parent::display($tpl);
   }

@@ -8,6 +8,7 @@
 defined('_JEXEC') or die;
 require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/utility.php';
 require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/step.php';
+require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/odyssey.php';
 
 
 class TravelHelper
@@ -330,7 +331,7 @@ class TravelHelper
   public static function checkInPassengers($form, $customerId = 0)
   {
     //Get the passenger ini file in which some settings are defined.
-    $psgrIni = parse_ini_file(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/passenger.ini');
+    $psgrIni = parse_ini_file(OdysseyHelper::getOverridedFile(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/passenger.ini'));
     $attributes = $psgrIni['attributes'];
     $types = $psgrIni['types'];
     $address = $psgrIni['address'];
