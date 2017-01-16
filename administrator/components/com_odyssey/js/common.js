@@ -564,7 +564,7 @@
       rule = 'RULE';
     }
 
-    var thDatetime = '<tr><th class="datetime">'+Joomla.JText._('COM_ODYSSEY_HEADING_DATETIME')+'</th>';
+    var thDatetime = '<tr><th class="datetime">'+Joomla.JText._('COM_ODYSSEY_HEADING_DEPARTURE_DATE')+'</th>';
     var thCity = '<th class="city">'+Joomla.JText._('COM_ODYSSEY_HEADING_DEPARTURE_CITY')+'</th>';
     var thMaxPas = '<th class="max-passengers">'+Joomla.JText._('COM_ODYSSEY_HEADING_MAX_PASSENGERS')+'</th>'; 
     var thPrice = '<th class="prices">'+Joomla.JText._('COM_ODYSSEY_HEADING_PRICE'+rule+'_PER_PASSENGER')+'</th>'; 
@@ -610,15 +610,11 @@
 			    '<td id="col-4-'+ids+'"></td><td id="col-5-'+ids+'"></td></tr>');
     }
     else {
-      //Remove the seconds part ":00" from the end of the string.
-      var dateTime = data.date_time.slice(0, -3); 
-      //Set datetime_2 in case of period date type.
+      var dateTime = data.date_time;
       var dateTime_2 = '';
+      //Check for period date type.
       if(data.date_time_2 != '0000-00-00 00:00:00') {
-	//Remove time value as it is not used with period date type. 
-	dateTime = data.date_time.slice(0, -9); 
-	dateTime_2 = data.date_time_2.slice(0, -9); 
-	dateTime_2 = '<br />'+dateTime_2;
+	dateTime_2 = '<br />'+data.date_time_2;
       }
 
       $('#'+tableId).append('<tr id="row-'+ids+'"><td id="col-1-'+ids+'">'+dateTime+dateTime_2+'</td>'+

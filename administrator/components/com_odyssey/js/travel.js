@@ -58,7 +58,8 @@
 
   $.fn.createPriceTables = function(dptStepId) {
     var travelId = $('#jform_id').val();
-    var urlQuery = {'travel_id':travelId, 'dpt_step_id':dptStepId};
+    var langTag = $('#lang-tag').val();
+    var urlQuery = {'travel_id':travelId, 'dpt_step_id':dptStepId, 'lang_tag':langTag};
 
     $.ajax({
 	type: 'GET', 

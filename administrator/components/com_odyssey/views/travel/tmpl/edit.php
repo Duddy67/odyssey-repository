@@ -17,6 +17,10 @@ JHtml::_('behavior.modal');
 $this->ignore_fieldsets = array('details', 'permissions', 'jmetadata');
 //Get the the search filters to use set in global config.
 $searchFilters = $this->config->get('search_filters');
+
+//Lang tag is needed in the Ajax file.
+$lang = JFactory::getLanguage();
+$langTag = $lang->getTag();
 ?>
 
 <script type="text/javascript">
@@ -161,6 +165,7 @@ Joomla.submitbutton = function(task)
       <?php echo JHtml::_('bootstrap.endTab'); ?>
   </div>
 
+  <input type="hidden" name="lang_tag" id="lang-tag" value="<?php echo $langTag; ?>" />
   <input type="hidden" name="search_filters" id="search-filters" value="<?php echo $searchFilters; ?>" />
   <input type="hidden" name="task" value="" />
   <?php echo JHtml::_('form.token'); ?>

@@ -18,11 +18,36 @@ require_once (JPATH_BASE.'/administrator/components/com_odyssey/helpers/utility.
 $mainframe = JFactory::getApplication('site');
 $mainframe->initialise();
 
-//Get the required variables.
+//Get or set the required variables.
 $travelId = JFactory::getApplication()->input->get->get('travel_id', 0, 'uint');
 $dptStepId = JFactory::getApplication()->input->get->get('dpt_step_id', 0, 'uint');
-
+$langTag = JFactory::getApplication()->input->get->get('lang_tag', '', 'str');
 $data = array();
+$dateType = 'standard';
+
+$lang = JFactory::getLanguage();
+//Check the lang tag parameter has been properly retrieved.
+if(empty($langTag)) {
+  //If not, we'll use english by default.
+  $langTag = $lang->getTag();
+}
+$lang->load('com_odyssey', JPATH_ROOT.'/administrator/components/com_odyssey/', $lang->getTag(), true);
+
+
+function setDateFormat(&$items, $dateType)
+{
+  //Set date format according to the date type.
+  $dateFormat = 'COM_ODYSSEY_DATE_FORMAT_'.strtoupper($dateType);
+
+  foreach($items as $key => $value) {
+    $items[$key]['date_time'] = JHtml::_('date', $value['date_time'], JText::_($dateFormat));
+    //
+    if($dateType == 'period') {
+      $items[$key]['date_time_2'] = JHtml::_('date', $value['date_time_2'], JText::_($dateFormat));
+    }
+  }
+}
+
 
 $db = JFactory::getDbo();
 $query = $db->getQuery(true);
@@ -37,7 +62,11 @@ $query->select('d.dpt_id, d.date_time, d.date_time_2, d.max_passengers, c.name A
       ->order('d.date_time, p.psgr_nb');
 $db->setQuery($query);
 $results = $db->loadAssocList();
-//file_put_contents('debog_file.txt', print_r($query->__toString(), true));
+
+//Check for the departure date type.
+if($results[0]['date_time_2'] != '0000-00-00 00:00:00') {
+  $dateType = 'period';
+}
 
 $travelPriceRows = UtilityHelper::combinePriceRows($results);
 
@@ -182,6 +211,9 @@ $results = $db->loadAssocList();
 
 $transitCityPriceRows = UtilityHelper::combinePriceRows($results);
 
+setDateFormat($travelPriceRows, $dateType);
+setDateFormat($addonPriceRows, $dateType);
+setDateFormat($transitCityPriceRows, $dateType);
 
 $data['travel'] = $travelPriceRows;
 $data['addons'] = $addonPriceRows;
