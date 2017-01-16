@@ -7,7 +7,6 @@
 
 
 defined('_JEXEC') or die; // No direct access.
-
 jimport('joomla.application.component.controller');
 
 
