@@ -37,6 +37,7 @@ function OdysseyBuildRoute(&$query)
   }
 
   if(isset($query['layout'])) {
+    $segments[] = $query['layout'];
     unset($query['layout']);
   }
 
@@ -106,6 +107,8 @@ function OdysseyParseRoute($segments)
 	   break;
     case 'search':
 	   $vars['view'] = 'search';
+	   $layout = explode(':', $segments[1]);
+	   $vars['layout'] = $layout[0];
 	   break;
   }
 

@@ -443,6 +443,28 @@ class TravelHelper
   }
 
 
+  //Return width and height of an image according to its reduction rate.
+  public static function getThumbnailSize($width, $height, $reductionRate = 0)
+  {
+    $size = array();
+
+    if($reductionRate == 0) {
+      //Just return the original values.
+      $size['width'] = $width;
+      $size['height'] = $height;
+    }   
+    else { //Compute the new image size.
+      $widthReduction = ($width / 100) * $reductionRate;
+      $size['width'] = $width - $widthReduction;
+
+      $heightReduction = ($height / 100) * $reductionRate;
+      $size['height'] = $height - $heightReduction;
+    }   
+
+    return $size;
+  }
+
+
   //Send an appropriate email to customers according to the performed action.
   public static function sendEmail($emailType, $userId, $orderId = 0, $message = array())
   {

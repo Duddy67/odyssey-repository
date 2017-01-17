@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_ODYSSEY_SEARCH_VIEW_THUMBNAIL_TITLE" option="COM_ODYSSEY_SEARCH_VIEW_THUMBNAIL_OPTION">
+		<help
+			key=""
+		/>
+		<message>
+			<![CDATA[COM_ODYSSEY_SEARCH_VIEW_THUMBNAIL_DESC]]>
+		</message>
+	</layout>
+
+	<!-- Add fields to the parameters object for the layout. -->
+<fields name="params">
+  <fieldset name="thumbnail" label="JGLOBAL_FIELDSET_OPTIONS">
+      <field name="link_thumbnail" type="radio"
+	     default="1"
+	     class="btn-group btn-group-yesno"
+	     label="COM_ODYSSEY_LINK_THUMBNAIL_LABEL"
+	     description="COM_ODYSSEY_LINK_THUMBNAIL_DESC">
+	     <option value="1">JYES</option>
+	     <option value="0">JNO</option>
+      </field>
+
+      <field name="reduction_rate" type="text"
+	      default=""
+	      label="COM_ODYSSEY_REDUCTION_RATE_LABEL"
+	      description="COM_ODYSSEY_REDUCTION_RATE_DESC">
+      </field>
+
+  </fieldset>
+</fields>
+</metadata>

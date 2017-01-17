@@ -78,7 +78,7 @@ class ModOdysplayHelper {
 	//Get the image width and height then retrieve the new image size according to the
 	//reduction rate.
 	$imageSize = getimagesize($travel->image);
-	$size = ModOdysplayHelper::getThumbnailSize($imageSize[0], $imageSize[1], $params->get('img_reduction_rate'));
+	$size = TravelHelper::getThumbnailSize($imageSize[0], $imageSize[1], $params->get('img_reduction_rate'));
 	$travel->img_width = $size['width'];
 	$travel->img_height = $size['height'];
       }
@@ -112,28 +112,6 @@ class ModOdysplayHelper {
     }
 
     return $travels;
-  }
-
-
-  //Return width and height of an image according to its reduction rate.
-  public static function getThumbnailSize($width, $height, $reductionRate)
-  {
-    $size = array();
-
-    if($reductionRate == 0) {
-      //Just return the original values.
-      $size['width'] = $width;
-      $size['height'] = $height;
-    }   
-    else { //Compute the new image size.
-      $widthReduction = ($width / 100) * $reductionRate;
-      $size['width'] = $width - $widthReduction;
-
-      $heightReduction = ($height / 100) * $reductionRate;
-      $size['height'] = $height - $heightReduction;
-    }   
-
-    return $size;
   }
 
 

@@ -88,7 +88,8 @@ class OdysseyModelSearch extends JModelList
     $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
 
     // Select the required fields from the table.
-    $query->select($this->getState('list.select', 't.id, t.alias, t.name, MIN(tp.price) AS price, t.travel_duration, t.catid'))
+    $query->select($this->getState('list.select', 't.id, t.alias, t.name, MIN(tp.price) AS price, t.travel_duration, t.catid,'.
+	                                          't.subtitle, t.intro_text, t.image'))
 	  ->from('#__odyssey_travel AS t')
 	  //Get the lowest price for each travel.
 	  ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id')
