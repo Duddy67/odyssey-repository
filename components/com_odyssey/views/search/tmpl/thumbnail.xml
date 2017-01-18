@@ -12,11 +12,11 @@
 	<!-- Add fields to the parameters object for the layout. -->
 <fields name="params">
   <fieldset name="thumbnail" label="JGLOBAL_FIELDSET_OPTIONS">
-      <field name="link_thumbnail" type="radio"
+      <field name="linked_thumbnail" type="radio"
 	     default="1"
 	     class="btn-group btn-group-yesno"
-	     label="COM_ODYSSEY_LINK_THUMBNAIL_LABEL"
-	     description="COM_ODYSSEY_LINK_THUMBNAIL_DESC">
+	     label="COM_ODYSSEY_LINKED_THUMBNAIL_LABEL"
+	     description="COM_ODYSSEY_LINKED_THUMBNAIL_DESC">
 	     <option value="1">JYES</option>
 	     <option value="0">JNO</option>
       </field>
