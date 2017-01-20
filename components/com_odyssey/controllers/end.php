@@ -249,6 +249,10 @@ class OdysseyControllerEnd extends JControllerForm
       $task2 = 'warning_payment';
     }
 
+      //For test purposes.
+      //$reminderDate = '15:00 2017-01-20';
+      //$limitDate = '15:01 2017-01-20';
+
       $orderId = $travel['order_id'];
       $uri = JUri::getInstance();
       //heredoc syntax "<<" is used to set the at command.

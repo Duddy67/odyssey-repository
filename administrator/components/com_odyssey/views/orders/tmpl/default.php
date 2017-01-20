@@ -184,10 +184,20 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 		      echo '<img src="'.$src.'" width="24" height="24" alt="completed" />';
 		    }
 		  }
+		  else {
+		    if($item->payment_status == 'completed' && $item->order_status == 'completed') {
+		      $src = '../media/com_odyssey/images/completed.jpg';
+		      echo '<img src="'.$src.'" width="24" height="24" alt="completed" />';
+		    }
+		    else {
+		      $src = '../media/com_odyssey/images/pending.jpg';
+		      echo '<img src="'.$src.'" width="24" height="24" alt="pending" />';
+		    }
+		  }
 	      ?>
 	  </td>
 	  <td class="nowrap small hidden-phone">
-	    <?php echo JHtml::_('date', $item->departure_date, JText::_('DATE_FORMAT_LC4')); ?>
+	    <?php echo JHtml::_('date', $item->departure_date, JText::_('COM_ODYSSEY_DATE_FORMAT_PERIOD')); ?>
 	  </td>
 	  <td>
 	    <?php echo $item->id; ?>
