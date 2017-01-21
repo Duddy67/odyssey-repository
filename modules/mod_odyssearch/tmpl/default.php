@@ -15,7 +15,7 @@ $css->addStyleSheet(JURI::base().'modules/mod_odyssearch/odyssearch.css');
 
 <?php if ($form) : ?>
 <div class="odyssearch-module">
-  <form action="<?php echo JRoute::_('index.php?option=com_odyssey&view=search');?>" method="post" name="adminForm" id="adminForm">
+  <form action="<?php echo JRoute::_('index.php?option=com_odyssey&view=search&itemId='.$itemId);?>" method="post" name="adminForm" id="adminForm">
     <?php foreach ($form->getFieldset() as $fieldName => $field) : ?>
       <?php if ($fieldName != 'filter_search' && in_array($field->getAttribute('name'), $showedFilters)) : ?>
 	<?php

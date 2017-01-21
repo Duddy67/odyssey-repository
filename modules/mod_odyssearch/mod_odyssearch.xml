@@ -19,11 +19,19 @@
 	<!-- Optional parameters -->
       <config>
 	<fields name="params">
+	  <fieldset name="basic">
+	    <field name="set_itemid" type="menuitem"
+		    label="MOD_ODYSEARCH_FIELD_SETITEMID_LABEL"
+		    description="MOD_ODYSEARCH_FIELD_SETITEMID_DESC"
+		    default="0" >
+	      <option value="0">MOD_ODYSEARCH_SELECT_MENU_ITEMID</option>
+	    </field>
+	  </fieldset>
 	  <fieldset name="advanced">
 	    <field name="moduleclass_sfx" type="text" default=""
 		   label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
 		   description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
-	    </fieldset>
+	  </fieldset>
 	</fields>
       </config>
 

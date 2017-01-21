@@ -21,7 +21,7 @@ class OdysseyViewSearch extends JViewLegacy
   protected $items;
   protected $state;
   protected $pagination;
-  public $menuParams;
+  public $params;
   public $config;
   public $currency;
 
@@ -40,17 +40,28 @@ class OdysseyViewSearch extends JViewLegacy
       return false;
     }
 
-    //Get the needed parameters for the thumbnail layout.
-    if($this->getLayout() == 'thumbnail') {
-      $app = JFactory::getApplication();
-      $active = $app->getMenu()->getActive();
-      $menus = $app->getMenu();
-      $this->menuParams = $menus->getParams($active->id);
+    $app = JFactory::getApplication();
+    //Set the layout to the global value. 
+    //Note: Use substr to remove the _: characters from the beginning of the result.
+    $layout = substr($app->getParams()->get('search_layout'), 2);
+    $active = $app->getMenu()->getActive();
+    $menus = $app->getMenu();
 
-      $rate = 0;
-      if(ctype_digit($this->menuParams->get('reduction_rate'))) {
-	$rate = $this->menuParams->get('reduction_rate');
-      }
+    if($active) {
+      //Get the params from the menu.
+      $this->params = $menus->getParams($active->id);
+      $layout = $this->getLayout();
+      //$menus->setActive($active->id);
+    }
+    else {
+      //Get the params from the global values.
+      $this->params = $app->getParams();
+      $this->setLayout($layout);
+    }
+
+    $rate = 0;
+    if(ctype_digit($this->params->get('reduction_rate'))) {
+      $rate = $this->params->get('reduction_rate');
     }
 
     $itemIds = $catIds = array();
@@ -58,7 +69,7 @@ class OdysseyViewSearch extends JViewLegacy
     foreach($this->items as $item) {
       $item->slug = $item->alias ? ($item->id.':'.$item->alias) : $item->id;
 
-      if($this->getLayout() == 'thumbnail') {
+      if($layout == 'thumbnail') {
 	//First check for a valid image file.
 	if(empty($item->image) || !is_file($item->image)) {
 	  //Set the default image.

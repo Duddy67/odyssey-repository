@@ -32,18 +32,18 @@ echo JLayoutHelper::render('default', array('view' => $this, 'search_filters' =>
       $link = JRoute::_(OdysseyHelperRoute::getTravelRoute($item->slug, $item->catid));
     ?>
       <div class="search-thumbnails">
-        <?php echo ($this->menuParams->get('linked_thumbnail')) ? '<a href="'.$link.'">' : ''; ?>
+        <?php echo ($this->params->get('linked_thumbnail')) ? '<a href="'.$link.'">' : ''; ?>
 	<div class="thumbnail-image"
 	     style="background-image: url('<?php echo $item->image; ?>'); background-size:<?php echo $item->img_width; ?>px <?php echo $item->img_height; ?>px; background-repeat:no-repeat; width:<?php echo $item->img_width; ?>px; height:<?php echo $item->img_height; ?>px;">
 	  <div class="bottom-panel">
 	    <span class="title">
-	    <?php echo (!$this->menuParams->get('linked_thumbnail')) ? '<a href="'.$link.'">' : ''; ?>
+	    <?php echo (!$this->params->get('linked_thumbnail')) ? '<a href="'.$link.'">' : ''; ?>
 	    <?php echo $this->escape($item->name); ?>
-	    <?php echo (!$this->menuParams->get('linked_thumbnail')) ? '</a>' : ''; ?>
+	    <?php echo (!$this->params->get('linked_thumbnail')) ? '</a>' : ''; ?>
 	    </span>
 	  </div>
 	</div>
-        <?php echo ($this->menuParams->get('linked_thumbnail')) ? '</a>' : ''; ?>
+        <?php echo ($this->params->get('linked_thumbnail')) ? '</a>' : ''; ?>
 
 	<div class="infos">
 	  <span class="subtitle"><?php echo $this->escape($item->subtitle); ?></span>

@@ -17,6 +17,8 @@ if($option == 'com_odyssey' && $view == 'search') {
   return;
 }
 
+$itemId = $params->get('set_itemid');
+
 $form = false;
 //Create a new JForm object
 $form = new JForm('filterForm');

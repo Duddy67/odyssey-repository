@@ -561,6 +561,32 @@
 		</field>
     </fieldset>
 
+    <fieldset name="search" label="COM_ODYSSEY_CONFIG_SEARCH_SETTINGS_LABEL"
+	      description="COM_ODYSSEY_CONFIG_SEARCH_SETTINGS_DESC">
+
+		<field name="search_layout" type="componentlayout"
+		       label="JGLOBAL_FIELD_LAYOUT_LABEL"
+		       description="JGLOBAL_FIELD_LAYOUT_DESC"
+		       menuitems="true"
+		       extension="com_odyssey"
+		       view="search" />
+
+		<field name="linked_thumbnail" type="radio"
+		       default="1"
+		       class="btn-group btn-group-yesno"
+		       label="COM_ODYSSEY_LINKED_THUMBNAIL_LABEL"
+		       description="COM_ODYSSEY_LINKED_THUMBNAIL_DESC">
+		       <option value="1">JYES</option>
+		       <option value="0">JNO</option>
+		</field>
+
+		<field name="reduction_rate" type="text"
+			default="0"
+			label="COM_ODYSSEY_REDUCTION_RATE_LABEL"
+			description="COM_ODYSSEY_REDUCTION_RATE_DESC">
+		</field>
+    </fieldset>
+
     <fieldset name="blog_default_parameters"
 	      label="COM_ODYSSEY_CONFIG_BLOG_SETTINGS_LABEL"
 	      description="COM_ODYSSEY_CONFIG_BLOG_SETTINGS_DESC" >

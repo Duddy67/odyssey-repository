@@ -107,8 +107,10 @@ function OdysseyParseRoute($segments)
 	   break;
     case 'search':
 	   $vars['view'] = 'search';
-	   $layout = explode(':', $segments[1]);
-	   $vars['layout'] = $layout[0];
+	   if(isset($segments[1])) {
+	     $layout = explode(':', $segments[1]);
+	     $vars['layout'] = $layout[0];
+	   }
 	   break;
   }
 
