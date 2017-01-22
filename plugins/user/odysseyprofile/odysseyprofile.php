@@ -1,7 +1,7 @@
 <?php
 /**
- * @package Odyssey
- * @copyright Copyright (c)2016 - 2016 Lucas Sanner
+ * @package Odyssey Profile
+ * @copyright Copyright (c)2016 - 2017 Lucas Sanner
  * @license GNU General Public License version 3, or later
  */
 

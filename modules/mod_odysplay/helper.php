@@ -1,4 +1,11 @@
 <?php
+/**
+ * @package Odysplay
+ * @copyright Copyright (c)2016 - 2017 Lucas Sanner
+ * @license GNU General Public License version 3, or later
+ */
+
+
 //No direct access.
 defined('_JEXEC') or die;
 
