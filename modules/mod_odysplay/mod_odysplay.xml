@@ -22,10 +22,12 @@
 	<!-- Optional parameters -->
       <config>
 	<fields name="params">
-	  <fieldset name="basic">
-	     <field name="travel_ids" type="text" 
-		    label="MOD_ODYSPLAY_FIELD_TRAVEL_IDS_LABEL"
-		    description="MOD_ODYSPLAY_FIELD_TRAVEL_IDS_DESC" />
+	  <fieldset name="basic" addfieldpath="/administrator/components/com_odyssey/models/fields">
+	      <field name="travel_ids" type="travellist"
+		      label="MOD_ODYSPLAY_FIELD_TRAVELS_LABEL"
+		      description="MOD_ODYSPLAY_FIELD_TRAVELS_DESC"
+		      multiple="true" size="5" required="true" >
+	      </field>
 
 	      <field name="ordering" type="list"
 		      default="t.publish_up"
@@ -35,7 +37,8 @@
 		  <option value="t.publish_up DESC">MOD_ODYSPLAY_OPTION_ORDERING_PUBLISHED_DATE_DESC</option>
 		  <option value="t.created ASC">MOD_ODYSPLAY_OPTION_ORDERING_CREATED_DATE_ASC</option>
 		  <option value="t.created DESC">MOD_ODYSPLAY_OPTION_ORDERING_CREATED_DATE_DESC</option>
-		  <option value="ids">MOD_ODYSPLAY_OPTION_ORDERING_ID</option>
+		  <option value="t.name ASC">MOD_ODYSPLAY_OPTION_ORDERING_NAME_ASC</option>
+		  <option value="t.name DESC">MOD_ODYSPLAY_OPTION_ORDERING_NAME_DESC</option>
 		  <option value="rand()">MOD_ODYSPLAY_OPTION_ORDERING_RANDOM</option>
 	      </field>
 

@@ -13,11 +13,8 @@ JLoader::register('PriceruleHelper', JPATH_ROOT.'/components/com_odyssey/helpers
 JLoader::register('OdysseyHelperRoute', JPATH_ROOT.'/components/com_odyssey/helpers/route.php');
 JLoader::register('UtilityHelper', JPATH_ROOT.'/administrator/components/com_odyssey/helpers/utility.php');
 
-//Get the id string.
+//Get the travel ids.
 $travelIds = $params->get('travel_ids');
-$travelIds = preg_replace('#\s#', '', $travelIds);
-//Turn the string of ids into an array.
-$travelIds = explode(';', $travelIds);
 
 $module = JModuleHelper::getModule('odysplay');
 

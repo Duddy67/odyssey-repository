@@ -37,30 +37,10 @@ class ModOdysplayHelper {
 	  ->where('t.published=1')
 	  ->where('(t.publish_up = '.$nullDate.' OR t.publish_up <= '.$nowDate.')')
 	  ->where('(t.publish_down = '.$nullDate.' OR t.publish_down >= '.$nowDate.')')
-	  ->where('t.id IN('.implode(',', $travelIds).')');
-
-	  //Id order is computed in a different way.
-	  if($params->get('ordering') != 'ids') {
-	    $query->order($params->get('ordering'));
-	  }
-
-    $results = $db->setQuery($query)
+	  ->where('t.id IN('.implode(',', $travelIds).')')
+	  ->order($params->get('ordering'));
+    $travels = $db->setQuery($query)
 		  ->loadObjectList();
-
-    $travels = array();
-    if($params->get('ordering') == 'ids') {
-      //Order the travels according to the id order set in the travel_ids field. (ie: 5;2;9).
-      foreach($travelIds as $travelId) {
-	foreach($results as $result) {
-	  if($result->id == $travelId) {
-	    $travels[] = $result;
-	  }
-	}
-      }
-    }
-    else {
-      $travels = $results;
-    }
 
     $catIds = array();
 
