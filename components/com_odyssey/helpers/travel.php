@@ -95,6 +95,7 @@ class TravelHelper
     $settings = $db->loadAssoc();
 
     //Set some required informations.
+    $settings['company'] = $parameters->get('company');
     $settings['rounding_rule'] = $parameters->get('rounding_rule');
     $settings['digits_precision'] = $parameters->get('digits_precision');
     $settings['option_time_limit'] = $parameters->get('option_time_limit');
