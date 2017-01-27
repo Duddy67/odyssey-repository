@@ -527,36 +527,34 @@ class PriceruleHelper
 
     //Price rules have to be merged.
     //Note: The final result is stored in the $travelPrules array.
-    if(!empty($travelPrules) && !empty($travelCatPrules)) {
-      foreach($travelIds as $travelId) {
-	//Travel and travel category price rules are linked to the same travel.
-	if(isset($travelPrules[$travelId]) && isset($travelCatPrules[$travelId])) {
-	  //Merge travel and travel category price rules together.
-	  $catalogPrules = array_merge($travelPrules[$travelId]['prules'], $travelCatPrules[$travelId]['prules']);
-	  //The elements of the merged array must be reorder according to their "ordering" attribute.
-	  //In order to do so we use a simple bubble sort algorithm.
-	  $nbPrules = count($catalogPrules);
-	  for($i = 0; $i < $nbPrules; $i++) {
-	    for($j = 0; $j < $nbPrules - 1; $j++) {
-	      if($catalogPrules[$j]['ordering'] > $catalogPrules[$j + 1]['ordering']) {
-		$temp = $catalogPrules[$j + 1];
-		$catalogPrules[$j + 1] = $catalogPrules[$j];
-		$catalogPrules[$j] = $temp;
-	      }
+    foreach($travelIds as $travelId) {
+      //Travel and travel category price rules are linked to the same travel.
+      if(isset($travelPrules[$travelId]) && isset($travelCatPrules[$travelId])) {
+	//Merge travel and travel category price rules together.
+	$catalogPrules = array_merge($travelPrules[$travelId]['prules'], $travelCatPrules[$travelId]['prules']);
+	//The elements of the merged array must be reorder according to their "ordering" attribute.
+	//In order to do so we use a simple bubble sort algorithm.
+	$nbPrules = count($catalogPrules);
+	for($i = 0; $i < $nbPrules; $i++) {
+	  for($j = 0; $j < $nbPrules - 1; $j++) {
+	    if($catalogPrules[$j]['ordering'] > $catalogPrules[$j + 1]['ordering']) {
+	      $temp = $catalogPrules[$j + 1];
+	      $catalogPrules[$j + 1] = $catalogPrules[$j];
+	      $catalogPrules[$j] = $temp;
 	    }
 	  }
+	}
 
-	  $travelPrules[$travelId]['prules'] = $catalogPrules;
-	}
-	elseif(!isset($travelPrules[$travelId]) && isset($travelCatPrules[$travelId])) {
-	  //Store result in the $travelPrules array.
-	  $travelPrules[$travelId]['prules'] = $travelCatPrules[$travelId]['prules'];
-	}
+	$travelPrules[$travelId]['prules'] = $catalogPrules;
+      }
+      elseif(!isset($travelPrules[$travelId]) && isset($travelCatPrules[$travelId])) {
+	//Store the category price rules in the $travelPrules array.
+	$travelPrules[$travelId]['prules'] = $travelCatPrules[$travelId]['prules'];
       }
     }
 
     //Compute and select the lower price for each travel.
-    $lowerPrice = array();
+    $lowestPrice = array();
     foreach($travelPrules as $travelId => $travelPrule) {
       $delete = false;
       foreach($travelPrule['prules'] as $key => $prule) {
@@ -580,13 +578,13 @@ class PriceruleHelper
 
 	  //Compare and replace (if needed) the modified price in order to end up with 
 	  //the lowest price for this travel.
-	  if(!isset($lowerPrice[$travelId])) {
-	    $lowerPrice[$travelId] = array('normal_price' => $data[2], 'price' => $price);
+	  if(!isset($lowestPrice[$travelId])) {
+	    $lowestPrice[$travelId] = array('normal_price' => $data[2], 'price' => $price);
 	  }
 	  else {
-	    if($price < $lowerPrice[$travelId]['price']) {
-	      $lowerPrice[$travelId]['normal_price'] = $data[2];
-	      $lowerPrice[$travelId]['price'] = $price;
+	    if($price < $lowestPrice[$travelId]['price']) {
+	      $lowestPrice[$travelId]['normal_price'] = $data[2];
+	      $lowestPrice[$travelId]['price'] = $price;
 	    }
 	  }
 	}
@@ -598,11 +596,11 @@ class PriceruleHelper
       }
     }
     //echo '<pre>';
-    //var_dump($lowerPrice);
+    //var_dump($lowestPrice);
     //var_dump($travelPrules);
     //echo '</pre>';
 
-    return $lowerPrice;
+    return $lowestPrice;
   }
 
 
