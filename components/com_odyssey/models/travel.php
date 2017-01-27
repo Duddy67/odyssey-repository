@@ -71,6 +71,7 @@ class OdysseyModelTravel extends JModelItem
   {
     $pk = (!empty($pk)) ? $pk : (int)$this->getState('travel.id');
     $user = JFactory::getUser();
+    $nowDate = $this->getState('now_date');
 
     if($this->_item === null) {
       $this->_item = array();
@@ -83,8 +84,14 @@ class OdysseyModelTravel extends JModelItem
 				     't.subtitle,t.checked_out,t.checked_out_time,t.created,t.created_by,t.access,t.params,t.metadata,'.
 				     't.metakey,t.metadesc,t.hits,t.publish_up,t.publish_down,t.language,t.modified,t.modified_by,'.
 				     't.dpt_step_id,t.show_steps,t.show_grouped_steps,t.departure_number,t.extra_desc_1,'.
-				     't.extra_desc_2,t.extra_desc_3,t.extra_desc_4'))
+				     't.extra_desc_2,t.extra_desc_3,t.extra_desc_4,MIN(tp.price) AS lowest_price'))
 	    ->from($db->quoteName('#__odyssey_travel').' AS t')
+	    //Get the lowest price of this travel for one passenger.
+	    ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id')
+	    ->join('INNER', '#__odyssey_travel_price AS tp ON tp.travel_id=t.id')
+	    //Don't get the old departures of the travel.
+	    ->where('(ds.date_time > '.$db->quote($nowDate).' OR ds.date_time_2 > '.$db->quote($nowDate).')')
+	    ->where('tp.dpt_step_id=t.dpt_step_id AND tp.psgr_nb=1')
 	    ->where('t.id='.$pk);
 
       // Join on category table.
@@ -111,7 +118,6 @@ class OdysseyModelTravel extends JModelItem
       if((!$user->authorise('core.edit.state', 'com_odyssey')) && (!$user->authorise('core.edit', 'com_odyssey'))) {
 	// Filter by start and end dates.
 	$nullDate = $db->quote($db->getNullDate());
-	$nowDate = $this->getState('now_date');
 	$query->where('(t.publish_up = '.$nullDate.' OR t.publish_up <= '.$db->quote($nowDate).')')
 	      ->where('(t.publish_down = '.$nullDate.' OR t.publish_down >= '.$db->quote($nowDate).')');
       }
