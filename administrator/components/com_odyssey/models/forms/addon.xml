@@ -52,8 +52,7 @@
 	<field name="description" type="editor"
 		label="COM_ODYSSEY_FIELD_DESCRIPTION_LABEL"
 		description="COM_ODYSSEY_FIELD_DESCRIPTION_DESC"
-		rows="5" cols="10"
-		default=""></field>
+	       filter="JComponentHelper::filterText" buttons="true" />
 
 	<!-- layout: title_alias -->
 	<field name="name" type="text"

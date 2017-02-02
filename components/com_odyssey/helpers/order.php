@@ -303,6 +303,50 @@ class OrderHelper
   }
 
 
+  public static function createTransaction($travel, $utility, $settings)
+  {
+    //Set the amount value which has been paid.
+    $amount = $travel['final_amount'];
+    if(isset($travel['deposit_amount'])) {
+      $amount = $travel['deposit_amount'];
+    }
+
+    if($travel['booking_option'] == 'remaining') {
+      $amount = $travel['outstanding_balance'];
+    }
+
+    //Set the result of the transaction.
+    $result = 'success';
+    $detail = $utility['payment_details'];
+    if(!$utility['payment_result']) {
+      $result = 'error';
+    }
+
+    //Create the transaction.
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
+    $columns = array('order_id','payment_mode','amount_type','amount','result','detail','transaction_data','created');
+    $values = (int)$travel['order_id'].','.$db->quote($utility['payment_mode']).','.$db->quote($travel['booking_option']).','.  
+              (float)$amount.','.$db->quote($result).','.$db->quote($detail).','.$db->quote($utility['transaction_data']).','.$nowDate;
+
+    $query->insert('#__odyssey_order_transaction')
+	  ->columns($columns)
+	  ->values($values);
+    try {
+      $db->setQuery($query);
+      $db->execute();
+    }
+    catch(RuntimeException $e) {
+      JFactory::getApplication()->enqueueMessage(JText::_($e->getMessage()), 'error');
+      return false;
+    }
+
+    return true;
+  }
+
+
   public static function setPassengers($passengers, $orderId)
   {
     //Get the passenger ini file in which some settings are defined.
