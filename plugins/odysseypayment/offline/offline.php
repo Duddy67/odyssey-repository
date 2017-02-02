@@ -68,8 +68,6 @@ class plgOdysseypaymentOffline extends JPlugin
     //Store the output into the utility array in order to be displayed
     //in the payment view.
     $utility['plugin_output'] = $output;
-    //Everything went ok.
-    $utility['payment_result'] = true;
 
     return $utility;
   }
@@ -79,7 +77,7 @@ class plgOdysseypaymentOffline extends JPlugin
   {
     //Payment results can only be ok with offline payment method since there's
     //no web procedure to pass through.
-    $utility['payment_result'] = true;
+
     //Redirect the customer to the ending step.
     $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
 

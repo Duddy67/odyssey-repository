@@ -66,7 +66,6 @@ class plgOdysseypaymentPaypal extends JPlugin
 	//Redirect the user on the Paypal web site (add the token into url).
 	//Note: Redirection is perform by the setPayment controller function.
 	$utility['redirect_url'] = $paypalServer.'/webscr&cmd=_express-checkout&token='.$paypalParamsArray['TOKEN'];
-	$utility['payment_result'] = true;
 	return $utility;
       }
       else { //Paypal query has failed.
@@ -178,7 +177,6 @@ class plgOdysseypaymentPaypal extends JPlugin
       //in the payment view.
       $utility['plugin_output'] = $output;
 
-      $utility['payment_result'] = true;
       return $utility;
     }
     elseif($utility['paypal_step'] === 'getExpressCheckoutDetails') {
@@ -214,7 +212,6 @@ class plgOdysseypaymentPaypal extends JPlugin
 
 	  //Notify that payment has succeded
 	  $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
-	  $utility['payment_result'] = true;
 	  $utility['payment_details'] = $paypalParamsArray['ACK'];
 	  //Serialize the Paypal data to store it into database.
 	  $utility['transaction_data'] = serialize($paypalParamsArray);
@@ -229,7 +226,7 @@ class plgOdysseypaymentPaypal extends JPlugin
           if($paypalParamsArray['L_ERRORCODE0'] == 11607) {
 	    //Notify that payment has succeded
 	    $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
-	    $utility['payment_result'] = true;
+
 	    return $utility;
 	  }
 
@@ -261,7 +258,7 @@ class plgOdysseypaymentPaypal extends JPlugin
     $utility['plugin_output'] = '';
     $utility['payment_details'] = '';
     $utility['transaction_data'] = '';
-    $utility['payment_result'] = false;
+    $utility['payment_result'] = true;
 
     return $utility;
   }

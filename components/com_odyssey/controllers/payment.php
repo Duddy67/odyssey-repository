@@ -117,7 +117,7 @@ class OdysseyControllerPayment extends JControllerForm
     if(!$session->has('utility', 'odyssey')) {
       //Create indexes which are going to use by the controller. 
       $utility = array('payment_mode'=> '',
-	               'payment_result'=> false,
+	               'payment_result'=> true,
 		       //The plugin must indicate wether it has created a transaction for this order.
 	               'transaction_created'=> false,
 	               'payment_details'=> '',
