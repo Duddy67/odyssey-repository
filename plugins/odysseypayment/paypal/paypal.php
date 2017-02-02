@@ -35,8 +35,8 @@ class plgOdysseypaymentPaypal extends JPlugin
 
     if(!$curl[0]) { //curl failed
       //Display an error message.
-      $utility['error'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_CURL', $curl[1]);
-      $utility['plugin_result'] = false;
+      $utility['payment_details'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_CURL', $curl[1]);
+      $utility['payment_result'] = false;
       return $utility;
     }
     else { //curl succeeded.
@@ -66,14 +66,14 @@ class plgOdysseypaymentPaypal extends JPlugin
 	//Redirect the user on the Paypal web site (add the token into url).
 	//Note: Redirection is perform by the setPayment controller function.
 	$utility['redirect_url'] = $paypalServer.'/webscr&cmd=_express-checkout&token='.$paypalParamsArray['TOKEN'];
-	$utility['plugin_result'] = true;
+	$utility['payment_result'] = true;
 	return $utility;
       }
       else { //Paypal query has failed.
 	//Display the Paypal error message.
-	$utility['error'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_PAYPAL', 
+	$utility['payment_details'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_PAYPAL', 
 	                     $paypalParamsArray['L_SHORTMESSAGE0'], $paypalParamsArray['L_LONGMESSAGE0']);
-	$utility['plugin_result'] = false;
+	$utility['payment_result'] = false;
 	return $utility;
       }		
     }
@@ -100,8 +100,8 @@ class plgOdysseypaymentPaypal extends JPlugin
       //Check the token previously created against the one just passed by Paypal.
       if($token !== $utility['paypal_token']) {
 	//Display the Paypal error message.
-	$utility['error'] = JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_TOKEN'); 
-	$utility['plugin_result'] = false;
+	$utility['payment_details'] = JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_TOKEN'); 
+	$utility['payment_result'] = false;
 	return $utility;
       }
 
@@ -117,8 +117,8 @@ class plgOdysseypaymentPaypal extends JPlugin
 
       if(!$curl[0]) { //curl failed
 	//Display an error message.
-	$utility['error'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_CURL', $curl[1]);
-	$utility['plugin_result'] = false;
+	$utility['payment_details'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_CURL', $curl[1]);
+	$utility['payment_result'] = false;
 	return $utility;
       }
       else { //curl succeeded.
@@ -129,13 +129,13 @@ class plgOdysseypaymentPaypal extends JPlugin
 	if($paypalParamsArray['ACK'] === 'Success') {
 	  //Store the paypal params array as we gonna use it later (for payerID
 	  //variable).
-	  $utility['payment_details'] = $paypalParamsArray;
+	  $utility['transaction_data'] = $paypalParamsArray;
 	}
 	else { //Paypal query has failed.
 	  //Display the Paypal error message.
-	  $utility['error'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_PAYPAL', 
+	  $utility['payment_details'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_PAYPAL', 
 			       $paypalParamsArray['L_SHORTMESSAGE0'], $paypalParamsArray['L_LONGMESSAGE0']);
-	  $utility['plugin_result'] = false;
+	  $utility['payment_result'] = false;
 	  return $utility;
 	}		
       }
@@ -178,7 +178,7 @@ class plgOdysseypaymentPaypal extends JPlugin
       //in the payment view.
       $utility['plugin_output'] = $output;
 
-      $utility['plugin_result'] = true;
+      $utility['payment_result'] = true;
       return $utility;
     }
     elseif($utility['paypal_step'] === 'getExpressCheckoutDetails') {
@@ -198,8 +198,8 @@ class plgOdysseypaymentPaypal extends JPlugin
 
       if(!$curl[0]) { //curl failed
 	//Display an error message.
-	$utility['error'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_CURL', $curl[1]);
-	$utility['plugin_result'] = false;
+	$utility['payment_details'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_CURL', $curl[1]);
+	$utility['payment_result'] = false;
 	return $utility;
       }
       else { //curl succeeded.
@@ -214,9 +214,10 @@ class plgOdysseypaymentPaypal extends JPlugin
 
 	  //Notify that payment has succeded
 	  $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
-	  $utility['plugin_result'] = true;
+	  $utility['payment_result'] = true;
+	  $utility['payment_details'] = $paypalParamsArray['ACK'];
 	  //Serialize the Paypal data to store it into database.
-	  $utility['payment_details'] = serialize($paypalParamsArray);
+	  $utility['transaction_data'] = serialize($paypalParamsArray);
 	  return $utility;
 	}
 	else { //Paypal query has failed.
@@ -228,22 +229,22 @@ class plgOdysseypaymentPaypal extends JPlugin
           if($paypalParamsArray['L_ERRORCODE0'] == 11607) {
 	    //Notify that payment has succeded
 	    $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
-	    $utility['plugin_result'] = true;
+	    $utility['payment_result'] = true;
 	    return $utility;
 	  }
 
 	  //Display the Paypal error message.
-	  $utility['error'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_PAYPAL', 
+	  $utility['payment_details'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_PAYPAL', 
 			       $paypalParamsArray['L_SHORTMESSAGE0'], $paypalParamsArray['L_LONGMESSAGE0']);
-	  $utility['plugin_result'] = false;
+	  $utility['payment_result'] = false;
 	  return $utility;
 	}		
       }
     }
     else { //Something odd happened.
       //Display an error message.
-      $utility['error'] = JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_NO_STEP');
-      $utility['plugin_result'] = false;
+      $utility['payment_details'] = JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_NO_STEP');
+      $utility['payment_result'] = false;
       return $utility;
     }
   }
@@ -258,8 +259,9 @@ class plgOdysseypaymentPaypal extends JPlugin
     //then empty the generic variables.
     $utility['redirect_url'] = '';
     $utility['plugin_output'] = '';
-    $utility['error'] = '';
-    $utility['plugin_result'] = false;
+    $utility['payment_details'] = '';
+    $utility['transaction_data'] = '';
+    $utility['payment_result'] = false;
 
     return $utility;
   }
@@ -384,7 +386,7 @@ class plgOdysseypaymentPaypal extends JPlugin
     $query .= $this->buildPaypalDetailOrder($travel, $addons, $settings);
 
     $query .= '&PAYMENTREQUEST_0_CURRENCYCODE='.$currencyCode.
-	      '&PayerID='.$utility['payment_details']['PAYERID']. //Add payment id sent back by Paypal.
+	      '&PayerID='.$utility['transaction_data']['PAYERID']. //Add payment id sent back by Paypal.
 	      '&PAYMENTREQUEST_0_PAYMENTACTION=Sale'; //Indicate a final sale.
 
     return $query;

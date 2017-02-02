@@ -568,6 +568,7 @@ CREATE TABLE `#__odyssey_order_transaction` (
   `amount` DECIMAL(14,5) NOT NULL,
   `result` CHAR(15) NOT NULL ,
   `detail` TEXT NULL,
+  `transaction_data` MEDIUMTEXT NULL,
   `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' , -- in case of multiple transactions
   INDEX `idx_order_id` (`order_id` ASC) ) 
 ENGINE = MyISAM DEFAULT CHARSET=utf8;

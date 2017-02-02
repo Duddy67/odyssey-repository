@@ -35,15 +35,11 @@ class OdysseyControllerEnd extends JControllerForm
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
 
-      //Create the order number.
-      $Ymd = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->format('Y-m-d');
-      $orderNb = $travel['order_id'].'-'.$Ymd;
-
-      $fields = array('order_nb="'.$orderNb.'"', 'admin_locked=0','published=1');
+      $fields = array('admin_locked=0','published=1');
       $emailType = 'payment_error';
 
       //Set order statusses and the outstanding balance according to the payment result.
-      if($utility['plugin_result']) {
+      if($utility['payment_result']) {
 	if($travel['booking_option'] == 'deposit') {
 	  $fields[] = 'payment_status="deposit"';
 	  //Compute the outstanding balance.
@@ -77,7 +73,10 @@ class OdysseyControllerEnd extends JControllerForm
       $db->setQuery($query);
       $db->execute();
 
-      $this->createTransaction($travel, $utility, $settings); 
+      //Check wether a transaction has to be created.
+      if(!$utility['transaction_created']) {
+	$this->createTransaction($travel, $utility, $settings); 
+      }
 
       $this->setAllotment($travel);
 
@@ -110,7 +109,7 @@ class OdysseyControllerEnd extends JControllerForm
     $query = $db->getQuery(true);
 
     //Just make the order available in the backend.
-    $fields = array('order_nb='.$db->quote($travel['order_id']), 'admin_locked=0', 'published=1', 'limit_date='.$db->quote($limitDate));
+    $fields = array('admin_locked=0', 'published=1', 'limit_date='.$db->quote($limitDate));
 
     $query->update('#__odyssey_order')
 	  ->set($fields)
@@ -151,9 +150,8 @@ class OdysseyControllerEnd extends JControllerForm
     //Set the result of the transaction.
     $result = 'success';
     $detail = $utility['payment_details'];
-    if(!$utility['plugin_result']) {
+    if(!$utility['payment_result']) {
       $result = 'error';
-      $detail = $utility['error'];
     }
 
     //Create the transaction.
@@ -161,9 +159,9 @@ class OdysseyControllerEnd extends JControllerForm
     $query = $db->getQuery(true);
 
     $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
-    $columns = array('order_id','payment_mode','amount_type','amount','result','detail','created');
+    $columns = array('order_id','payment_mode','amount_type','amount','result','detail','transaction_data','created');
     $values = (int)$travel['order_id'].','.$db->quote($utility['payment_mode']).','.$db->quote($travel['booking_option']).','.  
-              (float)$amount.','.$db->quote($result).','.$db->quote($detail).','.$nowDate;
+              (float)$amount.','.$db->quote($result).','.$db->quote($detail).','.$db->quote($utility['transaction_data']).','.$nowDate;
 
     $query->insert('#__odyssey_order_transaction')
 	  ->columns($columns)

@@ -33,13 +33,13 @@ class plgOdysseypaymentOffline extends JPlugin
     //Check for errors.
     if($db->getErrorNum() || is_null($offlinePayment)) {
       if($db->getErrorNum()) {
-	$utility['error'] = $db->getErrorMsg();
+	$utility['payment_details'] = $db->getErrorMsg();
       }
       else {
-	$utility['error'] = JText::_('COM_ODYSSEY_ERROR');
+	$utility['payment_details'] = JText::_('COM_ODYSSEY_ERROR');
       }
 
-      $utility['plugin_result'] = false;
+      $utility['payment_result'] = false;
 
       return $utility;
     }
@@ -69,7 +69,7 @@ class plgOdysseypaymentOffline extends JPlugin
     //in the payment view.
     $utility['plugin_output'] = $output;
     //Everything went ok.
-    $utility['plugin_result'] = true;
+    $utility['payment_result'] = true;
 
     return $utility;
   }
@@ -79,7 +79,7 @@ class plgOdysseypaymentOffline extends JPlugin
   {
     //Payment results can only be ok with offline payment method since there's
     //no web procedure to pass through.
-    $utility['plugin_result'] = true;
+    $utility['payment_result'] = true;
     //Redirect the customer to the ending step.
     $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
 

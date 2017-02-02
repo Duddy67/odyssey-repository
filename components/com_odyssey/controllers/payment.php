@@ -59,8 +59,20 @@ class OdysseyControllerPayment extends JControllerForm
 	OrderHelper::storePriceRules($addons, $orderId, 'addon');
 	OrderHelper::setPassengers($passengers, $orderId);
 
-	//Save the order id.
+	//Store the id of the newly created order.
 	$travel['order_id'] = $orderId;
+
+	//Create the order number.
+	$Ymd = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->format('Y-m-d');
+	$orderNb = $orderId.'-'.$Ymd;
+
+	$db = JFactory::getDbo();
+	$query = $db->getQuery(true);
+	$query->update('#__odyssey_order')
+	      ->set('order_nb='.$db->Quote($orderNb))
+	      ->where('id='.(int)$orderId);
+	$db->setQuery($query);
+	$db->execute();
       }
 
       $session->set('travel', $travel, 'odyssey');
@@ -105,12 +117,16 @@ class OdysseyControllerPayment extends JControllerForm
     if(!$session->has('utility', 'odyssey')) {
       //Create indexes which are going to use by the controller. 
       $utility = array('payment_mode'=> '',
-	               'plugin_result'=> false,
+	               'payment_result'=> false,
+		       //The plugin must indicate wether it has created a transaction for this order.
+	               'transaction_created'=> false,
 	               'payment_details'=> '',
+	               'transaction_data'=> '',
 	               'redirect_url'=> '',
-	               'plugin_output'=> '',     //Html code to display in the payment view.
-	               'offline_id'=> 0,         //Only used with Odyssey offline plugin.
-		       'error'=>'');
+			//Html code to display in the payment view.
+	               'plugin_output'=> '',     
+			//Only used with Odyssey offline plugin.
+	               'offline_id'=> 0);
       $session->set('utility', $utility, 'odyssey');
     }
 
@@ -152,7 +168,7 @@ class OdysseyControllerPayment extends JControllerForm
     //Store the utility array modified by the plugin in the session.
     $session->set('utility', $results[0], 'odyssey');
 
-    if(!$results[0]['plugin_result']) { //An error has occured.
+    if(!$results[0]['payment_result']) { //An error has occured.
       //Retrieve and display the error message set by the plugin.
       $message = $results[0]['error'];
       $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=payment', false), $message, 'error');
@@ -191,7 +207,7 @@ class OdysseyControllerPayment extends JControllerForm
     //Store the utility array modified by the plugin in the session.
     $session->set('utility', $results[0], 'odyssey');
 
-    if(!$results[0]['plugin_result']) { //An error has occured.
+    if(!$results[0]['payment_result']) { //An error has occured.
       //Retrieve and display the error message set by the plugin.
       $message = $results[0]['error'];
       $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=payment', false), $message, 'error');
@@ -227,7 +243,7 @@ class OdysseyControllerPayment extends JControllerForm
     //Store the utility array modified by the plugin in the session.
     $session->set('utility', $results[0], 'odyssey');
 
-    if(!$results[0]['plugin_result']) { //An error has occured.
+    if(!$results[0]['payment_result']) { //An error has occured.
       //Retrieve and display the error message set by the plugin.
       $message = $results[0]['error'];
       $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=payment', false), $message, 'error');
