@@ -241,7 +241,7 @@ class OdysseyControllerPayment extends JControllerForm
 
     //Store the utility array modified by the plugin in the session.
     $session->set('utility', $results[0], 'odyssey');
-file_put_contents('debog_payment.txt', print_r($results, true));
+//file_put_contents('debog_payment.txt', print_r($results, true));
 
     if(!$results[0]['payment_result']) { //An error has occured.
       //Retrieve and display the error message set by the plugin.
