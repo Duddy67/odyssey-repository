@@ -49,16 +49,14 @@ class plgOdysseypaymentOffline extends JPlugin
 
     //Create the form corresponding to the selected offline payment mode.
 
-    $output = '<form
-      action="index.php?option=com_odyssey&task=payment.response&payment=offline" '.
+    $output = '<form action="index.php?option=com_odyssey&task=payment.response&payment=offline" '.
 	       'method="post" id="payment_modes" >';
     $output .= '<div class="offline-payment">';
     $output .= '<h1>'.$offlinePayment->name.'</h1>';
     $output .= $offlinePayment->information;
     $output .= '<div id="action-buttons">';
     $output .= '<span class="btn">'.
-               '<a href="index.php?option=com_odyssey&view=payment&task=payment.cancel&payment=offline" onclick="hideButton(\'action-buttons\')">'.
-                        JText::_('COM_ODYSSEY_CANCEL').'</a></span>';
+               '<a href="index.php?option=com_odyssey&view=payment&task=payment.cancelPayment&payment=offline" onclick="hideButton(\'action-buttons\')">'.JText::_('COM_ODYSSEY_CANCEL').'</a></span>';
     $output .= '<span class="button-separation">&nbsp;</span>';
     $output .= '<input id="submit-button" class="btn btn-success" onclick="hideButton(\'action-buttons\')" type="submit" value="'.JText::_('COM_ODYSSEY_VALIDATE').'" />';
     $output .= '</div>';
@@ -75,8 +73,8 @@ class plgOdysseypaymentOffline extends JPlugin
 
   public function onOdysseyPaymentOfflineResponse($travel, $addons, $settings, $utility)
   {
-    //Payment results can only be ok with offline payment method since there's
-    //no web procedure to pass through.
+    //Note: Payment results can only be ok with offline payment method since there's
+    //      no web procedure to pass through.
 
     //Redirect the customer to the ending step.
     $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
@@ -90,14 +88,11 @@ class plgOdysseypaymentOffline extends JPlugin
     //Grab the user session.
     $session = JFactory::getSession();
     $utility = $session->get('utility', array(), 'odyssey'); 
-    //Empty the output variable which make the view to display the
-    //payment modes. 
+    //Empty the output variable which make the view to display the payment modes. 
     $utility['plugin_output'] = '';
     $session->set('utility', $utility, 'odyssey');
 
-    $app = JFactory::getApplication();
-    $app->redirect(JRoute::_('index.php?option=com_odyssey&view=payment', false));
-    return true;
+    return $utility;
   }
 
 

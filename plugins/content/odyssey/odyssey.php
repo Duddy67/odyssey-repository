@@ -881,6 +881,12 @@ class plgContentOdyssey extends JPlugin
       $db->execute();
 
       $query->clear();
+      $query->delete('#__odyssey_order_pricerule')
+	    ->where('order_id='.(int)$data->id);
+      $db->setQuery($query);
+      $db->execute();
+
+      $query->clear();
       $query->delete('#__odyssey_order_travel')
 	    ->where('order_id='.(int)$data->id);
       $db->setQuery($query);

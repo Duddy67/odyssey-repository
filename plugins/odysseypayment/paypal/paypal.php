@@ -66,6 +66,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 	//Redirect the user on the Paypal web site (add the token into url).
 	//Note: Redirection is perform by the setPayment controller function.
 	$utility['redirect_url'] = $paypalServer.'/webscr&cmd=_express-checkout&token='.$paypalParamsArray['TOKEN'];
+
 	return $utility;
       }
       else { //Paypal query has failed.
@@ -73,6 +74,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 	$utility['payment_details'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_PAYPAL', 
 	                     $paypalParamsArray['L_SHORTMESSAGE0'], $paypalParamsArray['L_LONGMESSAGE0']);
 	$utility['payment_result'] = false;
+
 	return $utility;
       }		
     }
@@ -164,8 +166,7 @@ class plgOdysseypaymentPaypal extends JPlugin
       $output .= $paypalPayment->information;
       $output .= '<div id="action-buttons">';
       $output .= '<span class="button">'.
-		 '<a href="index.php?option=com_odyssey&view=payment&task=payment.cancel&payment=paypal" onclick="hideButton(\'action-buttons\')">'.
-			  JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_CANCEL').'</a></span>';
+		 '<a href="index.php?option=com_odyssey&view=payment&task=payment.cancelPayment&payment=paypal" onclick="hideButton(\'action-buttons\')">'.JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_CANCEL').'</a></span>';
       $output .= '<span class="button-separation">&nbsp;</span>';
       $output .= '<input id="submit-button" type="submit" onclick="hideButton(\'action-buttons\')" value="'
 	          .JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_VALIDATE').'" />';
@@ -249,7 +250,6 @@ class plgOdysseypaymentPaypal extends JPlugin
 
   public function onOdysseyPaymentPaypalCancel($utility)
   {
-
     //Remove the specific variables
     unset($utility['paypal_token']);
     unset($utility['paypal_step']);
@@ -258,7 +258,6 @@ class plgOdysseypaymentPaypal extends JPlugin
     $utility['plugin_output'] = '';
     $utility['payment_details'] = '';
     $utility['transaction_data'] = '';
-    $utility['payment_result'] = true;
 
     return $utility;
   }

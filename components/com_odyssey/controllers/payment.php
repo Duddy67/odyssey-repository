@@ -235,17 +235,17 @@ class OdysseyControllerPayment extends JControllerForm
 
     $payment = $this->input->get->get('payment', '', 'string');
     $event = 'onOdysseyPayment'.ucfirst($payment).'Cancel';
-
     JPluginHelper::importPlugin('odysseypayment');
     $dispatcher = JDispatcher::getInstance();
     $results = $dispatcher->trigger($event, array(&$utility));
 
     //Store the utility array modified by the plugin in the session.
     $session->set('utility', $results[0], 'odyssey');
+file_put_contents('debog_payment.txt', print_r($results, true));
 
     if(!$results[0]['payment_result']) { //An error has occured.
       //Retrieve and display the error message set by the plugin.
-      $message = $results[0]['error'];
+      $message = $results[0]['payment_details'];
       $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=payment', false), $message, 'error');
       return false;
     }
