@@ -157,9 +157,18 @@ class plgOdysseypaymentPaypal extends JPlugin
       //Set the name of the step we are now taking.
       $utility['paypal_step'] = 'getExpressCheckoutDetails';
 
+      $amountToPay = $travel['final_amount'];
+      if($travel['booking_option'] == 'deposit') {
+	$amountToPay = $travel['deposit_amount'];
+      }
+      elseif($travel['booking_option'] == 'remaining') {
+	$amountToPay = $travel['outstanding_balance'];
+      }
+
       //Now we ask the user to proceed with the final transaction by pressing the
       //form button, (Note: payment can still be cancelled).
-      $output = '<form action="index.php?option=com_odyssey&view=payment&task=payment.response&payment=paypal" '.
+      $output = '<div class="payment-message">'.JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_VALIDATION_MESSAGE', UtilityHelper::formatNumber($amountToPay), $settings['currency']).'</div>';
+      $output .= '<form action="index.php?option=com_odyssey&view=payment&task=payment.response&payment=paypal" '.
 		 'method="post" id="payment_modes">';
       $output .= '<div class="paypal-payment">';
       $output .= '<h1>'.$paypalPayment->name.'</h1>';
@@ -168,7 +177,7 @@ class plgOdysseypaymentPaypal extends JPlugin
       $output .= '<span class="button">'.
 		 '<a href="index.php?option=com_odyssey&view=payment&task=payment.cancelPayment&payment=paypal" onclick="hideButton(\'action-buttons\')">'.JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_CANCEL').'</a></span>';
       $output .= '<span class="button-separation">&nbsp;</span>';
-      $output .= '<input id="submit-button" type="submit" onclick="hideButton(\'action-buttons\')" value="'
+      $output .= '<input id="submit-button" class="btn btn-success" type="submit" onclick="hideButton(\'action-buttons\')" value="'
 	          .JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_VALIDATE').'" />';
       $output .= '</div>';
       $output .= '</div>';
@@ -497,7 +506,8 @@ class plgOdysseypaymentPaypal extends JPlugin
 
     //Display the final amount.
     $detailOrder .= '&PAYMENTREQUEST_0_AMT='.UtilityHelper::formatNumber($finalAmount);
-file_put_contents('debog_paypal.txt', print_r($detailOrder, true));
+
+//file_put_contents('debog_paypal.txt', print_r($detailOrder, true));
     return $detailOrder;
   }
 

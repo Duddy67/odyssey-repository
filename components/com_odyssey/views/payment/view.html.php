@@ -31,7 +31,6 @@ class OdysseyViewPayment extends JViewLegacy
     //Include css and Javascript files.
     $doc = JFactory::getDocument();
     $doc->addStyleSheet(JURI::base().'components/com_odyssey/css/odyssey.css');
-    $doc->addScript(JURI::base().'components/com_odyssey/js/utility.js');
   }
 }
 

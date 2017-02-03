@@ -48,7 +48,6 @@ class plgOdysseypaymentOffline extends JPlugin
     $utility['payment_details'] = $offlinePayment->name;
 
     //Create the form corresponding to the selected offline payment mode.
-
     $output = '<form action="index.php?option=com_odyssey&task=payment.response&payment=offline" '.
 	       'method="post" id="payment_modes" >';
     $output .= '<div class="offline-payment">';
