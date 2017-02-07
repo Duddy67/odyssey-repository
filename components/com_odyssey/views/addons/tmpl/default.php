@@ -105,7 +105,8 @@ $settings = $session->get('settings', array(), 'odyssey');
     if($addon['group_nb'] == 'none') {
       //Display information and price.
       echo '<div class="addon">'.
-	   '<h2 class="addon-title">'.$this->escape($addon['name']).'</h2>'.$addon['description'];
+	   '<h2 class="addon-title">'.$this->escape($addon['name']).'</h2>'.
+	   '<div class="addon-description">'.$addon['description'].'</div>';
 
       if($addon['price'] > 0) {
 	//Check for price rules.
@@ -154,7 +155,8 @@ $settings = $session->get('settings', array(), 'odyssey');
 
       //Display information and price.
       echo '<div class="addon">'.
-	   '<h2 class="addon-title">'.$this->escape($addon['name']).'</h2>'.$addon['description'];
+	   '<h2 class="addon-title">'.$this->escape($addon['name']).'</h2>'.
+	   '<div class="addon-description">'.$addon['description'].'</div>';
 
       if($addon['price'] > 0) {
 	//Check for price rules.
