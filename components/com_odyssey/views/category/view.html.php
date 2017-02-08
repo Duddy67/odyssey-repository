@@ -70,8 +70,8 @@ class OdysseyViewCategory extends JViewCategory
     // Prepare the data
     // Get the metrics for the structural page layout.
     $params     = $this->params;
-    $numLeading = $params->def('num_leading_articles', 1);
-    $numIntro   = $params->def('num_intro_articles', 4);
+    $numLeading = $params->def('num_leading_travels', 1);
+    $numIntro   = $params->def('num_intro_travels', 4);
     $numLinks   = $params->def('num_links', 4);
 
     //Get the user object and the current url, (needed in the travel edit layout).

@@ -41,7 +41,9 @@ $nowDate = $this->state->get('now_date');
     <?php endif; ?>
   <?php endif; ?>
 
-  <?php echo $this->item->intro_text; ?>
+  <?php if($params->get('show_intro')) : ?>
+    <?php echo $this->item->intro_text; ?>
+  <?php endif; ?>
 
   <?php if($params->get('show_tags') && !empty($this->item->tags->itemTags)) : ?>
 	  <?php $this->item->tagLayout = new JLayoutFile('joomla.content.tags'); ?>
