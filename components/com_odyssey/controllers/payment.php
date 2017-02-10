@@ -197,7 +197,7 @@ class OdysseyControllerPayment extends JControllerForm
     $settings = $session->get('settings', array(), 'odyssey'); 
     $utility = $session->get('utility', array(), 'odyssey'); 
 
-    $payment = $this->input->get->get('payment', '', 'string');
+    $payment = $this->input->get('payment', '', 'string');
     $event = 'onOdysseyPayment'.ucfirst($payment).'Response';
 
     JPluginHelper::importPlugin('odysseypayment');
