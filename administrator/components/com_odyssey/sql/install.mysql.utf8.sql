@@ -594,6 +594,21 @@ ENGINE = MyISAM DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
+-- Table `#__odyssey_tmp_data
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `#__odyssey_tmp_data`;
+CREATE TABLE `#__odyssey_tmp_data` (
+  `order_id` INT UNSIGNED NOT NULL ,
+  `travel` MEDIUMTEXT NOT NULL ,
+  `addons` MEDIUMTEXT NOT NULL ,
+  `settings` MEDIUMTEXT NOT NULL ,
+  `utility` MEDIUMTEXT NOT NULL ,
+  `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
+  INDEX `idx_order_id` (`order_id` ASC) )
+ENGINE = MyISAM DEFAULT CHARSET=utf8;
+
+
+-- -----------------------------------------------------
 -- Table `#__odyssey_city` 
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `#__odyssey_city`;

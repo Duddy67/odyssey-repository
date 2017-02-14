@@ -10,6 +10,7 @@
 defined('_JEXEC') or die('Restricted access');
 // Import the JPlugin class
 jimport('joomla.plugin.plugin');
+require_once JPATH_ROOT.'/components/com_odyssey/helpers/order.php';
 
 
 
@@ -213,6 +214,8 @@ class plgOdysseypaymentPaypal extends JPlugin
       else { //curl succeeded.
 	//Retrieve all the Paypal result into an array.
 	$paypalParamsArray = $this->buildPaypalParamsArray($curl[1]); 
+	//Serialize the Paypal data to store it into database.
+	$utility['transaction_data'] = serialize($paypalParamsArray);
 
 	//Paypal query has succeeded
 	if($paypalParamsArray['ACK'] === 'Success') {
@@ -223,9 +226,8 @@ class plgOdysseypaymentPaypal extends JPlugin
 	  //Notify that payment has succeded
 	  $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
 	  $utility['payment_details'] = $paypalParamsArray['ACK'];
-	  //Serialize the Paypal data to store it into database.
-	  $utility['transaction_data'] = serialize($paypalParamsArray);
-	  return $utility;
+
+	  OrderHelper::createTransaction($travel, $utility, $settings); 
 	}
 	else { //Paypal query has failed.
 	  //Before going further we check the Paypal error code. 
@@ -236,16 +238,17 @@ class plgOdysseypaymentPaypal extends JPlugin
           if($paypalParamsArray['L_ERRORCODE0'] == 11607) {
 	    //Notify that payment has succeded
 	    $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
-
-	    return $utility;
 	  }
 
 	  //Display the Paypal error message.
 	  $utility['payment_details'] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_ERROR_PAYPAL', 
 			       $paypalParamsArray['L_SHORTMESSAGE0'], $paypalParamsArray['L_LONGMESSAGE0']);
 	  $utility['payment_result'] = false;
-	  return $utility;
+
+	  OrderHelper::createTransaction($travel, $utility, $settings); 
 	}		
+
+	return $utility;
       }
     }
     else { //Something odd happened.

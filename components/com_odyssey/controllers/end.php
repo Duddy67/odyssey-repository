@@ -33,6 +33,13 @@ class OdysseyControllerEnd extends JControllerForm
       $travel = $session->get('travel', array(), 'odyssey'); 
       $addons = $session->get('addons', array(), 'odyssey'); 
 
+      if($utility['use_tmp_data']) {
+	$data = OrderHelper::getTemporaryData($travel['order_id']);
+	$utility = $data['utility'];
+      }
+
+      OrderHelper::deleteTemporaryData();
+
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
 
@@ -73,11 +80,6 @@ class OdysseyControllerEnd extends JControllerForm
 	    ->where('id='.(int)$travel['order_id']);
       $db->setQuery($query);
       $db->execute();
-
-      //Check wether a transaction has to be created.
-      if(!$utility['transaction_created']) {
-	OrderHelper::createTransaction($travel, $utility, $settings); 
-      }
 
       $this->setAllotment($travel);
 

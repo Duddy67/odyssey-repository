@@ -10,6 +10,7 @@
 defined('_JEXEC') or die('Restricted access');
 // Import the JPlugin class
 jimport('joomla.plugin.plugin');
+require_once JPATH_ROOT.'/components/com_odyssey/helpers/order.php';
 
 
 
@@ -74,6 +75,8 @@ class plgOdysseypaymentOffline extends JPlugin
   {
     //Note: Payment results can only be ok with offline payment method since there's
     //      no web procedure to pass through.
+
+    OrderHelper::createTransaction($travel, $utility, $settings); 
 
     //Redirect the customer to the ending step.
     $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);

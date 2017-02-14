@@ -116,18 +116,21 @@ class OdysseyControllerPayment extends JControllerForm
     //or create if necessary any needed variable.
     if(!$session->has('utility', 'odyssey')) {
       //Create indexes which are going to use by the controller. 
-      $utility = array('payment_mode'=> '',
-	               'payment_result'=> true,
-		       //The plugin must indicate wether it has created a transaction for this order.
-	               'transaction_created'=> false,
-	               'payment_details'=> '',
-	               'transaction_data'=> '',
-	               'redirect_url'=> '',
+      $utility = array('payment_mode' => '',
+	               'payment_result' => true,
+		       //
+	               'reply_and_exit' => '',
+	               'payment_details' => '',
+	               'transaction_data' => '',
+	               'redirect_url' => '',
+	               'use_tmp_data' => false,
 			//Html code to display in the payment view.
-	               'plugin_output'=> '',     
+	               'plugin_output' => '',     
 			//Only used with Odyssey offline plugin.
-	               'offline_id'=> 0);
+	               'offline_id' => 0);
       $session->set('utility', $utility, 'odyssey');
+      //
+      $this->createTemporaryData();
     }
 
     //Get all of the POST data.
@@ -197,15 +200,39 @@ class OdysseyControllerPayment extends JControllerForm
     $settings = $session->get('settings', array(), 'odyssey'); 
     $utility = $session->get('utility', array(), 'odyssey'); 
 
+    $validSession = true;
     $payment = $this->input->get('payment', '', 'string');
     $event = 'onOdysseyPayment'.ucfirst($payment).'Response';
+
+    if(empty($travel)) {
+      $validSession = false;
+      $orderId = $this->getOrderIdFromBankData($payment);
+      $data = OrderHelper::getTemporaryData($orderId);
+      $travel = $data['travel']; 
+      $addons = $data['addons']; 
+      $settings = $data['settings']; 
+      $utility = $data['utility']; 
+    }
 
     JPluginHelper::importPlugin('odysseypayment');
     $dispatcher = JDispatcher::getInstance();
     $results = $dispatcher->trigger($event, array($travel, $addons, $settings, &$utility));
 
-    //Store the utility array modified by the plugin in the session.
-    $session->set('utility', $results[0], 'odyssey');
+    $this->updateUtility($orderId, $results[0]);
+
+    if($validSession) {
+      //Store the utility array modified by the plugin in the session.
+      $session->set('utility', $results[0], 'odyssey');
+    }
+
+    if(!empty($results[0]['reply_and_exit'])) { 
+      $reply = $results[0]['reply_and_exit'];
+      $results[0]['reply_and_exit'] = '';
+      $this->updateUtility($orderId, $results[0]);
+
+      echo $reply;
+      exit;
+    }
 
     if(!$results[0]['payment_result']) { //An error has occured.
       //Retrieve and display the error message set by the plugin.
@@ -297,6 +324,68 @@ class OdysseyControllerPayment extends JControllerForm
     }
 
     return $amounts;
+  }
+
+
+  protected function createTemporaryData()
+  {
+    //Grab the user session.
+    $session = JFactory::getSession();
+    $travel = $session->get('travel', array(), 'odyssey'); 
+    $addons = $session->get('addons', array(), 'odyssey'); 
+    $settings = $session->get('settings', array(), 'odyssey'); 
+    $utility = $session->get('utility', array(), 'odyssey'); 
+
+    //Remove possible duplicate due to a cancelling. 
+    OrderHelper::deleteTemporaryData();
+
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    $now = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+
+    $columns = array('order_id', 'travel', 'addons', 'settings', 'utility', 'created');
+    $values = (int)$travel['order_id'].','.$db->quote(serialize($travel)).','.$db->quote(serialize($addons)).
+              ','.$db->quote(serialize($settings)).','.$db->quote(serialize($utility)).','.$db->quote($now);
+
+    $query->insert('#__odyssey_tmp_data')
+	  ->columns($columns)
+	  ->values($values);
+    try {
+      $db->setQuery($query);
+      $db->execute();
+    }
+    catch(RuntimeException $e) {
+      JFactory::getApplication()->enqueueMessage(JText::_($e->getMessage()), 'error');
+      return 0;
+    }
+
+  }
+
+
+  protected function updateUtility($orderId, $utility)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->update('#__odyssey_tmp_data')
+	  ->set('utility='.$db->Quote(serialize($utility)))
+	  ->where('order_id='.(int)$orderId);
+    $db->setQuery($query);
+    $db->execute();
+  }
+
+
+  private function getOrderIdFromBankData($payment)
+  {
+    //Get data sent by the bank platform through GET or POST.
+    $data = $this->input->getArray();
+    $orderId = 0;
+
+    if(preg_match('#^monetico#i', $payment)) {
+      $orderId = $data['reference'];
+    }
+
+    return $orderId;
   }
 }
 
