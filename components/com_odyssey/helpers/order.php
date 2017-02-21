@@ -526,33 +526,36 @@ class OrderHelper
   }
 
 
-  public static function deleteTemporaryData()
+  public static function deleteTemporaryData($orderId)
   {
-    //Grab the user session.
-    $session = JFactory::getSession();
-    $travel = $session->get('travel', array(), 'odyssey'); 
-
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
     $query->delete('#__odyssey_tmp_data')
-	  ->where('order_id='.(int)$travel['order_id']);
+          ->where('order_id='.(int)$orderId);
     $db->setQuery($query);
     $db->execute();
   }
 
 
-  public static function getTemporaryData($orderId)
+  public static function getTemporaryData($orderId, $utility = false)
   {
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
     $query->select('travel, addons, settings, utility')
           ->from('#__odyssey_tmp_data')
-          ->where('order_id='.(int)$orderId)
-          ->where('user_id='.(int)$userId);
+          ->where('order_id='.(int)$orderId);
     $db->setQuery($query);
     $result = $db->loadObject();
+
+    if(is_null($result)) {
+      return $result;
+    }
+
+    if($utility) {
+      return unserialize($result->utility);
+    }
 
     $data = array();
     $data['travel'] = unserialize($result->travel);
@@ -563,4 +566,5 @@ class OrderHelper
     return $data;
   }
 }
+
 

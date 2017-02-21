@@ -73,6 +73,7 @@ class OdysseyViewOrder extends JViewLegacy
     //Check if there is any amount left to pay.
     if(!$this->outOfDate && ($this->item->outstanding_balance > 0 &&
 			     ($this->item->payment_status == 'pending' ||
+			      $this->item->payment_status == 'error' ||
 			      $this->item->payment_status == 'deposit'))) {
       $this->remainingPayment = true;
       //Must be called only once.

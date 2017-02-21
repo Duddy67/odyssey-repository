@@ -110,7 +110,7 @@ class plgOdysseypaymentPaypal extends JPlugin
       //Get the first part of the query where all the basic parameters are set.
       $paypalQuery = $this->getPaypalQuery();
       //Get the GetExpressCheckoutDetails query.
-      $getExpressCheckoutDetails = $this->getExpressCheckoutDetails();
+      $getExpressCheckoutDetails = $this->getExpressCheckoutDetails($utility);
       //Concatenate the 2 parts to get the complete query.
       $paypalQuery = $paypalQuery.$getExpressCheckoutDetails;
 
@@ -198,7 +198,7 @@ class plgOdysseypaymentPaypal extends JPlugin
       //Get the first part of the query where all the basic parameters are set.
       $paypalQuery = $this->getPaypalQuery();
       //Get the DoExpressCheckoutPayment query.
-      $doExpressCheckoutPayment = $this->doExpressCheckoutPayment($travel, $addons, $settings);
+      $doExpressCheckoutPayment = $this->doExpressCheckoutPayment($travel, $addons, $settings, $utility);
       //Concatenate the 2 parts to get the complete query.
       $paypalQuery = $paypalQuery.$doExpressCheckoutPayment;
 
@@ -224,7 +224,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 	  //database.
 
 	  //Notify that payment has succeded
-	  $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
+	  $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.recapOrder', false);
 	  $utility['payment_details'] = $paypalParamsArray['ACK'];
 
 	  OrderHelper::createTransaction($travel, $utility, $settings); 
@@ -237,7 +237,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 	  //been completed for this token.), we can confirm the purchase. 
           if($paypalParamsArray['L_ERRORCODE0'] == 11607) {
 	    //Notify that payment has succeded
-	    $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
+	    $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.recapOrder', false);
 	  }
 
 	  //Display the Paypal error message.
@@ -262,15 +262,6 @@ class plgOdysseypaymentPaypal extends JPlugin
 
   public function onOdysseyPaymentPaypalCancel($utility)
   {
-    //Remove the specific variables
-    unset($utility['paypal_token']);
-    unset($utility['paypal_step']);
-    //then empty the generic variables.
-    $utility['redirect_url'] = '';
-    $utility['plugin_output'] = '';
-    $utility['payment_details'] = '';
-    $utility['transaction_data'] = '';
-
     return $utility;
   }
 
@@ -343,7 +334,7 @@ class plgOdysseypaymentPaypal extends JPlugin
     //We can add custom parameter to the query, but we need 
     //GetExpressCheckoutDetails to recover it.
     $query = '&METHOD=SetExpressCheckout'.
-	     '&CANCELURL='.urlencode(JUri::base().'index.php?option=com_odyssey&view=payment&task=payment.cancel&payment=paypal').
+	     '&CANCELURL='.urlencode(JUri::base().'index.php?option=com_odyssey&view=payment&task=payment.cancelPayment&payment=paypal').
 	     '&RETURNURL='.urlencode(JUri::base().'index.php?option=com_odyssey&view=payment&task=payment.response&payment=paypal');
 
     //Get the query for the detail order.
@@ -362,12 +353,8 @@ class plgOdysseypaymentPaypal extends JPlugin
 
   //Once Paypal query has succeeded, we might want more details about the 
   //transaction. We can get them with the GetExpressCheckoutDetails method.
-  protected function getExpressCheckoutDetails()
+  protected function getExpressCheckoutDetails($utility)
   {
-    //Get some needed data from the utility session array.
-    $session = JFactory::getSession();
-    $utility = $session->get('utility', array(), 'odyssey'); 
-
     //Build the query.
     $query = '&METHOD=GetExpressCheckoutDetails'.
 	     '&TOKEN='.$utility['paypal_token'];
@@ -380,12 +367,9 @@ class plgOdysseypaymentPaypal extends JPlugin
   //parameters plus the optional parameters we need. If DoExpressCheckoutPayment method 
   //has succeeded, Paypal return a list of parameters value we can use during 
   //our transaction. 
-  protected function doExpressCheckoutPayment($travel, $addons, $settings)
+  protected function doExpressCheckoutPayment($travel, $addons, $settings, $utility)
   {
     $currencyCode = $settings['currency_code'];
-    //Get some needed data from the utility session array.
-    $session = JFactory::getSession();
-    $utility = $session->get('utility', array(), 'odyssey'); 
 
     $query = '&METHOD=DoExpressCheckoutPayment'.
 	     '&TOKEN='.$utility['paypal_token']. //Add the token sent back by Paypal.
@@ -530,4 +514,5 @@ class plgOdysseypaymentPaypal extends JPlugin
     return $paypalParamArray; //Return the array.
   }
 }
+
 

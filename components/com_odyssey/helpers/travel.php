@@ -517,7 +517,9 @@ class TravelHelper
   //Build the email subject and body according to the email type.
   public static function getEmailMessage($emailType, $userId, $orderId = 0)
   {
-    $bookingOptions = array('take_option', 'deposit', 'whole_price', 'remaining');
+    $bookingOptions = array('take_option', 'deposit', 'whole_price',
+			    'remaining', 'deposit_payment_error',
+			    'whole_price_payment_error', 'remaining_payment_error');
 
     //Send an email regarding a booking action of the customer.
     if(in_array($emailType, $bookingOptions)) {
@@ -547,6 +549,7 @@ class TravelHelper
 	  }
 
     $query->where('o.id='.(int)$orderId);
+file_put_contents('debog_email.txt', print_r($query->__toString(), true));
     $db->setQuery($query);
     $result = $db->loadObject();
 
@@ -558,7 +561,7 @@ class TravelHelper
       $amount = UtilityHelper::formatNumber($result->amount).' '.$currency;
       $outstandingBalance = UtilityHelper::formatNumber($result->outstanding_balance).' '.$currency;
     }
-//file_put_contents('debog_file.txt', print_r($settings, true));
+
     $limitDate = UtilityHelper::getLimitDate($settings['option_validity_period']);
     $limitDate = JHTML::_('date', $limitDate, JText::_('DATE_FORMAT_LC2'));
     $finalAmount = UtilityHelper::formatNumber($result->final_amount).' '.$currency;
@@ -583,12 +586,30 @@ class TravelHelper
 									      $finalAmount, $websiteUrl);
 	break;
 
+      case 'deposit_payment_error':
+	$subject = JText::sprintf('COM_ODYSSEY_EMAIL_DEPOSIT_PAYMENT_ERROR_SUBJECT', $result->travel_name);
+	$body = JText::sprintf('COM_ODYSSEY_EMAIL_DEPOSIT_PAYMENT_ERROR_BODY', $result->firstname, $result->lastname,
+									       $amount, $result->travel_name, 
+									       $settings['company'],
+									       $result->order_details,
+									       $finalAmount, $websiteUrl);
+	break;
+
       case 'whole_price':
 	$subject = JText::sprintf('COM_ODYSSEY_EMAIL_WHOLE_PRICE_CONFIRMATION_SUBJECT', $result->travel_name);
 	$body = JText::sprintf('COM_ODYSSEY_EMAIL_WHOLE_PRICE_CONFIRMATION_BODY', $result->firstname, $result->lastname,
 										  $amount, $result->travel_name, 
 										  $result->order_details,
 										  $finalAmount, $websiteUrl);
+	break;
+
+      case 'whole_price_payment_error':
+	$subject = JText::sprintf('COM_ODYSSEY_EMAIL_WHOLE_PRICE_PAYMENT_ERROR_SUBJECT', $result->travel_name);
+	$body = JText::sprintf('COM_ODYSSEY_EMAIL_WHOLE_PRICE_PAYMENT_ERROR_BODY', $result->firstname, $result->lastname,
+										   $amount, $result->travel_name, 
+										   $settings['company'],
+										   $result->order_details,
+										   $finalAmount, $websiteUrl);
 	break;
 
       case 'remaining':
@@ -598,6 +619,15 @@ class TravelHelper
 										$result->order_details,
 										$finalAmount, $websiteUrl);
 	break;
+
+      case 'remaining_payment_error':
+	$subject = JText::sprintf('COM_ODYSSEY_EMAIL_REMAINING_PAYMENT_ERROR_SUBJECT', $result->travel_name);
+	$body = JText::sprintf('COM_ODYSSEY_EMAIL_REMAINING_PAYMENT_ERROR_BODY', $result->firstname, $result->lastname,
+										 $amount, $result->travel_name, 
+										 $settings['company'],
+										 $result->order_details,
+										 $finalAmount, $websiteUrl);
+	break;
     }
 
     $body .= JText::_('COM_ODYSSEY_EMAIL_BODY_THANKS');
@@ -606,4 +636,5 @@ class TravelHelper
     return $message;
   }
 }
+
 

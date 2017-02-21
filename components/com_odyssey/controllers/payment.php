@@ -17,6 +17,18 @@ require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/utility.php';
  */
 class OdysseyControllerPayment extends JControllerForm
 {
+  //Create indexes which are going to be used by the plugin. 
+  private $utility = array('payment_mode' => '',
+			   'payment_result' => true,
+			   'reply_and_exit' => '',     //In case of data remotely returned by the bank platform.
+			   'payment_details' => '',
+			   'transaction_data' => '',
+			   'redirect_url' => '',
+			   'plugin_output' => '',     //Html code to display in the payment view.
+			   'offline_id' => 0          //Only used with Odyssey offline plugin.
+			   );
+
+
   public function setBooking()
   {
     TravelHelper::checkBookingProcess();
@@ -85,6 +97,8 @@ class OdysseyControllerPayment extends JControllerForm
 	$this->setRedirect('index.php?option='.$this->option.'&task=end.confirmOption');
       }
       else {
+	//Just in case a previous temporary data for this order is still remaining.
+	OrderHelper::deleteTemporaryData($travel['order_id']);
 	//Move on to the payment part.
 	$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=payment', false));
       }
@@ -104,32 +118,12 @@ class OdysseyControllerPayment extends JControllerForm
     //Reset the safety variable, (previously used to store the order), to zero. 
     $session->set('submit', 0, 'odyssey'); 
 
-    //Get all the amounts (cart, shipping etc...).
-    //$amounts = $this->getAmounts();
-
     //Plugins are going to need some persistent way to keep the different steps
     //of the payment as well as few extra variables (eg: token) during the payment
     //process.
-    //We also  provide a dedicated variable into which plugins can store their
-    //html output in order to display it in the payment view.  
-    //So we create a session utility array in which plugins are able to store
+    //So we create a utility array in which plugins are able to store
     //or create if necessary any needed variable.
-    if(!$session->has('utility', 'odyssey')) {
-      //Create indexes which are going to use by the controller. 
-      $utility = array('payment_mode' => '',
-	               'payment_result' => true,
-		       //
-	               'reply_and_exit' => '',
-	               'payment_details' => '',
-	               'transaction_data' => '',
-	               'redirect_url' => '',
-	               'use_tmp_data' => false,
-			//Html code to display in the payment view.
-	               'plugin_output' => '',     
-			//Only used with Odyssey offline plugin.
-	               'offline_id' => 0);
-      $session->set('utility', $utility, 'odyssey');
-      //
+    if(is_null(OrderHelper::getTemporaryData($travel['order_id']))) {
       $this->createTemporaryData();
     }
 
@@ -148,12 +142,12 @@ class OdysseyControllerPayment extends JControllerForm
       $offlineId = $matches[1];
     }
 
-    //Get the utility session array.
-    $utility = $session->get('utility', array(), 'odyssey'); 
+    //Get (then set) the utility temporary data.
+    $utility = OrderHelper::getTemporaryData($travel['order_id'], true);
     //Store the needed data for the payment process.
     $utility['payment_mode'] = $paymentMode; 
     $utility['offline_id'] = (int)$offlineId; 
-    $session->set('utility', $utility, 'odyssey');
+    $this->updateUtility($travel['order_id'], $utility);
 
     //Build the name of the event to trigger according to the payment name of
     //the plugin.
@@ -164,16 +158,18 @@ class OdysseyControllerPayment extends JControllerForm
 
     //Trigger the event.
     //Note: Parameters are not passed by reference (using an &) cause we don't
-    //allow plugins to modify directly session variables, except for the utility array.
+    //allow plugins to modify directly the temporary data, except for the utility array.
     //Warning: Plugins MUST NOT use the session variables to get or modify data. 
     $results = $dispatcher->trigger($event, array($travel, $addons, $settings, &$utility));
 
-    //Store the utility array modified by the plugin in the session.
-    $session->set('utility', $results[0], 'odyssey');
+    //Store the utility array modified by the plugin.
+    $this->updateUtility($travel['order_id'], $results[0]);
 
     if(!$results[0]['payment_result']) { //An error has occured.
       //Retrieve and display the error message set by the plugin.
-      $message = $results[0]['error'];
+      $message = $results[0]['payment_details'];
+      //Reset the temporary data.
+      $this->updateUtility($travel['order_id'], $this->utility);
       $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=payment', false), $message, 'error');
       return false;
     }
@@ -191,54 +187,52 @@ class OdysseyControllerPayment extends JControllerForm
   }
 
 
+  //During the exchanges with the payment plugin the user's session might be unavailable,
+  //so the response() method uses only the temporary data.
   public function response()
   {
     //Grab the user session.
     $session = JFactory::getSession();
-    $travel = $session->get('travel', array(), 'odyssey'); 
-    $addons = $session->get('addons', array(), 'odyssey'); 
-    $settings = $session->get('settings', array(), 'odyssey'); 
-    $utility = $session->get('utility', array(), 'odyssey'); 
-
-    $validSession = true;
     $payment = $this->input->get('payment', '', 'string');
-    $event = 'onOdysseyPayment'.ucfirst($payment).'Response';
 
-    if(empty($travel)) {
-      $validSession = false;
+    //Check out whether the user's session is available then get the order id accordingly. 
+    if(empty($travel = $session->get('travel', array(), 'odyssey'))) {
       $orderId = $this->getOrderIdFromBankData($payment);
-      $data = OrderHelper::getTemporaryData($orderId);
-      $travel = $data['travel']; 
-      $addons = $data['addons']; 
-      $settings = $data['settings']; 
-      $utility = $data['utility']; 
     }
+    else {
+      $orderId = $travel['order_id'];
+    }
+
+    //Get the required variables from the temporary data.
+    $tmpData = OrderHelper::getTemporaryData($orderId);
+    $travel = $tmpData['travel']; 
+    $addons = $tmpData['addons']; 
+    $settings = $tmpData['settings']; 
+    $utility = $tmpData['utility']; 
+
+    $event = 'onOdysseyPayment'.ucfirst($payment).'Response';
 
     JPluginHelper::importPlugin('odysseypayment');
     $dispatcher = JDispatcher::getInstance();
     $results = $dispatcher->trigger($event, array($travel, $addons, $settings, &$utility));
 
+    //Update the temporary utility data sent back by the plugin.
     $this->updateUtility($orderId, $results[0]);
 
-    if($validSession) {
-      //Store the utility array modified by the plugin in the session.
-      $session->set('utility', $results[0], 'odyssey');
-    }
-
+    //Some bank platforms send a bunch of data to be checked by the component (security
+    //token etc..).
+    //The response is generaly a boolean value informing the bank platform whether 
+    //the sent data is correct or not.
+    //As the user is on the bank platform (and not on the website) when the data is sent,
+    //there is nothing else to do but exit the program after replying.
     if(!empty($results[0]['reply_and_exit'])) { 
       $reply = $results[0]['reply_and_exit'];
+      //Empty the field to prevent the script to exit again on the next triggered event.
       $results[0]['reply_and_exit'] = '';
       $this->updateUtility($orderId, $results[0]);
 
       echo $reply;
       exit;
-    }
-
-    if(!$results[0]['payment_result']) { //An error has occured.
-      //Retrieve and display the error message set by the plugin.
-      $message = $results[0]['error'];
-      $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=payment', false), $message, 'error');
-      return false;
     }
 
     //Plugin needs to redirect the user.
@@ -258,72 +252,22 @@ class OdysseyControllerPayment extends JControllerForm
   {
     //Grab the user session.
     $session = JFactory::getSession();
-    $utility = $session->get('utility', array(), 'odyssey'); 
+    $travel = $session->get('travel', array(), 'odyssey'); 
+    $utility = OrderHelper::getTemporaryData($travel['order_id'], true);
 
     $payment = $this->input->get->get('payment', '', 'string');
     $event = 'onOdysseyPayment'.ucfirst($payment).'Cancel';
     JPluginHelper::importPlugin('odysseypayment');
     $dispatcher = JDispatcher::getInstance();
-    $results = $dispatcher->trigger($event, array(&$utility));
+    $results = $dispatcher->trigger($event, array($utility));
 
-    //Store the utility array modified by the plugin in the session.
-    $session->set('utility', $results[0], 'odyssey');
-//file_put_contents('debog_payment.txt', print_r($results, true));
+    //Reset the utility array.
+    $this->updateUtility($travel['order_id'], $this->utility);
 
-    if(!$results[0]['payment_result']) { //An error has occured.
-      //Retrieve and display the error message set by the plugin.
-      $message = $results[0]['payment_details'];
-      $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=payment', false), $message, 'error');
-      return false;
-    }
-
-    //Plugin needs to redirect the user.
-    if(!empty($results[0]['redirect_url'])) {
-      $this->setRedirect($results[0]['redirect_url']);
-      return true;
-    }
-
-    //Display plugin result in the payment view or display available payment 
-    //plugins if output is empty.
+    //Display the available payment plugins.
     $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=payment', false));
 
     return true;
-  }
-
-
-  protected function getAmounts()
-  {
-    //Get the cartAmount session variable.
-    $session = JFactory::getSession();
-    $cartAmount = $session->get('cart_amount', array(), 'odyssey'); 
-
-    //Store the different amounts in an array.
-    $amounts = array();
-    $amounts['cart_amount'] = $cartAmount['amount'];
-    $amounts['crt_amt_incl_tax'] = $cartAmount['amt_incl_tax'];
-    $amounts['final_cart_amount'] = $cartAmount['final_amount'];
-    $amounts['fnl_crt_amt_incl_tax'] = $cartAmount['fnl_amt_incl_tax'];
-
-    //Check the cart is shippable before searching any selected shipper.
-    if(ShopHelper::isShippable()) {
-      $shippers = $session->get('shippers', array(), 'odyssey'); 
-
-      foreach($shippers as $shipper) {
-	//Get the selected shipper.
-	if((bool)$shipper['selected']) {
-	  foreach($shipper['shippings'] as $shipping) {
-	    //Store the shipping amounts.
-	    if((bool)$shipping['selected']) {
-	      $amounts['shipping_cost'] = $shipping['cost'];
-	      $amounts['final_shipping_cost'] = $shipping['final_cost'];
-	      break 2;
-	    }
-	  }
-        }
-      }
-    }
-
-    return $amounts;
   }
 
 
@@ -334,10 +278,6 @@ class OdysseyControllerPayment extends JControllerForm
     $travel = $session->get('travel', array(), 'odyssey'); 
     $addons = $session->get('addons', array(), 'odyssey'); 
     $settings = $session->get('settings', array(), 'odyssey'); 
-    $utility = $session->get('utility', array(), 'odyssey'); 
-
-    //Remove possible duplicate due to a cancelling. 
-    OrderHelper::deleteTemporaryData();
 
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
@@ -345,7 +285,7 @@ class OdysseyControllerPayment extends JControllerForm
 
     $columns = array('order_id', 'travel', 'addons', 'settings', 'utility', 'created');
     $values = (int)$travel['order_id'].','.$db->quote(serialize($travel)).','.$db->quote(serialize($addons)).
-              ','.$db->quote(serialize($settings)).','.$db->quote(serialize($utility)).','.$db->quote($now);
+              ','.$db->quote(serialize($settings)).','.$db->quote(serialize($this->utility)).','.$db->quote($now);
 
     $query->insert('#__odyssey_tmp_data')
 	  ->columns($columns)
@@ -358,7 +298,6 @@ class OdysseyControllerPayment extends JControllerForm
       JFactory::getApplication()->enqueueMessage(JText::_($e->getMessage()), 'error');
       return 0;
     }
-
   }
 
 
@@ -375,17 +314,30 @@ class OdysseyControllerPayment extends JControllerForm
   }
 
 
+  //Almost all of the bank platforms provide a dedicated field to store a specific data.
+  //The Odyssey payment plugins use this field to store the id of the current order. The
+  //name of this dedicated field is set in the plugin parameters through the
+  //order_id_field variable. 
   private function getOrderIdFromBankData($payment)
   {
     //Get data sent by the bank platform through GET or POST.
     $data = $this->input->getArray();
     $orderId = 0;
 
-    if(preg_match('#^monetico#i', $payment)) {
-      $orderId = $data['reference'];
-    }
+    //Get the plugin name (remove the possible part after the underscore).
+    preg_match('#^([0-9a-z]+)(_[0-9a-z]+)*#', $payment, $matches);
+    //Get the plugin params.
+    $plugin = JPluginHelper::getPlugin('odysseypayment', $matches[1]);
+    $pluginParams = new JRegistry($plugin->params);
+    //Get the field name where the order id is stored.
+    $fieldName = $pluginParams->get('order_id_field');
+    $fieldName = trim($fieldName);
+
+    //Retrieve the order id.
+    $orderId = $data[$fieldName];
 
     return $orderId;
   }
 }
+
 

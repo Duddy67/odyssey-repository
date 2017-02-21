@@ -17,7 +17,7 @@ require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/utility.p
  */
 class OdysseyControllerEnd extends JControllerForm
 {
-  public function confirmPayment()
+  public function recapOrder()
   {
     $session = JFactory::getSession();
     //Note: Better set default value to 1 instead of 0 as the session variables will be 
@@ -29,22 +29,17 @@ class OdysseyControllerEnd extends JControllerForm
       $session->set('end_booking', 1, 'odyssey'); 
 
       $settings = $session->get('settings', array(), 'odyssey'); 
-      $utility = $session->get('utility', array(), 'odyssey'); 
       $travel = $session->get('travel', array(), 'odyssey'); 
       $addons = $session->get('addons', array(), 'odyssey'); 
 
-      if($utility['use_tmp_data']) {
-	$data = OrderHelper::getTemporaryData($travel['order_id']);
-	$utility = $data['utility'];
-      }
+      $utility = OrderHelper::getTemporaryData($travel['order_id'], true);
 
-      OrderHelper::deleteTemporaryData();
+      OrderHelper::deleteTemporaryData($travel['order_id']);
 
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
 
       $fields = array('admin_locked=0','published=1');
-      $emailType = 'payment_error';
 
       //Set order statusses and the outstanding balance according to the payment result.
       if($utility['payment_result']) {
@@ -74,6 +69,10 @@ class OdysseyControllerEnd extends JControllerForm
 	  $emailType = $travel['booking_option'];
 	}
       }
+      else { //The payment has failed.
+	$fields[] = 'payment_status="error"';
+	$emailType = $travel['booking_option'].'_payment_error';
+      }
 
       $query->update('#__odyssey_order')
 	    ->set($fields)
@@ -86,8 +85,12 @@ class OdysseyControllerEnd extends JControllerForm
       $userId = JFactory::getUser()->get('id');
       TravelHelper::sendEmail($emailType, $userId); 
 
-      if($travel['booking_option'] == 'deposit' && $settings['run_at_command']) {
+      if($utility['payment_result'] && $travel['booking_option'] == 'deposit' && $settings['run_at_command']) {
 	$this->schedulingTasks($travel, $settings, 'deposit');
+      }
+
+      if(!$utility['payment_result']) {
+	JFactory::getApplication()->enqueueMessage(JText::_('COM_ODYSSEY_PAYMENT_ERROR', 'warning'));
       }
 
       TravelHelper::clearSession();
@@ -107,7 +110,6 @@ class OdysseyControllerEnd extends JControllerForm
     //Get the limit date against the validity period of the option.
     $limitDate = UtilityHelper::getLimitDate($settings['option_validity_period']);
 
-//file_put_contents('debog_limitdate.txt', print_r($limitDate, true)); 
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
@@ -230,4 +232,5 @@ EOF'
     return;
   }
 }
+
 

@@ -79,7 +79,7 @@ class plgOdysseypaymentOffline extends JPlugin
     OrderHelper::createTransaction($travel, $utility, $settings); 
 
     //Redirect the customer to the ending step.
-    $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.confirmPayment', false);
+    $utility['redirect_url'] = JRoute::_('index.php?option=com_odyssey&task=end.recapOrder', false);
 
     return $utility;
   }
@@ -87,15 +87,7 @@ class plgOdysseypaymentOffline extends JPlugin
 
   public function onOdysseyPaymentOfflineCancel($utility)
   {
-    //Grab the user session.
-    $session = JFactory::getSession();
-    $utility = $session->get('utility', array(), 'odyssey'); 
-    //Empty the output variable which make the view to display the payment modes. 
-    $utility['plugin_output'] = '';
-    $session->set('utility', $utility, 'odyssey');
-
     return $utility;
   }
-
-
 }
+
