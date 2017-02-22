@@ -68,6 +68,8 @@ class OdysseyControllerEnd extends JControllerForm
 	  $fields[] = 'limit_date='.$db->quote('0000-00-00 00:00:00');
 	  $emailType = $travel['booking_option'];
 	}
+
+	$this->setAllotment($travel);
       }
       else { //The payment has failed.
 	$fields[] = 'payment_status="error"';
@@ -79,8 +81,6 @@ class OdysseyControllerEnd extends JControllerForm
 	    ->where('id='.(int)$travel['order_id']);
       $db->setQuery($query);
       $db->execute();
-
-      $this->setAllotment($travel);
 
       $userId = JFactory::getUser()->get('id');
       TravelHelper::sendEmail($emailType, $userId); 
@@ -145,18 +145,19 @@ class OdysseyControllerEnd extends JControllerForm
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
     //Collect needed data regarding allotment.
-    $query->select('checked_out, allotment, altm_subtract')
-          ->from('#__odyssey_step')
-          ->join('INNER', '#__odyssey_departure_step_map ON step_id=id')
-          ->where('id='.(int)$travel['dpt_step_id'])
-	  ->where('dpt_id='.(int)$travel['dpt_id'])
-          ->group('checked_out');
+    $query->select('s.checked_out, sm.allotment, sm.altm_subtract, o.already_alloted')
+          ->from('#__odyssey_step AS s')
+          ->join('INNER', '#__odyssey_departure_step_map AS sm ON sm.step_id=s.id')
+          ->join('INNER', '#__odyssey_order AS o ON o.id='.(int)$travel['order_id'])
+          ->where('s.id='.(int)$travel['dpt_step_id'])
+	  ->where('sm.dpt_id='.(int)$travel['dpt_id'])
+          ->group('s.checked_out');
     $db->setQuery($query);
     $result = $db->loadObject();
 
     //Ensure first that the passenger number of the new order have to be subtract from
-    //the allotment. 
-    if((int)$result->altm_subtract) {
+    //the allotment and the allotment hasn't already performed. 
+    if((int)$result->altm_subtract && !(int)$result->already_alloted) {
       //Compute the new allotment value.
       $newAllotment = $result->allotment - $travel['nb_psgr'];
       //If the result is lower than zero set it to zero or MySQL will cause an error.
@@ -178,6 +179,14 @@ class OdysseyControllerEnd extends JControllerForm
 	    ->set($fields)
 	    ->where('step_id='.(int)$travel['dpt_step_id'])
 	    ->where('dpt_id='.(int)$travel['dpt_id']);
+      $db->setQuery($query);
+      $db->execute();
+
+      //Set the flag to prevent to set the allotment again.
+      $query->clear();
+      $query->update('#__odyssey_order')
+	    ->set('already_alloted=1')
+	    ->where('id='.(int)$travel['order_id']);
       $db->setQuery($query);
       $db->execute();
     }

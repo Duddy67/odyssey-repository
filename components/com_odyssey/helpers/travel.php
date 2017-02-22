@@ -549,7 +549,6 @@ class TravelHelper
 	  }
 
     $query->where('o.id='.(int)$orderId);
-file_put_contents('debog_email.txt', print_r($query->__toString(), true));
     $db->setQuery($query);
     $result = $db->loadObject();
 

@@ -481,6 +481,7 @@ CREATE TABLE `#__odyssey_order` (
   `rounding_rule` CHAR(4) NOT NULL ,
   `digits_precision` TINYINT(1) UNSIGNED NOT NULL ,
   `admin_locked` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1 ,
+  `already_alloted` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
   `limit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
   `published` TINYINT NOT NULL DEFAULT 0 ,
   `checked_out` INT NOT NULL DEFAULT 0 ,
