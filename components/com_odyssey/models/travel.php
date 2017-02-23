@@ -252,7 +252,7 @@ class OdysseyModelTravel extends JModelItem
       //Store departures.
       if($data['date_type'] == 'period') {
 	//Extract year month day from the starting date time (time value is not used with period date type).
-	preg_match('#^([0-9]{4})-([0-9]{2})-([0-9]{2}).*$#', $bookingDate, $matches);
+	preg_match('#^([0-9]{4})-([0-9]{2})-([0-9]{2}).*$#', $data['date_time'], $matches);
 	$fromYear = $matches[1];
 	$fromMonth = $matches[2];
 	$fromDay = $matches[3];
