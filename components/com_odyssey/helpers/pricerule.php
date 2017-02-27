@@ -57,7 +57,6 @@ class PriceruleHelper
 	  ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
 	  ->where('('.$db->quote($now).' > pr.publish_up OR pr.publish_up = "0000-00-00 00:00:00")')
 	  ->order('pr.ordering');
-//file_put_contents('debog_prule.txt', print_r($query->__toString(), true));
     $db->setQuery($query);
     $travelCatPrules = $db->loadAssocList();
 
@@ -413,7 +412,7 @@ class PriceruleHelper
 
 
   /**
-   * Gets catalog price rules set for the first passenger and matching the given travels.
+   * Gets catalog price rules set for the base number of passengers and matching the given travels.
    * Applies price rules accordingly and returns the lowest price for each travel.
    *
    * @param array  An array of travel ids.
@@ -430,6 +429,8 @@ class PriceruleHelper
     $groups = JAccess::getGroupsByUser($user->get('id'));
     //Get current date and time (equal to NOW() in SQL).
     $now = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+    //Get the base number of passengers.
+    $baseNbPsgr = JComponentHelper::getParams('com_odyssey')->get('base_nb_psgr', 1);
 
     if(!is_array($catIds)) {
       //Put the integer into an array.
@@ -439,7 +440,7 @@ class PriceruleHelper
 
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
-    //Get possible catalog price rules set for the first passenger and the given travels.
+    //Get possible catalog price rules set for the base numner of passengers and the given travels.
     $query->select('tpr.travel_id, pr.name, pr.behavior, pr.show_rule, pr.ordering,tpr.prule_id,'.
 	           'tpr.dpt_id, pr.operation, tpr.value, tp.psgr_nb, tp.price AS normal_price')
 	  ->from('#__odyssey_pricerule AS pr')
@@ -450,8 +451,8 @@ class PriceruleHelper
 	  ->where('pr.prule_type="catalog" AND pr.target="travel" AND tpr.travel_id IN('.implode(',', $travelIds).')')
 	  //Don't collect price rules related to coupon.
 	  ->where('(pr.behavior="XOR" OR pr.behavior= "AND")')
-	  //Get only price rules set for the first passenger.
-	  ->where('tpr.psgr_nb=1 AND tp.psgr_nb=1 AND tpr.value > 0')
+	  //Get only price rules set for the base number of passengers.
+	  ->where('tpr.psgr_nb='.(int)$baseNbPsgr.' AND tp.psgr_nb='.(int)$baseNbPsgr.' AND tpr.value > 0')
 	  ->where('prr.prule_id=pr.id AND pr.published=1')
 	  //Check against publication dates (start and stop).
 	  ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
@@ -481,26 +482,27 @@ class PriceruleHelper
     }
 
     $query->clear();
-    //Get possible catalog price rules set for the first passenger and linked to the travel category.
+    //Get possible catalog price rules set for the base number of passenger and linked to the travel category.
     $query->select('t.id AS travel_id, pr.name,pr.behavior, pr.show_rule, pr.ordering, prt.prule_id,'.
 		   'tp.dpt_id, pr.operation, pr.value, tp.psgr_nb, tp.price AS normal_price')
 	  ->from('#__odyssey_pricerule AS pr')
 	  ->join('INNER', '#__odyssey_prule_target AS prt ON prt.prule_id=pr.id')
-	  //Get the first passenger prices as we need them to compute price rule results.
+	  //Get the base number of passenger prices as we need them to compute price rule results.
 	  ->join('INNER', '#__odyssey_travel AS t ON t.catid=prt.item_id')
-	  ->join('INNER', '#__odyssey_travel_price AS tp ON tp.travel_id=t.id AND tp.psgr_nb=1')
+	  ->join('INNER', '#__odyssey_travel_price AS tp ON tp.travel_id=t.id AND tp.psgr_nb='.(int)$baseNbPsgr)
 	  ->join('INNER', '#__odyssey_prule_recipient AS prr ON (pr.recipient="customer" AND prr.item_id='.(int)$user->get('id').')'.
 	                  ' OR (pr.recipient="customer_group" AND prr.item_id IN ('.implode(',', $groups).'))')
 	  ->where('pr.prule_type="catalog" AND pr.target="travel_cat" AND prt.item_id IN('.implode(',', $catIds).')')
 	  //Don't collect price rules related to coupon.
 	  ->where('(pr.behavior="XOR" OR pr.behavior= "AND")')
-	  //Get only price rules set for the first passenger.
-	  ->where('(prt.psgr_nbs=0 OR prt.psgr_nbs REGEXP "(^1$)|(^1,)|(,1,)|(,1$)")')
+	  //Get only price rules set for the base number of passengers.
+	  ->where('(prt.psgr_nbs=0 OR prt.psgr_nbs REGEXP "(^'.$baseNbPsgr.'$)|(^'.$baseNbPsgr.',)|(,'.$baseNbPsgr.',)|(,'.$baseNbPsgr.'$)")')
 	  ->where('prr.prule_id=pr.id AND pr.published=1')
 	  //Check against publication dates (start and stop).
 	  ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
 	  ->where('('.$db->quote($now).' > pr.publish_up OR pr.publish_up = "0000-00-00 00:00:00")')
 	  ->order('t.id, pr.ordering, prt.prule_id,tp.dpt_id');
+//file_put_contents('debog_prule.txt', print_r($query->__toString(), true));
     $db->setQuery($query);
     $results = $db->loadAssocList();
 
@@ -555,6 +557,7 @@ class PriceruleHelper
 
     //Compute and select the lower price for each travel.
     $lowestPrice = array();
+
     foreach($travelPrules as $travelId => $travelPrule) {
       $delete = false;
       foreach($travelPrule['prules'] as $key => $prule) {
@@ -565,25 +568,25 @@ class PriceruleHelper
 
 	foreach($prule['dpt_ids'] as $dptId => $data) {
 	  //Get the normal price.
-	  $price = $data[2];
+	  $price = $data[$baseNbPsgr + 1];
 	  //Check if a previous price rule has been applied to the normal price.
-	  if(isset($travelPrules[$travelId]['prules'][$key - 1]['dpt_ids'][$dptId][3])) {
+	  if(isset($travelPrules[$travelId]['prules'][$key - 1]['dpt_ids'][$dptId][$baseNbPsgr + 2])) {
 	    //Get the normal price previously modified by a price rule. 
-	    $price = $travelPrules[$travelId]['prules'][$key - 1]['dpt_ids'][$dptId][3];
+	    $price = $travelPrules[$travelId]['prules'][$key - 1]['dpt_ids'][$dptId][$baseNbPsgr + 2];
 	  }
 
 	  //Apply the price rule and store the modified price.
-	  $price = UtilityHelper::formatNumber(PriceruleHelper::computePriceRule($prule['operation'], $data[1], $price));
-	  $travelPrules[$travelId]['prules'][$key]['dpt_ids'][$dptId][3] = $price;  
+	  $price = UtilityHelper::formatNumber(PriceruleHelper::computePriceRule($prule['operation'], $data[$baseNbPsgr], $price));
+	  $travelPrules[$travelId]['prules'][$key]['dpt_ids'][$dptId][$baseNbPsgr + 2] = $price;  
 
 	  //Compare and replace (if needed) the modified price in order to end up with 
 	  //the lowest price for this travel.
 	  if(!isset($lowestPrice[$travelId])) {
-	    $lowestPrice[$travelId] = array('normal_price' => $data[2], 'price' => $price);
+	    $lowestPrice[$travelId] = array('normal_price' => $data[$baseNbPsgr + 1], 'price' => $price);
 	  }
 	  else {
 	    if($price < $lowestPrice[$travelId]['price']) {
-	      $lowestPrice[$travelId]['normal_price'] = $data[2];
+	      $lowestPrice[$travelId]['normal_price'] = $data[$baseNbPsgr + 1];
 	      $lowestPrice[$travelId]['price'] = $price;
 	    }
 	  }

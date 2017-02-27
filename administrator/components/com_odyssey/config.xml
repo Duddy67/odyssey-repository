@@ -63,6 +63,14 @@
 		<option value="region_city">COM_ODYSSEY_OPTION_REGION_CITY</option>
 	</field>
 
+	<field name="base_nb_psgr"
+	       type="text"
+	       default="1"
+	       required="true"
+	       label="COM_ODYSSEY_FIELD_BASE_NB_PSGR_LABEL"
+	       description="COM_ODYSSEY_FIELD_BASE_NB_PSGR_DESC">
+	</field>
+
 	<field name="spacer1" type="spacer" hr="true" />
 
 	<field name="option_time_limit"

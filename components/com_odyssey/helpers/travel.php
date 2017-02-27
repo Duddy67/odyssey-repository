@@ -19,14 +19,16 @@ class TravelHelper
     $query = $db->getQuery(true);
     $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
     $pricesStartingAt = array();
+    //Get the base number of passengers.
+    $baseNbPsgr = JComponentHelper::getParams('com_odyssey')->get('base_nb_psgr', 1);
 
-    //Get the lower price for one passenger among all the scheduled departures of the travel. 
+    //Get the lower price for the base number of passengers among all the scheduled departures of the travel. 
     $query->select('t.id, MIN(tp.price) AS price_starting_at')
 	  ->from('#__odyssey_travel_price AS tp')
 	  ->join('INNER', '#__odyssey_travel AS t ON t.id=tp.travel_id')
 	  ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id AND (ds.date_time >= '.$nowDate.
 		          ' OR ds.date_time_2 >= '.$nowDate.')')
-	  ->where('t.id IN('.implode(',', $travelIds).') AND tp.dpt_id=ds.dpt_id AND tp.psgr_nb=1')
+	  ->where('t.id IN('.implode(',', $travelIds).') AND tp.dpt_id=ds.dpt_id AND tp.psgr_nb='.(int)$baseNbPsgr)
 	  ->group('t.id');
     $db->setQuery($query);
     $results = $db->loadAssocList();
@@ -98,6 +100,7 @@ class TravelHelper
     $settings['company'] = $parameters->get('company');
     $settings['rounding_rule'] = $parameters->get('rounding_rule');
     $settings['digits_precision'] = $parameters->get('digits_precision');
+    $settings['base_nb_psgr'] = $parameters->get('base_nb_psgr');
     $settings['option_time_limit'] = $parameters->get('option_time_limit');
     $settings['option_validity_period'] = $parameters->get('option_validity_period');
     $settings['option_reminder'] = $parameters->get('option_reminder');
