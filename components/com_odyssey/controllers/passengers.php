@@ -42,7 +42,8 @@ echo '</pre>';
       $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=passengers'.$Itemid, false));
     }
     else { //The user must login or registrate.
-      $this->setRedirect(JRoute::_('index.php?option=com_users&view=login'.$Itemid, false));
+      //Note: Passes a booking flag to allow the login template to detect where the user is coming from. 
+      $this->setRedirect(JRoute::_('index.php?option=com_users&view=login&booking=1'.$Itemid, false));
     }
 
     return;
