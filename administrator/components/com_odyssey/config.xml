@@ -71,6 +71,12 @@
 	       description="COM_ODYSSEY_FIELD_BASE_NB_PSGR_DESC">
 	</field>
 
+	<field name="gts_article_ids"
+	       type="text"
+	       label="COM_ODYSSEY_FIELD_GTS_ARTICLE_IDS_LABEL"
+	       description="COM_ODYSSEY_FIELD_GTS_ARTICLE_IDS_DESC">
+	</field>
+
 	<field name="spacer1" type="spacer" hr="true" />
 
 	<field name="option_time_limit"

@@ -101,6 +101,7 @@ class TravelHelper
     $settings['rounding_rule'] = $parameters->get('rounding_rule');
     $settings['digits_precision'] = $parameters->get('digits_precision');
     $settings['base_nb_psgr'] = $parameters->get('base_nb_psgr');
+    $settings['gts_article_ids'] = $parameters->get('gts_article_ids');
     $settings['option_time_limit'] = $parameters->get('option_time_limit');
     $settings['option_validity_period'] = $parameters->get('option_validity_period');
     $settings['option_reminder'] = $parameters->get('option_reminder');

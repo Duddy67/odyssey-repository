@@ -15,8 +15,25 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 $digitsPrecision = $this->config->get('digits_precision');
 $nbItems = count($this->items);
 ?>
+<script type="text/javascript">
+var odyssey = {
+  clearSearch: function() {
+    document.getElementById('filter-search').value = '';
+    odyssey.submitForm();
+  },
 
-<form action="<?php echo JRoute::_('index.php?option=com_odyssey&view=search&layout=thumbnail');?>" method="post" name="adminForm" id="adminForm">
+  submitForm: function() {
+    var action = document.getElementById('siteForm').action;
+    //Set an anchor on the form.
+    document.getElementById('siteForm').action = action+'#siteForm';
+    document.getElementById('siteForm').submit();
+  }
+};
+</script>
+
+
+<form action="<?php echo
+JRoute::_('index.php?option=com_odyssey&view=search&layout=thumbnail');?>" method="post" name="siteForm" id="siteForm">
 <?php
 // Search tools bar 
 echo JLayoutHelper::render('default', array('view' => $this, 'search_filters' => $this->state->get('search.filters')), JPATH_SITE.'/components/com_odyssey/layouts/search/');
@@ -60,11 +77,24 @@ echo JLayoutHelper::render('default', array('view' => $this, 'search_filters' =>
       </div>
     <?php endforeach; ?>
 
-    <div class="pagination"><?php echo $this->pagination->getListFooter(); ?></div>
+    <?php if(($this->params->def('show_pagination', 2) == 1  || ($this->params->get('show_pagination') == 2)) && ($this->pagination->pagesTotal > 1)) : ?>
+    <div class="pagination">
+
+	    <?php if ($this->params->def('show_pagination_results', 1)) : ?>
+		    <p class="counter pull-right">
+			    <?php echo $this->pagination->getPagesCounter(); ?>
+		    </p>
+	    <?php endif; ?>
+
+	    <?php //Load our own pagination layout. ?>
+	    <?php echo JLayoutHelper::render('travel_pagination', $this->pagination, JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
+    </div>
+    <?php endif; ?>
   <?php endif; ?>
 
 <input type="hidden" name="nb_items" id="nb-items" value="<?php echo $nbItems; ?>" />
 <input type="hidden" name="option" value="com_odyssey" />
+<input type="hidden" name="limitstart" value="" />
 <input type="hidden" name="task" value="" />
 <?php echo JHtml::_('form.token'); ?>
 </form>
