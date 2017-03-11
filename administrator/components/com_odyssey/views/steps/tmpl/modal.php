@@ -113,7 +113,7 @@ $statuses = array(0 => 'JUNPUBLISHED', 1 => 'JPUBLISHED', 2 => 'JARCHIVED', -2 =
 	  <?php if($idNb && !empty($itemType)) : //Called from a dynamical item.  ?>
 	    <a class="pointer" style="color:#025a8d;" onclick="if(window.parent) window.parent.<?php echo $this->escape('jQuery.'.$function);?>(<?php echo $item->id; ?>, '<?php echo $this->escape(addslashes($item->name)); ?>', '<?php echo $idNb; ?>', '<?php echo $this->escape($itemType); ?>');" ><?php echo $this->escape($item->name); ?></a>
 	  <?php else : ?>
-	    <a class="pointer" style="color:#025a8d;" onclick="if(window.parent) window.parent.<?php echo $this->escape($function);?>(<?php echo $item->id; ?>, '<?php echo $this->escape(addslashes($item->name)); ?>');" >
+	    <a class="pointer" style="color:#025a8d;" onclick="if(window.parent) window.parent.<?php echo $this->escape($function);?>(<?php echo $item->id; ?>, '<?php echo $this->escape(addslashes($item->name)).' - ('.$this->escape(addslashes($item->group_alias)).')'; ?>');" >
 		<?php echo $this->escape($item->name); ?></a>
 	  <?php endif; ?>
 	    <span class="small break-word">

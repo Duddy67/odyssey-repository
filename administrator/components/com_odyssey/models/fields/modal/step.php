@@ -127,13 +127,14 @@ class JFormFieldModal_Step extends JFormField
     if((int) $this->value > 0) {
       $db = JFactory::getDbo();
       $query = $db->getQuery(true)
-	      ->select($db->quoteName('name'))
+	      ->select('name, group_alias')
 	      ->from($db->quoteName('#__odyssey_step'))
 	      ->where($db->quoteName('id').' = '.(int) $this->value);
       $db->setQuery($query);
+      $results = $db->loadObject();
 
       try {
-	$title = $db->loadResult();
+	$title = $results->name.' - ('.$results->group_alias.')';
       }
       catch(RuntimeException $e) {
 	JError::raiseWarning(500, $e->getMessage());
@@ -156,7 +157,7 @@ class JFormFieldModal_Step extends JFormField
 
     // The current step display field.
     $html[] = '<span class="input-append">';
-    $html[] = '<input type="text" class="input-medium" id="'.$this->id.'_name" value="'.$title.'" disabled="disabled" />';
+    $html[] = '<input type="text" class="input-xlarge" id="'.$this->id.'_name" value="'.$title.'" disabled="disabled" />';
     $html[] = '<a class="modal btn hasTooltip" title="'.JHtml::tooltipText('COM_ODYSSEY_CHANGE_DEPARTURE_STEP').'"  href="'.$link.'&amp;'.JSession::getFormToken().'=1" rel="{handler: \'iframe\', size: {x: 800, y: 450}}"><i class="icon-file"></i> '.JText::_('JSELECT').'</a>';
 
     // Edit travel button
