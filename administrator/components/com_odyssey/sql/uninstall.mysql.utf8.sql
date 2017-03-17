@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS `#__odyssey_travel`;
 DROP TABLE IF EXISTS `#__odyssey_travel_tag_map`;
 DROP TABLE IF EXISTS `#__odyssey_travel_price`;
+DROP TABLE IF EXISTS `#__odyssey_travel_image`;
 DROP TABLE IF EXISTS `#__odyssey_addon_price`;
 DROP TABLE IF EXISTS `#__odyssey_addon_option_price`;
 DROP TABLE IF EXISTS `#__odyssey_transit_city_price`;

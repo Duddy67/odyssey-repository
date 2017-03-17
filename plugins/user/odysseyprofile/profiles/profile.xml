@@ -12,6 +12,8 @@
 		    size="30" />
 
 	    <field name="customer_title" type="list"
+		    filter="string"
+		    id="customer_title"
 		    label="PLG_USER_ODYSSEY_PROFILE_FIELD_TITLE_LABEL"
 		    description="PLG_USER_ODYSSEY_PROFILE_FIELD_TITLE_DESC"
 		    class="chzn-color-state" default="">
@@ -66,6 +68,7 @@
 		    filter="string"
 		    label="PLG_USER_ODYSSEY_PROFILE_FIELD_PHONE_LABEL"
 		    size="30" />
+
 
 	  </fieldset>
 	</fields>

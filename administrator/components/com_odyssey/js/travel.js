@@ -21,6 +21,7 @@
       $('#cityfilter').getContainer();
     }
 
+    $('#image').getContainer();
 
     //Set as functions the global variables previously declared.
     checkTravelData = $.fn.checkTravelData;
@@ -46,6 +47,7 @@
 	    $.each(results.country, function(i, result) { $.fn.createItem('countryfilter', result); });
 	    $.each(results.region, function(i, result) { $.fn.createItem('regionfilter', result); });
 	    $.each(results.city, function(i, result) { $.fn.createItem('cityfilter', result); });
+	    $.each(results.image, function(i, result) { $.fn.createItem('image', result); });
 	  },
 	  error: function(jqXHR, textStatus, errorThrown) {
 	    //Display the error.
@@ -277,6 +279,74 @@
 
     return true;
   };
+
+
+  $.fn.createImageItem = function(idNb, data) {
+    //Get the id of the current user.
+    var userId = odyssey.getUserId();
+    //Build the link to the Joomla image server.
+    var link = 'index.php?option=com_media&view=images&tmpl=component&asset=com_odyssey&author='+userId+'&fieldid='+idNb+'&folder=odyssey';
+    $('#image-item-'+idNb).createButton('select', '#', link);
+
+    //Create the "alt" label.
+    var properties = {'title':Joomla.JText._('COM_ODYSSEY_IMAGE_ALT_TITLE')};
+    $('#image-item-'+idNb).createHTMLTag('<span>', properties, 'image-alt-label');
+    $('#image-item-'+idNb+' .image-alt-label').text(Joomla.JText._('COM_ODYSSEY_IMAGE_ALT_LABEL'));
+    //Create the "alt" input.
+    properties = {'type':'text', 'name':'image_alt_'+idNb, 'value':data.alt};
+    $('#image-item-'+idNb).createHTMLTag('<input>', properties, 'image-alt');
+
+    //Create the "order" label.
+    properties = {'title':Joomla.JText._('COM_ODYSSEY_IMAGE_ORDERING_TITLE')};
+    $('#image-item-'+idNb).createHTMLTag('<span>', properties, 'image-ordering-label');
+    $('#image-item-'+idNb+' .image-ordering-label').text(Joomla.JText._('COM_ODYSSEY_IMAGE_ORDERING_LABEL'));
+
+    //Get the number of image items within the container then use it as ordering
+    //number for the current item.
+    var ordering = $('#image-container').children('div').length;
+    if(data.ordering !== '') {
+      ordering = data.ordering;
+    }
+    //Create the "order" input.
+    properties = {'type':'text', 'name':'image_ordering_'+idNb, 'readonly':'readonly', 'value':ordering};
+    $('#image-item-'+idNb).createHTMLTag('<input>', properties, 'item-ordering');
+    //Create the removal button.
+    $('#image-item-'+idNb).createButton('remove_image');
+
+    //Create a div in which img tag is nested.
+    properties = {'id':'img-div-'+idNb};
+    $('#image-item-'+idNb).createHTMLTag('<div>', properties, 'div-travel-image');
+    //Create the img tag within the div.
+    properties = {'src':data.src, 'width':data.width, 'height':data.height, 'id':'travel-img-'+idNb};
+    $('#img-div-'+idNb).createHTMLTag('<img>', properties, 'travel-image');
+
+    if(data.src !== '') {
+      //Div is resized to fit the image dimensions and a 1px gray border is defined. 
+      $('#img-div-'+idNb).css({'width':data.width+'px','height':data.height+'px','border':'1px solid #c0c0c0'});
+    }
+
+    //Create the hidden inputs needed to save image data.
+    properties = {'type':'hidden', 'name':'image_src_'+idNb, 'id':'image-src-'+idNb, 'value':data.src};
+    $('#image-item-'+idNb).createHTMLTag('<input>', properties);
+    properties = {'type':'hidden', 'name':'image_width_'+idNb, 'id':'image-width-'+idNb, 'value':data.width};
+    $('#image-item-'+idNb).createHTMLTag('<input>', properties);
+    properties = {'type':'hidden', 'name':'image_height_'+idNb, 'id':'image-height-'+idNb, 'value':data.height};
+    $('#image-item-'+idNb).createHTMLTag('<input>', properties);
+  };
+
+  //Remove the selected image item then reset the order of the other items left.
+  $.fn.imageReorder = function(idNb) {
+    //Remove the selected image.
+    $('#image-container').removeItem(idNb);
+
+    //List all of the div children (ie: image items) of the image container 
+    //in order to reset their ordering value.
+    $('#image-container').children('div').each(function(i, div) {
+	//Reset the ordering input tag value.
+	$(div).children('.image-ordering').val(i+1);
+	});
+  };
+
 
 })(jQuery);
 

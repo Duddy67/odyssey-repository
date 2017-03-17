@@ -45,15 +45,23 @@ foreach($filters as $filter => $column) {
   $data[$filter] = $results;
 }
 
-/*$query->select('ts.dpt_step_id, ts.ordering AS sequence_ordering, s.name AS sequence_name')
-      ->from('#__odyssey_travel_dpt_step_map AS ts')
-      ->join('LEFT', '#__odyssey_step AS s ON s.id=ts.dpt_step_id')
-      ->where('ts.travel_id='.(int)$travelId)
-      ->order('ts.ordering');
+//Get images linked to the travel.
+$query->clear();
+$query->select('src, width, height, alt, ordering') 
+      ->from('#__odyssey_travel_image')
+      ->where('travel_id='.$travelId)
+      ->order('ordering');
 $db->setQuery($query);
-$sequences = $db->loadAssocList();
+$images = $db->loadAssocList();
 
-$data['sequence'] = $sequences;*/
+//Add "../" to the path of each image as we are in the administrator area.
+foreach($images as $key => $image) {
+  $image['src'] = '../'.$image['src'];
+  $images[$key] = $image;
+}
+
+$data['image'] = $images;
+
 
 echo json_encode($data);
 

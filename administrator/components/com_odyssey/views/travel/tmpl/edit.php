@@ -146,6 +146,16 @@ Joomla.submitbutton = function(task)
 	  </div>
 	<?php echo JHtml::_('bootstrap.endTab'); ?>
 
+      <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'images', JText::_('COM_ODYSSEY_SUBMENU_IMAGES', true)); ?>
+	<div class="row-fluid form-horizontal-desktop">
+	  <div class="span8" id="image">
+	    <?php echo $this->form->getInput('imageurl'); //Must be loaded to call the overrided media file.
+		  //echo $this->form->getControlGroup('img_reduction_rate');
+	    ?>
+	  </div>
+	</div>
+      <?php echo JHtml::_('bootstrap.endTab'); ?>
+
       <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'publishing', JText::_('JGLOBAL_FIELDSET_PUBLISHING', true)); ?>
       <div class="row-fluid form-horizontal-desktop">
 	<div class="span6">

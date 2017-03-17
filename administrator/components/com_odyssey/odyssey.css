@@ -10,6 +10,7 @@
 .recipient-item,
 .transitcity-item,
 .addon-item,
+.image-item,
 .option-item,
 .countryfilter-item,
 .regionfilter-item,
@@ -133,11 +134,47 @@
 .target-item .btn-wrapper, 
 .condition-item .btn-wrapper, 
 .recipient-item .btn-wrapper, 
+.image-item .btn-wrapper, 
 /*.option-item .btn-wrapper,*/
 .addon-item .btn-wrapper {
   float: left;
   margin-left: 20px;
   /*border: 1px solid #c0c0c0;*/
+}
+
+.image-item div[id^="btn-remove_image-"].btn-wrapper {
+  float: right !important;
+}
+
+.image-item div[id^="btn-select-"].btn-wrapper {
+  margin-right : 8%;
+}
+
+.image-alt {
+  margin-left: 1%;
+  margin-right: 8%;
+}
+
+.image-alt-label {
+  display: block;
+  float: left;
+  margin-top: 5px;
+  margin-left: 10px;
+  font-weight: bold;
+  color: #404040;
+}
+
+.image-ordering-label {
+  margin-top: 5px;
+  margin-left: 10px;
+  font-weight: bold;
+  color: #404040;
+}
+
+.div-travel-image {
+  overflow: hidden; /* Block formatting context. */
+  clear: both;
+  margin: 50px auto 20px auto;
 }
 
 .addon-status {
@@ -336,6 +373,7 @@ input[id^="ev-year-time-"] {
 
 .city-ordering,
 .addon-ordering,
+.image-ordering,
 .sequence-ordering {
   width: 30px;
 }

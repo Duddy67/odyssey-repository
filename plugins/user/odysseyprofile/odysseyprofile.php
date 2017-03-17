@@ -142,7 +142,8 @@ class PlgUserOdysseyprofile extends JPlugin
 
     // Add the registration fields to the form.
     JForm::addFormPath(__DIR__.'/profiles');
-    $form->loadFile('profile', false);
+    //IMPORTANT: Don't forget to set the reset argument flag to true or the "required" attribute won't be toggled.
+    $form->loadFile('profile', true);
 
     $fields = array('firstname',
 		    'customer_title',
@@ -165,7 +166,6 @@ class PlgUserOdysseyprofile extends JPlugin
       elseif($name == 'com_users.registration') {
 	// Toggle whether the field is required.
 	if($this->params->get('register-require_'.$field, 1) > 0) {
-	//echo 'register-require_'.$field;
 	  $form->setFieldAttribute($field, 'required', ($this->params->get('register-require_'.$field) == 2) ? 'required' : '', 'odysseyprofile');
 	}
 	else {

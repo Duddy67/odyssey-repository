@@ -78,6 +78,21 @@ ENGINE = MyISAM DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
+-- Table `#__odyssey_travel_image`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `#__odyssey_travel_image`;
+CREATE TABLE `#__odyssey_travel_image` (
+  `travel_id` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `src` VARCHAR(255) NOT NULL ,
+  `width` VARCHAR(10) NOT NULL ,
+  `height` VARCHAR(10) NOT NULL ,
+  `alt` TEXT NULL ,
+  `ordering` INT NOT NULL DEFAULT 0 ,
+  INDEX `idx_travel_id` (`travel_id` ASC) )
+ENGINE = MyISAM DEFAULT CHARSET=utf8;
+
+
+-- -----------------------------------------------------
 -- Table `#__odyssey_addon_price
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `#__odyssey_addon_price`;
@@ -676,7 +691,7 @@ CREATE TABLE `#__odyssey_passenger` (
   `customer` TINYINT(1) UNSIGNED NOT NULL ,
   `firstname` VARCHAR(30) NOT NULL , 
   `lastname` VARCHAR(30) NOT NULL , 
-  `birthdate` VARCHAR(30) NOT NULL , 
+  `birthdate` DATE NOT NULL , 
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 

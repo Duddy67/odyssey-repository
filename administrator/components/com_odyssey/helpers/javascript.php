@@ -93,6 +93,10 @@ class JavascriptHelper
     JText::script('COM_ODYSSEY_NO_ADDON_FOUND');
     JText::script('COM_ODYSSEY_NO_TRANSIT_CITY_FOUND');
     JText::script('COM_ODYSSEY_INFO_GLOBAL_ADDON'); 
+    JText::script('COM_ODYSSEY_IMAGE_ALT_LABEL'); 
+    JText::script('COM_ODYSSEY_IMAGE_ALT_TITLE'); 
+    JText::script('COM_ODYSSEY_IMAGE_ORDERING_LABEL'); 
+    JText::script('COM_ODYSSEY_IMAGE_ORDERING_TITLE'); 
 
     return;
   }

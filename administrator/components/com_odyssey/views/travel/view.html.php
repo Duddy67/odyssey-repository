@@ -37,7 +37,7 @@ class OdysseyViewTravel extends JViewLegacy
     JavascriptHelper::getTravelText();
 
     $this->config = JComponentHelper::getParams('com_odyssey');
-    JavascriptHelper::loadFunctions(array('country', 'region', 'city'));
+    JavascriptHelper::loadFunctions(array('country', 'region', 'city', 'user'));
 
     //Display the toolbar.
     $this->addToolBar();

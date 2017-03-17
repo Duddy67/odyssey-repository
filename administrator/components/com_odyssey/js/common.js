@@ -75,7 +75,7 @@
     }
 
     //Create the button.
-    $(this).append('<div class="btn-wrapper">');
+    $(this).append('<div class="btn-wrapper" id="btn-'+action+'-'+idNb+'">');
     //Create the button link which trigger the action when it is clicked.
     //Note: Find the last element linked to the .btn-wrapper class in case one 
     //button or more already exist into the item. 
@@ -83,7 +83,7 @@
     //Create the label button according to its action.
     var label = 'COM_ODYSSEY_BUTTON_'+action.toUpperCase()+'_LABEL'
 
-    if(action == 'remove_reorder') {
+    if(action == 'remove_reorder' || action == 'remove_image') {
       //The remove reorder label is just a remove label. 
       label = 'COM_ODYSSEY_BUTTON_REMOVE_LABEL'
     }
@@ -103,6 +103,11 @@
       case 'remove_reorder':
 	$(this).find('.btn-wrapper:last a').append('<span class="icon-remove"/>');
 	$(this).find('.btn-wrapper:last a').click( function() { $.fn.itemReorder(idNb, itemType); });
+	break;
+
+      case 'remove_image':
+	$(this).find('.btn-wrapper:last a').append('<span class="icon-remove"/>');
+	$(this).find('.btn-wrapper:last a').click( function() { $.fn.imageReorder(idNb); });
 	break;
 
       case 'select':
@@ -419,6 +424,8 @@
       data = {'addon_ordering':''};
     } else if(itemType == 'option') {
       data = {'option_ordering':''};
+    } else if(itemType == 'image') {
+      data = {'alt':'', 'ordering':'', 'src':'', 'width':'', 'height':''};
     } else { //
       //data = {};
     }

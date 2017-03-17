@@ -13,9 +13,13 @@
 		description="COM_ODYSSEY_FIELD_LASTNAME_DESC" 
 		required="true" />
 
-	<field name="birthdate" type="text"
-		label="COM_ODYSSEY_FIELD_BIRTHDATE_LABEL"
-		description="COM_ODYSSEY_FIELD_BIRTHDATE_DESC" />
+	<field name="birthdate"
+	       type="calendar"
+	       label="COM_ODYSSEY_FIELD_BIRTHDATE_LABEL"
+	       description="COM_ODYSSEY_FIELD_BIRTHDATE_DESC"
+	       info="COM_ODYSSEY_SPACER_BIRTHDATE"
+	       format="%Y-%m-%d"
+	       filter="server_utc" />
 
 	<field name="street" type="text"
 		label="COM_ODYSSEY_FIELD_STREET_LABEL"

@@ -247,6 +247,36 @@ class plgContentOdyssey extends JPlugin
       $columns = array('travel_id','country_code','region_code','city_id');
       OdysseyHelper::updateMappingTable('#__odyssey_search_filter', $columns, $filters, array($data->id));
 
+      //At last we end with images.
+
+      $images = array();
+      foreach($post as $key=>$val) {
+	if(preg_match('#^image_src_([0-9]+)$#', $key, $matches)) {
+	  $imageNb = $matches[1];
+	  //Remove "../" from src path as images come from the administrator area.
+	  $src = preg_replace('#^\.\.\/#', '', $post['image_src_'.$imageNb]);
+	  $width = $post['image_width_'.$imageNb];
+	  $height = $post['image_height_'.$imageNb];
+	  $ordering = $post['image_ordering_'.$imageNb];
+	  $alt = trim($post['image_alt_'.$imageNb]); //Clean out the value.
+
+	  if(!empty($src)) { //Check for empty field.
+	    $image = new JObject;
+	    $image->src = $src;
+	    $image->width = $width;
+	    $image->height = $height;
+	    $image->ordering = $ordering;
+	    $image->alt = $alt;
+	    $images[] = $image;
+	  }
+	}
+      }
+
+      //Set fields.
+      $columns = array('travel_id','src','width','height','ordering','alt');
+      //Update images.
+      OdysseyHelper::updateMappingTable('#__odyssey_travel_image', $columns, $images, array($data->id));
+
       return true;
     }
     elseif($context == 'com_odyssey.step') { //STEP
