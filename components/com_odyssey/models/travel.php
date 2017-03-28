@@ -259,6 +259,16 @@ class OdysseyModelTravel extends JModelItem
 
 	$dateTime = $fromYear.'-'.$fromMonth.'-'.$fromDay;
 
+	//To prevent users to pick dates previous to the current date we set the date
+	//variables to the current date.
+	$currentDate = date('Y-m-d');
+	if($dateTime < $currentDate) {
+	  preg_match('#^([0-9]{4})-([0-9]{2})-([0-9]{2}).*$#', $currentDate, $matches);
+	  $fromYear = $matches[1];
+	  $fromMonth = $matches[2];
+	  $fromDay = $matches[3];
+	}
+
 	//Remove padding zero (if any) from month and day.
 	$fromMonth = ($fromMonth[0] == '0') ? $fromMonth[1] : $fromMonth;
 	$fromDay = ($fromDay[0] == '0') ? $fromDay[1] : $fromDay;

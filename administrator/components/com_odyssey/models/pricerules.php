@@ -26,7 +26,7 @@ class OdysseyModelPricerules extends JModelList
 	      'prule_type', 'p.prule_type',
 	      'behavior', 'p.behavior',
 	      'operation', 'p.operation',
-	      'target', 'p.target',
+	      'target', 'p.target', 'target_category',
 	      'user', 'user_id',
 	      'ordering', 'p.ordering',
       );
@@ -57,6 +57,9 @@ class OdysseyModelPricerules extends JModelList
     $published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '');
     $this->setState('filter.published', $published);
 
+    $targetCategory = $this->getUserStateFromRequest($this->context.'.filter.target_category', 'filter_target_category', '');
+    $this->setState('filter.target_category', $targetCategory);
+
     // List state information.
     parent::populateState('p.name', 'asc');
   }
@@ -68,6 +71,7 @@ class OdysseyModelPricerules extends JModelList
     $id .= ':'.$this->getState('filter.search');
     $id .= ':'.$this->getState('filter.published');
     $id .= ':'.$this->getState('filter.user_id');
+    $id .= ':'.$this->getState('filter.target_category');
 
     return parent::getStoreId($id);
   }
@@ -120,6 +124,19 @@ class OdysseyModelPricerules extends JModelList
     if(is_numeric($userId)) {
       $type = $this->getState('filter.user_id.include', true) ? '= ' : '<>';
       $query->where('p.created_by'.$type.(int) $userId);
+    }
+
+    //Filter by target category.
+    $targetCategory = $this->getState('filter.target_category');
+    if(!empty($targetCategory)) {
+      //Sort by travel category.
+      $targets = '"travel", "travel_cat"';
+      //Or by addon category.
+      if($targetCategory == 'addon') {
+	$targets = '"addon", "addon_option"';
+      }
+
+      $query->where('(p.target IN ('.$targets.'))');
     }
 
     //Get the possible option sent by a link to a modal window.

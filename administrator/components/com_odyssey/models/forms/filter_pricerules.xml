@@ -8,8 +8,7 @@
 			hint="JSEARCH_FILTER"
 			class="js-stools-search-string"
 		/>
-		<field
-			name="published"
+		<field name="published"
 			type="status"
 			label="JOPTION_SELECT_PUBLISHED"
 			description="JOPTION_SELECT_PUBLISHED_DESC"
@@ -17,11 +16,17 @@
 			>
 			<option value="">JOPTION_SELECT_PUBLISHED</option>
 		</field>
-		<field
-			name="user_id"
+		<field name="user_id"
 			type="componentuser"
 			onchange="this.form.submit();" >
 			<option value="">COM_ODYSSEY_OPTION_SELECT_USER</option>
+		</field>
+		<field name="target_category"
+			type="list"
+			onchange="this.form.submit();" >
+			<option value="">COM_ODYSSEY_OPTION_SELECT_TARGET_CATEGORY</option>
+			<option value="travel">COM_ODYSSEY_OPTION_TRAVEL</option>
+			<option value="addon">COM_ODYSSEY_OPTION_ADDON</option>
 		</field>
 	</fields>
 	<fields name="list">
