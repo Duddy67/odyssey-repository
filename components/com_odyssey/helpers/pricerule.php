@@ -328,13 +328,20 @@ class PriceruleHelper
 
     //Merge the addon and addon option price rules.
     $catalogPrules = array_merge($catalogPrules, $results);
+    //Merge also the travel price rules to exclude addon price rules in case of exclusive
+    //travel price rules.
+    $session = JFactory::getSession();
+    $travel = $session->get('travel', array(), 'odyssey'); 
+    if(isset($travel['pricerules'])) {
+      $catalogPrules = array_merge($catalogPrules, $travel['pricerules']);
+    }
 
     $catalogPrules = PriceruleHelper::checkExclusivePriceRules($catalogPrules);
 
     //Build id path arrays from which all price rules can be easily retrieved.
     $addonPrules = $addonOptionPrules = array();
     foreach($catalogPrules as $catalogPrule) {
-      //Separate regular addons and addon options.
+      //Separate regular addons and addon options (ignore travel price rules).
       if(isset($catalogPrule['addon_option_id'])) { //We're dealing with an addon option.
 	//Path pattern: array[step_id] -> array[addon_id] -> array[addon_option_id] -> array(pricerule data)
 	if(!array_key_exists($catalogPrule['step_id'], $addonOptionPrules)) {
@@ -352,7 +359,7 @@ class PriceruleHelper
 	  }
 	}
       }
-      else { //We're dealing with a regular addon.
+      elseif(isset($catalogPrule['addon_id'])) { //We're dealing with a regular addon.
 	//Path pattern:  array[step_id] -> array[addon_id] -> array(pricerule data)
 	if(!array_key_exists($catalogPrule['step_id'], $addonPrules)) {
 	  $addonPrules[$catalogPrule['step_id']] = array($catalogPrule['addon_id'] => array($catalogPrule));
@@ -775,6 +782,88 @@ class PriceruleHelper
     //echo '</pre>';
 
     return $lowestPrice;
+  }
+
+
+  //Once the addons have been selected we need to merge their price rules with the travel's
+  //and check them in case an exclusive addon price rule cancels one or more
+  //travel price rules. 
+  public static function mergeAndCheckPriceRules()
+  {
+    //Grab the user session.
+    $session = JFactory::getSession();
+    $travel = $session->get('travel', array(), 'odyssey'); 
+    $addons = $session->get('addons', array(), 'odyssey'); 
+    $travelPrules = $addonPrules = 0;
+    $priceRules = array();
+
+    //Collect the travel price rules.
+    if(isset($travel['pricerules'])) {
+      foreach($travel['pricerules'] as $priceRule) {
+	//Set a tag which will be useful later.
+	$priceRule['travel_prule'] = true;
+	$priceRules[] = $priceRule;
+	$travelPrules++;
+      }
+    }
+
+    //No need to go further.
+    if(!$travelPrules) {
+      return;
+    }
+
+    //Collect all of the addon and addon option price rules.
+    foreach($addons as $addon) {
+      if(isset($addon['pricerules'])) {
+	foreach($addon['pricerules'] as $priceRule) {
+	  $priceRules[] = $priceRule;
+	  $addonPrules++;
+	}
+      }
+
+      if(isset($addon['options'])) {
+	foreach($addon['options'] as $option) {
+	  if(isset($option['pricerules'])) {
+	    foreach($option['pricerules'] as $priceRule) {
+	      $priceRules[] = $priceRule;
+	      $addonPrules++;
+	    }
+	  }
+	}
+      }
+    }
+
+    //No need to go further.
+    if(!$addonPrules) {
+      return;
+    }
+
+    //Remove possible travel price rules due to an exclusive addon (or addon option) price rule.
+    $priceRules = PriceruleHelper::checkExclusivePriceRules($priceRules);
+    //Get the ids of the remaining travel price rules. 
+    $pruleIds = array();
+    foreach($priceRules as $priceRule) {
+      if(isset($priceRule['travel_prule'])) {
+	$pruleIds[] = $priceRule['id'];
+      }
+    }
+
+    //Some travel price rules have been removed.
+    if(count($pruleIds) < $travelPrules) {
+      //Reset the travel session array regarding price rules.
+      $travel['travel_price'] = $travel['normal_price'];
+      unset($travel['normal_price']);
+      unset($travel['pricerules']);
+      $session->set('travel', $travel, 'odyssey'); 
+
+      //The remaining travel price rules have to be computed again.
+      if(count($pruleIds)) {
+	$travel = PriceruleHelper::getMatchingTravelPriceRules($pruleIds, $travel);
+	$session->set('travel', $travel, 'odyssey'); 
+      }
+    }
+
+    return;
   }
 
 

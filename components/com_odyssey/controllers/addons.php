@@ -7,6 +7,7 @@
 
 defined('_JEXEC') or die;
 require_once JPATH_COMPONENT.'/helpers/travel.php';
+require_once JPATH_COMPONENT.'/helpers/pricerule.php';
 
 
 /**
@@ -153,6 +154,9 @@ class OdysseyControllerAddons extends JControllerForm
     //echo '</pre>';
     $session = JFactory::getSession();
     $session->set('addons', $addons, 'odyssey'); 
+
+    //Addon and travel price rules must be merged and checked.
+    PriceruleHelper::mergeAndCheckPriceRules();
 
     $this->setRedirect('index.php?option='.$this->option.'&task=passengers.checkUser');
 
