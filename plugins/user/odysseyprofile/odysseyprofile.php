@@ -485,20 +485,22 @@ class PlgUserOdysseyprofile extends JPlugin
       //belongs to.
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
-      $query->select('COUNT(pr.id)')
+      $query->select('pr.id, pr.prule_type, pr.target')
 	    ->from('#__odyssey_pricerule AS pr')
 	    ->join('INNER', '#__odyssey_prule_recipient AS prr ON prr.prule_id=pr.id')
 	    ->where('pr.published=1')
 	    ->where('((pr.recipient="customer" AND prr.item_id='.$user->get('id').') OR '.
 		    '(pr.recipient="customer_group" AND prr.item_id IN('.implode(',', $filteredGroups).')))')
+	    //Rule out the coupon price rules.
+	    ->where('(pr.behavior!="CPN_AND" AND pr.behavior!="CPN_XOR")')
 	    //Check against publication dates (start and stop).
 	    ->where('('.$db->quote($now).' < pr.publish_down OR pr.publish_down = "0000-00-00 00:00:00")')
 	    ->where('('.$db->quote($now).' > pr.publish_up OR pr.publish_up = "0000-00-00 00:00:00")');
       $db->setQuery($query);
-      $result = $db->loadResult();
+      $result = $db->loadAssocList();
 
       //Inform the user that some price rules have been detected.
-      if($result) {
+      if(!empty($result)) {
 	JFactory::getApplication()->enqueueMessage(JText::_('PLUG_USER_ODYSSEY_MESSAGE_PRICERULE_DETECTED'), 'message');
       }
     }

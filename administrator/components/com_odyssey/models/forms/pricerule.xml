@@ -23,11 +23,11 @@
 	<field name="behavior" type="list"
 		label="COM_ODYSSEY_FIELD_PRICERULE_BEHAVIOR_LABEL"
 		description="COM_ODYSSEY_FIELD_PRICERULE_BEHAVIOR_DESC"
-		default="XOR">
-		<option value="XOR">COM_ODYSSEY_OPTION_EXCLUSIVE</option>
+		default="AND">
 		<option value="AND">COM_ODYSSEY_OPTION_CUMULATIVE</option>
-		<option value="CPN_XOR">COM_ODYSSEY_OPTION_COUPON_EXCLUSIVE</option>
+		<option value="XOR">COM_ODYSSEY_OPTION_EXCLUSIVE</option>
 		<option value="CPN_AND">COM_ODYSSEY_OPTION_COUPON_CUMULATIVE</option>
+		<option value="CPN_XOR">COM_ODYSSEY_OPTION_COUPON_EXCLUSIVE</option>
 	</field>
 
 	<field name="operation" type="list"
@@ -70,6 +70,8 @@
 		<option value="travel">COM_ODYSSEY_OPTION_TRAVEL_QUANTITY</option>
 		<option value="travel_cat">COM_ODYSSEY_OPTION_TRAVEL_CAT_QUANTITY</option>
 		<option value="travel_cat_amount">COM_ODYSSEY_OPTION_TRAVEL_CAT_AMOUNT</option>
+		<option value="travel_nb_psgr">COM_ODYSSEY_OPTION_TRAVEL_NB_PSGR</option>
+		<option value="travel_cat_nb_psgr">COM_ODYSSEY_OPTION_TRAVEL_CAT_NB_PSGR</option>
 	</field>
 
 	<field name="logical_opr" type="list"
