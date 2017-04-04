@@ -44,6 +44,11 @@ class JFormFieldMediatravel extends JFormField
       // Build the script.
       $script = array();
       $script[] = 'function jInsertFieldValue(value, id) {';
+      //We're dealing with the regular media image.
+      $script[] = '  if(id == "jform_image") {';
+      $script[] = '    document.getElementById(id).value=value;';
+      $script[] = '    return;';
+      $script[] = '  }';
       //Build the image url.
       //Note: Add "../" to the path as we are in the administrator area.
       $script[] = '  url="../"+value;';
