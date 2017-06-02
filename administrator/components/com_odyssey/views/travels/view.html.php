@@ -55,13 +55,13 @@ class OdysseyViewTravels extends JViewLegacy
     $user = JFactory::getUser();
 
     //The user is allowed to create or is able to create in one of the component categories.
-    if($canDo->get('core.create') || (count($user->getAuthorisedCategories('com_travel', 'core.create'))) > 0) {
+    if($canDo->get('core.create') || (count($user->getAuthorisedCategories('com_odyssey', 'core.create'))) > 0) {
       JToolBarHelper::addNew('travel.add', 'JTOOLBAR_NEW');
     }
 
     if($canDo->get('core.edit') || $canDo->get('core.edit.own') || 
-       (count($user->getAuthorisedCategories('com_travel', 'core.edit'))) > 0 || 
-       (count($user->getAuthorisedCategories('com_travel', 'core.edit.own'))) > 0) {
+       (count($user->getAuthorisedCategories('com_odyssey', 'core.edit'))) > 0 || 
+       (count($user->getAuthorisedCategories('com_odyssey', 'core.edit.own'))) > 0) {
       JToolBarHelper::editList('travel.edit', 'JTOOLBAR_EDIT');
     }
 
@@ -76,7 +76,7 @@ class OdysseyViewTravels extends JViewLegacy
     }
 
     //Check for delete permission.
-    if($canDo->get('core.delete') || count($user->getAuthorisedCategories('com_travel', 'core.delete'))) {
+    if($canDo->get('core.delete') || count($user->getAuthorisedCategories('com_odyssey', 'core.delete'))) {
       JToolBarHelper::divider();
       JToolBarHelper::deleteList('', 'travels.delete', 'JTOOLBAR_DELETE');
     }

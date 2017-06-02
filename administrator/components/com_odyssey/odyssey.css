@@ -529,6 +529,25 @@ label[class^="price-psgr-label"] {
   margin-top: 20px;
 }
 
+.field-calendar,
+.wrap-calendar-2 {
+  float: left;
+}
+
+.wrap-calendar-2 {
+  margin-left: 20px;
+}
+
+/* Override: For some reason the month nav row collapses. */
+.calendar-head-row .nav,
+.btn-prev-month, 
+.btn-next-month {
+  font-size: 18px !important;
+}
+.calendar-head-row .title div div {
+  font-size: 18px !important;
+}
+
 .thumbnail { /* Bootstrap class overrided */
   float: left;
   padding: 20px 8px 10px 0 !important;

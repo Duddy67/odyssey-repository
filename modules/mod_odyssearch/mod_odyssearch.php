@@ -27,8 +27,8 @@ $form->loadFile(JPATH_ROOT.'/components/com_odyssey/models/forms/filter_search.x
 
 //Get the filter setting from the component global configuration.
 $searchFilters = JComponentHelper::getParams('com_odyssey')->get('search_filters');
-//Duration filter is always showed.
-$showedFilters = array('duration'); 
+//Price and duration filters are always shown.
+$showedFilters = array('price', 'duration'); 
 
 //Set the filters to show according to the filter setting.
 if($searchFilters != 'region' && $searchFilters != 'city' && $searchFilters != 'region_city') {

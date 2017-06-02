@@ -20,6 +20,10 @@
 			type="cityfilterlist"
 			onchange="this.form.submit();" >
 		</field>
+		<field name="price"
+			type="pricefilterlist"
+			onchange="this.form.submit();" >
+		</field>
 		<field name="duration"
 			type="durationfilterlist"
 			onchange="this.form.submit();" >

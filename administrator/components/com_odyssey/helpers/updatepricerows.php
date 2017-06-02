@@ -114,6 +114,12 @@ class UpdatePriceRowsHelper
     $db->setQuery($query);
     $stepIds = $db->loadColumn();
 
+    //If no addon is linked to the steps we put the departure step id into the array to
+    //prevent a MySQL error when deleting.  
+    if(empty($stepIds)) {
+      $stepIds[] = $dptStepId;
+    }
+
     //Run the appropriate queries according to the new state of the departure step.
 
     if(!empty($dptsToRemove)) {

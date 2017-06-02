@@ -11,7 +11,7 @@ $data = $displayData;
 //Get the filter setting from the component global configuration.
 $searchFilters = $data['search_filters'];
 //Duration and date filters are always showed.
-$showedFilters = array('duration', 'date'); 
+$showedFilters = array('price', 'duration', 'date'); 
 
 //Set the filters to show according to the filter setting.
 if($searchFilters != 'region' && $searchFilters != 'city' && $searchFilters != 'region_city') {

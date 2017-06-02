@@ -68,7 +68,13 @@ $item = $this->item;
 
   <?php echo JLayoutHelper::render('extra_desc', $this->item, JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
 
-  <?php echo JLayoutHelper::render('travel_data', array('travel_data' => $this->travelData, 'item' => $item, 'params' => $params, 'now_date' => $this->nowDate), JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
+  <?php if(!empty($this->travelData['travel'])) : ?>
+    <?php echo JLayoutHelper::render('travel_data', array('travel_data' => $this->travelData, 'item' => $item, 'params' => $params, 'now_date' => $this->nowDate), JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
+  <?php else : ?>
+    <div class="alert alert-no-items">
+      <?php echo JText::_('COM_ODYSSEY_TRAVEL_NOT_AVAILABLE'); ?>
+    </div>
+  <?php endif; ?>
 </div>
 
 <?php

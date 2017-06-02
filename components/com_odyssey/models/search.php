@@ -61,6 +61,9 @@ class OdysseyModelSearch extends JModelList
     $duration = $app->getUserStateFromRequest($this->context.'.filter.duration', 'filter_duration');
     $this->setState('filter.duration', $duration);
 
+    $price = $app->getUserStateFromRequest($this->context.'.filter.price', 'filter_price');
+    $this->setState('filter.price', $price);
+
     // List state information.
     parent::populateState('t.name', 'asc');
   }
@@ -73,6 +76,7 @@ class OdysseyModelSearch extends JModelList
     $id .= ':'.$this->getState('filter.country');
     $id .= ':'.$this->getState('filter.region');
     $id .= ':'.$this->getState('filter.city');
+    $id .= ':'.$this->getState('filter.price');
     $id .= ':'.$this->getState('filter.duration');
     $id .= ':'.$this->getState('filter.date');
 
@@ -133,6 +137,12 @@ class OdysseyModelSearch extends JModelList
     if(is_numeric($city)) {
       $query->join('INNER', '#__odyssey_search_filter AS sf_ci ON sf_ci.travel_id=t.id')
 	    ->where('sf_ci.city_id='.(int)$city);
+    }
+
+    //Filter by price.
+    $price = $this->getState('filter.price');
+    if(!empty($price)) {
+      $query->where('t.price_range='.$db->Quote($price));
     }
 
     //Filter by duration.

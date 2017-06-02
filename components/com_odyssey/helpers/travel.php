@@ -26,9 +26,11 @@ class TravelHelper
     $query->select('t.id, MIN(tp.price) AS price_starting_at')
 	  ->from('#__odyssey_travel_price AS tp')
 	  ->join('INNER', '#__odyssey_travel AS t ON t.id=tp.travel_id')
-	  ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id AND (ds.date_time >= '.$nowDate.
-		          ' OR ds.date_time_2 >= '.$nowDate.')')
-	  ->where('t.id IN('.implode(',', $travelIds).') AND tp.dpt_id=ds.dpt_id AND tp.psgr_nb='.(int)$baseNbPsgr)
+	  //Note: Not sure the scheduled departures constraint is relevant.
+	  //->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id AND (ds.date_time >= '.$nowDate.
+		          //' OR ds.date_time_2 >= '.$nowDate.')')
+	  ->where('t.id IN('.implode(',', $travelIds).') AND tp.psgr_nb='.(int)$baseNbPsgr)
+	  //->where('tp.dpt_id=ds.dpt_id')
 	  ->group('t.id');
     $db->setQuery($query);
     $results = $db->loadAssocList();

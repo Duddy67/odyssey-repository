@@ -128,20 +128,27 @@
       var properties = {'id':'wrap-dpt-row-'+idNb};
       $('#departure-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-row');
 
-      properties = {'type':'text', 'name':'date_time_'+idNb, 'id':'date-time-'+idNb, 'value':data.date_time};
+      //A parent wraping div with a "field-calendar" class is required to get the calendar working.
+      var properties = {'id':'field-calendar-'+idNb};
+      $('#wrap-dpt-row-'+idNb).createHTMLTag('<div>', properties, 'field-calendar');
+
+      properties = {'type':'text', 'name':'date_time_'+idNb, 'id':'date-time-'+idNb,
+		    'value':data.date_time, 'data-alt-value':data.date_time, 'autocomplete':'off'};
 
       //Set format according to the date type.
       var dateFormat = '%Y-%m-%d %H:%M';
+      var time = true;
       if(dateType == 'period') {
 	dateFormat = '%Y-%m-%d';
-	properties.readonly = 'readonly';
+	time = false;
+	//properties.readonly = 'readonly';
       }
 
-      $('#wrap-dpt-row-'+idNb).createHTMLTag('<input>', properties, 'input-medium date-time dpt-date-time');
+      $('#field-calendar-'+idNb).createHTMLTag('<input>', properties, 'input-medium date-time dpt-date-time');
 
       //Create the calendar button.
-      properties = {'type':'button', 'id':'button-date-'+idNb};
-      $('#wrap-dpt-row-'+idNb).createHTMLTag('<button>', properties, 'btn dpt-btn');
+      properties = {'type':'button', 'id':'button-date-'+idNb, 'data-weekend':'0,6'};
+      $('#field-calendar-'+idNb).createHTMLTag('<button>', properties, 'btn dpt-btn');
       properties = {};
       $('#button-date-'+idNb).createHTMLTag('<span>', properties, 'icon-calendar');
 
@@ -154,19 +161,28 @@
 	  // Trigger for the calendar (button ID)
 	  button: 'button-date-'+idNb,
 	  // Alignment (defaults to "Bl")
-	  align: "Tl",
+	  align: 'Tl',
+	  showsTime: time,
 	  singleClick: true,
 	  firstDay: 0
       });
 
       //Add the second date time field for the period type.
       if(dateType == 'period') {
-	properties = {'type':'text', 'name':'date_time_2_'+idNb, 'id':'date-time-2-'+idNb, 'readonly':'readonly', 'value':data.date_time_2};
-	$('#wrap-dpt-row-'+idNb).createHTMLTag('<input>', properties, 'input-medium date-time readonly dpt-date-time');
+	//Add an extra wraping div or calendar won't work.
+	var properties = {'id':'wrap-calendar-2-'+idNb};
+	$('#wrap-dpt-row-'+idNb).createHTMLTag('<div>', properties, 'wrap-calendar-2');
+	//A parent wraping div with a "field-calendar" class is required to get the calendar working.
+	var properties = {'id':'field-calendar-2-'+idNb};
+	$('#wrap-calendar-2-'+idNb).createHTMLTag('<div>', properties, 'field-calendar');
+
+	properties = {'type':'text', 'name':'date_time_2_'+idNb, 'id':'date-time-2-'+idNb, 'value':data.date_time_2,
+		      'data-alt-value':data.date_time_2, 'autocomplete':'off'};
+	$('#field-calendar-2-'+idNb).createHTMLTag('<input>', properties, 'input-medium date-time dpt-date-time');
 
 	//Create the calendar button.
-	properties = {'type':'button', 'id':'button-date-2-'+idNb};
-	$('#wrap-dpt-row-'+idNb).createHTMLTag('<button>', properties, 'btn dpt-btn');
+	properties = {'type':'button', 'id':'button-date-2-'+idNb, 'data-weekend':'0,6'};
+	$('#field-calendar-2-'+idNb).createHTMLTag('<button>', properties, 'btn dpt-btn');
 	properties = {};
 	$('#button-date-2-'+idNb).createHTMLTag('<span>', properties, 'icon-calendar');
 
@@ -179,7 +195,8 @@
 	    // Trigger for the calendar (button ID)
 	    button: 'button-date-2-'+idNb,
 	    // Alignment (defaults to "Bl")
-	    align: "Tl",
+	    align: 'Tl',
+	    showsTime: false,
 	    singleClick: true,
 	    firstDay: 0
 	});

@@ -28,7 +28,7 @@ class JFormFieldDatefilterList extends JFormFieldList
     $options = $dates = array();
     $nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
     $post = JFactory::getApplication()->input->post->getArray();
-    $country = $region = $city = $duration = '';
+    $country = $region = $city = $price = $duration = '';
 
     if(isset($post['filter']['country'])) {
       $country = $post['filter']['country'];
@@ -40,6 +40,10 @@ class JFormFieldDatefilterList extends JFormFieldList
 
     if(isset($post['filter']['city'])) {
       $city = $post['filter']['city'];
+    }
+      
+    if(isset($post['filter']['price'])) {
+      $price = $post['filter']['price'];
     }
       
     if(isset($post['filter']['duration'])) {
@@ -70,7 +74,11 @@ class JFormFieldDatefilterList extends JFormFieldList
 	    ->where('sf_ci.city_id='.(int)$city);
     }
 
-    //Display only departures linked to travels which match the given duration.
+    //Display only departures linked to travels which match the given price and duration.
+    if(!empty($price)) {
+      $query->where('t.price_range='.$db->Quote($price));
+    }
+
     if(!empty($duration)) {
       $query->where('t.travel_duration='.$db->Quote($duration));
     }

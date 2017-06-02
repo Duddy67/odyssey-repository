@@ -15,12 +15,14 @@
     $('#filter_region').val('');
     $('#filter_city').prop('disabled', false);
     $('#filter_city').val('');
+    $('#filter_price').prop('disabled', false);
+    $('#filter_price').val('');
     $('#filter_duration').prop('disabled', false);
     $('#filter_duration').val('');
     $('#filter_date').prop('disabled', false);
     $('#filter_date').val('');
     //Reload the form.
-    $('#adminForm').submit();
+    $('#siteForm').submit();
   };
 
 
@@ -29,6 +31,7 @@
     var country = $('#filter_country').val();
     var region = $('#filter_region').val();
     var city = $('#filter_city').val();
+    var price = $('#filter_price').val();
     var duration = $('#filter_duration').val();
     var departure = $('#filter_date').val();
 
@@ -46,6 +49,12 @@
       $('#filter_date').prop('disabled', true);
     }
 
+    if($('#filter_price').children('option').length == 2) {
+      //If there is only 1 value left (plus the select value) there is no need to 
+      //enable the filter. Duration value can also be read in the result array.
+      $('#filter_price').prop('disabled', true);
+    }
+
     if($('#filter_duration').children('option').length == 2) {
       //If there is only 1 value left (plus the select value) there is no need to 
       //enable the filter. Duration value can also be read in the result array.
@@ -57,6 +66,11 @@
       $('#filter_date option[value=""]').text('- Next departures -');
       //Prevent from loading the form again.
       $('#filter_date').removeAttr('onchange');
+    }
+
+    if(nbItems == 0) {
+      $('#filter_duration').prop('disabled', true);
+      $('#filter_date').prop('disabled', true);
     }
   };
 })(jQuery);

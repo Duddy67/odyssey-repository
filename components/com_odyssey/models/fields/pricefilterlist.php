@@ -13,19 +13,20 @@ jimport('joomla.form.formfield');
 // import the list field type
 jimport('joomla.form.helper');
 JFormHelper::loadFieldClass('list');
+require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/utility.php';
 
 
 //Script which build the select html tag containing the country names and codes.
 
-class JFormFieldDurationfilterList extends JFormFieldList
+class JFormFieldPricefilterList extends JFormFieldList
 {
-  protected $type = 'durationfilterlist';
+  protected $type = 'pricefilterlist';
 
   protected function getOptions()
   {
     $options = array();
     $post = JFactory::getApplication()->input->post->getArray();
-    $country = $region = $city = $price = '';
+    $country = $region = $city = '';
 
     if(isset($post['filter']['country'])) {
       $country = $post['filter']['country'];
@@ -39,14 +40,11 @@ class JFormFieldDurationfilterList extends JFormFieldList
       $city = $post['filter']['city'];
     }
       
-    if(isset($post['filter']['price'])) {
-      $price = $post['filter']['price'];
-    }
       
     //Get the country names.
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
-    $query->select('t.travel_duration')
+    $query->select('t.price_range')
 	  ->from('#__odyssey_travel AS t');
 
     if(!empty($country)) {
@@ -64,22 +62,20 @@ class JFormFieldDurationfilterList extends JFormFieldList
 	    ->where('sf_ci.city_id='.(int)$city);
     }
 
-    if(!empty($price)) {
-      $query->where('t.price_range='.$db->Quote($price));
-    }
-
     $query->where('t.published=1')
-	  ->group('t.travel_duration')
-	  ->order('t.travel_duration DESC');
+	  ->group('t.price_range')
+	  ->order('LENGTH(t.price_range), t.price_range');
     $db->setQuery($query);
-    $durations = $db->loadColumn();
+    $prices = $db->loadColumn();
+
+    $currency = UtilityHelper::getCurrency();
 
     //Build the first option.
-    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT_DURATION'));
+    $options[] = JHtml::_('select.option', '', JText::_('COM_ODYSSEY_OPTION_SELECT_PRICE'));
 
     //Build the select options.
-    foreach($durations as $duration) {
-      $options[] = JHtml::_('select.option', $duration, JText::_('COM_ODYSSEY_OPTION_TRAVEL_DURATION_'.strtoupper($duration)));
+    foreach($prices as $price) {
+      $options[] = JHtml::_('select.option', $price, JText::_('COM_ODYSSEY_OPTION_PRICE_RANGE_'.strtoupper($price)).' '.$currency);
     }
 
     // Merge any additional options in the XML definition.
