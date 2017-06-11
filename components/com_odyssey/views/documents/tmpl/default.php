@@ -8,10 +8,6 @@
 defined( '_JEXEC' ) or die; // No direct access
 
 JHtml::_('bootstrap.tooltip');
-JHtml::_('behavior.multiselect');
-JHtml::_('formbehavior.chosen', 'select');
-JHtml::_('behavior.tabstate');
-
 
 $user = JFactory::getUser();
 $userId = $user->get('id');
@@ -31,23 +27,34 @@ function removeDocument(documentId)
 <form action="<?php echo JRoute::_('index.php?option=com_odyssey&view=documents');?>" method="post" enctype="multipart/form-data" name="adminForm" id="adminForm">
 
   <?php
-	echo $htmlDoc['sent'];
+	echo '<h3>'.JText::_('COM_ODYSSEY_SENT_DOCUMENTS').'</h3>';
 
-	$fieldset = $this->myForm->getFieldset('details');
-	foreach($fieldset as $field) {
-	  if($field->getAttribute('name') == 'uploaded_file') {
-	    echo $field->getControlGroup();
-	  }
+	if(empty($htmlDoc['sent'])) {
+	  echo '<div class="alert alert-no-items">'.JText::_('JGLOBAL_NO_MATCHING_RESULTS').'</div>';
 	}
-  ?>
 
-  <button onclick="Joomla.submitbutton('documents.uploadFile');" class="btn
-  btn-small btn-success"> <span class="icon-apply icon-white"></span>Save</button>
-  <?php echo $htmlDoc['received']; ?>
+	echo $htmlDoc['sent'];
+  ?>
+  <div>
+  <input type="file" name="uploaded_file" /><br />
+  <button onclick="Joomla.submitbutton('documents.uploadFile');" style="margin-top:10px;" class="btn btn-small btn-info">
+  <span class="icon-upload icon-white"></span><?php echo JText::_('COM_ODYSSEY_BUTTON_UPLOAD_LABEL'); ?></button>
+  </div>
+  <hr>
+  <?php
+	echo '<h3>'.JText::_('COM_ODYSSEY_RECEIVED_DOCUMENTS').'</h3>';
+
+	if(empty($htmlDoc['received'])) {
+	  echo '<div class="alert alert-no-items">'.JText::_('JGLOBAL_NO_MATCHING_RESULTS').'</div>';
+	}
+
+	echo $htmlDoc['received'];
+  ?>
 
 <input type="hidden" name="option" value="com_odyssey" />
 <input type="hidden" name="task" value="" />
 <input type="hidden" name="document_id" id="document-id" value="" />
+<input type="hidden" name="item_id" value="<?php echo $userId; ?>" />
 <?php echo JHtml::_('form.token'); ?>
 </form>
 

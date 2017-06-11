@@ -32,9 +32,9 @@ class OdysseyViewDocuments extends JViewLegacy
       return false;
     }
 
-    $this->myForm = new JForm('myForm');
+    //$this->myForm = new JForm('myForm');
     // Load any form .xml file you want (like registration.xml)
-    $this->myForm->loadFile(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/customer.xml');
+    //$this->myForm->loadFile(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/customer.xml');
     //$this->setDocument();
     //echo '<pre>';
     //var_dump($fieldset);

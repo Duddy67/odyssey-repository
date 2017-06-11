@@ -65,7 +65,7 @@ class OdysseyControllerCustomer extends JControllerForm
       OdmsHelper::removeDocument($post['document_id']);
       $this->setMessage(JText::_('COM_ODYSSEY_FILE_REMOVED_FROM_SERVER'));
     }
-    //file_put_contents('debog_file.txt', print_r($post['jform'], true)); 
+
     $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=customer&layout=edit&id='.$data['id'], false));
 
     return;

@@ -149,7 +149,7 @@ class OdmsHelper
     //the file, the returned value is undefined (nor boolean or whatever). 
     //Stick to the unlink PHP function which is safer.
     if(!unlink(JPATH_ROOT.'/'.$document->file_path.'/'.$document->file)) {
-      $data->setError(JText::sprintf('COM_ODYSSEY_FILE_COULD_NOT_BE_DELETED', $document->file));
+      JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_ODYSSEY_FILE_COULD_NOT_BE_DELETED', $document->file), 'error');
       return false;
     }
 

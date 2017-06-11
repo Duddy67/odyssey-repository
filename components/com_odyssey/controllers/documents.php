@@ -29,30 +29,41 @@ class OdysseyControllerDocuments extends JControllerAdmin
 
   public function uploadFile()
   {
-    //Get the jform data.
-    $data = $this->input->post->get('jform', array(), 'array');
+    //Get the POST data.
     $post = $this->input->post->getArray();
-    //file_put_contents('debog_file_controller.txt', print_r($_FILES, true)); 
     $document = OdmsHelper::uploadFile('customer');
 
-    $user = JFactory::getUser();
-    $userId = $user->get('id');
+    if(empty($document['error'])) {
+      $document['item_id'] = $post['item_id'];
+      $document['item_type'] = 'customer';
+      $document['uploaded_by'] = 'customer';
+      //
+      OdmsHelper::addDocument($document);
 
-    $document['item_id'] = $userId;
-    $document['item_type'] = 'customer';
-    $document['uploaded_by'] = 'customer';
-    OdmsHelper::addDocument($document);
+      $this->setMessage(JText::sprintf('COM_ODYSSEY_FILE_SUCCESSFULLY_UPLOADED', $document['file_name']));
+    }
+    else {
+      $this->setMessage(JText::_($document['error']), 'warning');
+    }
 
     $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=documents', false));
+
+    return;
   }
 
 
   public function removeDocument()
   {
     $post = $this->input->post->getArray();
-    OdmsHelper::removeDocument($post['document_id']);
-    //file_put_contents('debog_file.txt', print_r($post['jform'], true)); 
+
+    if(OdmsHelper::removeFile($post['document_id'])) {
+      OdmsHelper::removeDocument($post['document_id']);
+      $this->setMessage(JText::_('COM_ODYSSEY_FILE_REMOVED_FROM_SERVER'));
+    }
+
     $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=documents', false));
+
+    return;
   }
 }
 

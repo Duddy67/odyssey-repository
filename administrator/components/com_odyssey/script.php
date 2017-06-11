@@ -44,7 +44,41 @@ class com_odysseyInstallerScript
     }
 
     if($type == 'install') {
-      //
+      //Creates a "odms" folder in the root directory of the site.
+      if(JFolder::create(JPATH_ROOT.'/odms')) {
+	echo '<p style="color:green;">'.JText::_('COM_ODYSSEY_FOLDER_CREATION_SUCCESS').'</p>';
+      }
+      else { //Stop the installation if the folder cannot be created. 
+	Jerror::raiseWarning(null, JText::_('COM_ODYSSEY_FOLDER_CREATION_ERROR'));
+	return false;
+      }
+
+      //Creates subfolders.
+      if(JFolder::create(JPATH_ROOT.'/odms/customer')) {
+	echo '<p style="color:green;">'.JText::_('COM_ODYSSEY_SUBFOLDER_CREATION_SUCCESS').'</p>';
+      }
+      else { //Stop the installation if the subfolder cannot be created. 
+	Jerror::raiseWarning(null, JText::_('COM_ODYSSEY_SUBFOLDER_CREATION_ERROR'));
+	return false;
+      }
+
+      if(JFolder::create(JPATH_ROOT.'/odms/travel')) {
+	echo '<p style="color:green;">'.JText::_('COM_ODYSSEY_SUBFOLDER_CREATION_SUCCESS').'</p>';
+      }
+      else { //Stop the installation if the subfolder cannot be created. 
+	Jerror::raiseWarning(null, JText::_('COM_ODYSSEY_SUBFOLDER_CREATION_ERROR'));
+	return false;
+      }
+
+      //Creates a .htaccess file in the "odms" directory.
+      $buffer = 'Options -Indexes';
+      if(JFile::write(JPATH_ROOT.'/odms/.htaccess', $buffer)) {
+	echo '<p style="color:green;">'.JText::_('COM_ODYSSEY_HTACCESS_CREATION_SUCCESS').'</p>';
+      }
+      else { //Stop the installation if the .htaccess file cannot be created. 
+	Jerror::raiseWarning(null, JText::_('COM_ODYSSEY_HTACCESS_CREATION_ERROR'));
+	return false;
+      }
     }
   }
 
@@ -155,6 +189,15 @@ $db->Quote('{"common":{"core_content_item_id":"id","core_title":"title","core_st
 $db->Quote('OdysseyHelperRoute::getCategoryRoute'));
       $db->setQuery($query);
       $db->query();
+    }
+
+    //Move the download.php file in the file root directory.
+    if(JFile::move(JPATH_ADMINISTRATOR.'/components/com_odyssey/download.php',JPATH_ROOT.'/odms/download.php')) {
+      echo '<p style="color:green;">'.JText::_('COM_ODYSSEY_DOWNLOAD_FILE_MOVE_SUCCESS').'</p>';
+    }
+    else { //If the download.php file cannot be moved a warning message is displayed. 
+      Jerror::raiseWarning(null, JText::_('COM_ODYSSEY_DOWNLOAD_FILE_MOVE_ERROR'));
+      return false;
     }
   }
 
