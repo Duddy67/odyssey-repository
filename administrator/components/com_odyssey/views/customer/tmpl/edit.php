@@ -30,6 +30,7 @@ $fieldsets = $this->form->getFieldsets();
 //var_dump($fieldsets);
 $profile = $this->form->getFieldset('odysseyprofile');
 //var_dump($profile);
+$htmlDoc = OdmsHelper::renderDocuments($this->item->id, 'customer');
 ?>
 
 <script type="text/javascript">
@@ -50,6 +51,13 @@ function setLimitItem(this_)
   limitItem.value = this_.value; 
 
   this_.form.submit();
+}
+
+
+function removeDocument(documentId)
+{
+  document.getElementById('document-id').value = documentId;
+  Joomla.submitbutton('customer.removeDocument');
 }
 </script>
 
@@ -118,10 +126,42 @@ function setLimitItem(this_)
 	</div>
       </div>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
+
+      <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'documents', JText::_('COM_ODYSSEY_TAB_DOCUMENTS', true)); ?>
+	<div class="row-fluid form-horizontal-desktop">
+	  <div class="span6">
+	    <?php
+		  echo '<h3>'.JText::_('COM_ODYSSEY_SENT_DOCUMENTS').'</h3>';
+
+		  if(empty($htmlDoc['sent'])) {
+		    echo '<div class="alert alert-no-items">'.JText::_('JGLOBAL_NO_MATCHING_RESULTS').'</div>';
+		  }
+
+	          echo $htmlDoc['sent'];
+	    ?>
+	    <div>
+	    <input type="file" name="uploaded_file" /><br />
+	    <button onclick="Joomla.submitbutton('customer.uploadFile');" style="margin-top:10px;" class="btn btn-small btn-info">
+	    <span class="icon-upload icon-white"></span><?php echo JText::_('COM_ODYSSEY_BUTTON_UPLOAD_LABEL'); ?></button>
+	    </div>
+	    <hr>
+	    <?php
+		  echo '<h3>'.JText::_('COM_ODYSSEY_RECEIVED_DOCUMENTS').'</h3>';
+
+		  if(empty($htmlDoc['received'])) {
+		    echo '<div class="alert alert-no-items">'.JText::_('JGLOBAL_NO_MATCHING_RESULTS').'</div>';
+		  }
+
+		  echo $htmlDoc['received'];
+	    ?>
+	  </div>
+	</div>
+      <?php echo JHtml::_('bootstrap.endTab'); ?>
   </div>
 
   <input type="hidden" name="task" value="" />
   <input type="hidden" name="limit_item" value="<?php echo $limitItem; ?>" />
+  <input type="hidden" name="document_id" id="document-id" value="" />
   <?php echo JHtml::_('form.token'); ?>
 </form>
 

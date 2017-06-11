@@ -755,6 +755,25 @@ ENGINE = MyISAM DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
+-- Table `#__odyssey_document` 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `#__odyssey_document`;
+CREATE TABLE `#__odyssey_document` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `item_id` INT UNSIGNED NOT NULL ,
+  `item_type` VARCHAR(8) NOT NULL ,
+  `file` TINYTEXT NOT NULL ,
+  `file_name` TINYTEXT NOT NULL ,
+  `file_type` TINYTEXT NOT NULL ,
+  `file_size` TINYTEXT NOT NULL ,
+  `file_path` TINYTEXT NOT NULL ,
+  `uploaded_by` CHAR(8) NOT NULL ,
+  `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
+  PRIMARY KEY  (`id`) )
+ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+-- -----------------------------------------------------
 -- Insert currencies.
 -- -----------------------------------------------------
 INSERT INTO `#__odyssey_currency` (name, symbol, alpha, fractional_unit,

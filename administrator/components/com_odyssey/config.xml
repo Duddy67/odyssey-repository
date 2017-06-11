@@ -137,6 +137,16 @@
 
 	<field name="spacer2" type="spacer" hr="true" />
 
+	<field name="allowed_extensions" type="text" default="pdf;doc;docx;txt"
+		label="COM_ODYSSEY_FIELD_ALLOWED_EXTENSIONS_LABEL"
+		description="COM_ODYSSEY_FIELD_ALLOWED_EXTENSIONS_DESC" size="30" />
+
+	<field  name="max_file_size" type="maxfilesize" default="2"
+		label="COM_ODYSSEY_MAX_FILE_SIZE_LABEL"
+		description="COM_ODYSSEY_MAX_FILE_SIZE_DESC" />
+
+	<field name="spacer3" type="spacer" hr="true" />
+
 	<field name="run_at_command"
 	       type="radio" default="1"
 	       class="btn-group btn-group-yesno"

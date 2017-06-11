@@ -11,6 +11,7 @@ defined( '_JEXEC' ) or die; // No direct access
 jimport( 'joomla.application.component.view');
 require_once JPATH_COMPONENT.'/helpers/odyssey.php';
 require_once JPATH_COMPONENT.'/helpers/utility.php';
+require_once JPATH_COMPONENT.'/helpers/odms.php';
 
 
 class OdysseyViewCustomer extends JViewLegacy
