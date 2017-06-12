@@ -10,6 +10,7 @@ defined('_JEXEC') or die; //No direct access to this file.
  
 jimport('joomla.application.component.controllerform');
 require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/odms.php';
+require_once JPATH_ROOT.'/components/com_odyssey/helpers/travel.php';
  
 
 
@@ -40,8 +41,16 @@ class OdysseyControllerCustomer extends JControllerForm
       $document['item_id'] = $data['id'];
       $document['item_type'] = 'customer';
       $document['uploaded_by'] = 'admin';
-      //
+      //Adds the file as document in the table.
       OdmsHelper::addDocument($document);
+
+      $user = JFactory::getUser($data['id']);
+      $websiteUrl = JURI::root();
+      $subject = JText::_('COM_ODYSSEY_EMAIL_SENDING_DOCUMENT_SUBJECT');
+      $body = JText::sprintf('COM_ODYSSEY_EMAIL_SENDING_DOCUMENT_BODY', $user->get('username'), $document['file_name'], $websiteUrl);
+      $message = array('subject' => $subject, 'body' => $body);
+      //Informs the customer.
+      TravelHelper::sendEmail('sending_document', $data['id'], 0, $message);
 
       $this->setMessage(JText::sprintf('COM_ODYSSEY_FILE_SUCCESSFULLY_UPLOADED', $document['file_name']));
     }

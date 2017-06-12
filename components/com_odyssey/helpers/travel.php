@@ -473,7 +473,7 @@ class TravelHelper
 
 
   //Send an appropriate email to customers according to the performed action.
-  public static function sendEmail($emailType, $userId, $orderId = 0, $message = array())
+  public static function sendEmail($emailType, $userId = 0, $orderId = 0, $message = array())
   {
     //A reference to the global mail object (JMail) is fetched through the JFactory object. 
     //This is the object creating our mail.
@@ -484,9 +484,13 @@ class TravelHelper
 		    $config->get('fromname'));
 
     $mailer->setSender($sender);
+    //By default the email is sent to the administrator.
+    $recipient = $config->get('mailfrom');
 
-    $user = JFactory::getUser($userId);
-    $recipient = $user->email;
+    if($userId) {
+      $user = JFactory::getUser($userId);
+      $recipient = $user->email;
+    }
 
     $mailer->addRecipient($recipient);
 
