@@ -113,6 +113,7 @@ class TravelHelper
     $settings['deposit_rate'] = $parameters->get('deposit_rate');
     $settings['run_at_command'] = $parameters->get('run_at_command');
     $settings['country_code'] = $parameters->get('country_code');
+    $settings['api_connector'] = $parameters->get('api_connector');
 
     //Set the proper currency display.
     $settings['currency'] = $parameters->get('currency_code');

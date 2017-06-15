@@ -57,9 +57,6 @@ class OdysseyViewTravel extends JViewLegacy
     if($this->item->show_steps) {
       $this->steps = StepHelper::getStepSequence($this->item->dpt_step_id, $this->item->departure_number);
     }
-//echo '<pre>';
-//var_dump($this->steps);
-//echo '</pre>';
 
     //Get the default currency.
     $currency = UtilityHelper::getCurrency();

@@ -92,6 +92,11 @@
 	       description="COM_ODYSSEY_FIELD_SUBTITLE_DESC" 
 	       class="inputbox" />
 
+	<field name="travel_code" type="text"
+	       label="COM_ODYSSEY_FIELD_TRAVEL_CODE_LABEL"
+	       description="COM_ODYSSEY_FIELD_TRAVEL_CODE_DESC" 
+	       class="inputbox" />
+
 	<field name="image" type="media"
 	       label="COM_ODYSSEY_FIELD_IMAGE_LABEL"
 	       description="COM_ODYSSEY_FIELD_IMAGE_DESC" />

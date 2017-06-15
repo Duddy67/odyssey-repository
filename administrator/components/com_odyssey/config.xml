@@ -155,6 +155,31 @@
 	       <option value="1">JYES</option>
 	       <option value="0">JNO</option>
 	</field>
+
+	<field name="spacer4" type="spacer" hr="true" />
+
+	<field name="api_connector"
+	       type="radio" default="0"
+	       class="btn-group btn-group-yesno"
+	       label="COM_ODYSSEY_FIELD_API_CONNECTOR_LABEL"
+	       description="COM_ODYSSEY_FIELD_API_CONNECTOR_DESC">
+	       <option value="1">JYES</option>
+	       <option value="0">JNO</option>
+	</field>
+
+	<field name="api_name"
+	       type="text"
+	       default=""
+	       label="COM_ODYSSEY_FIELD_API_NAME_LABEL"
+	       description="COM_ODYSSEY_FIELD_API_NAME_DESC">
+	</field>
+
+	<field name="api_plugin"
+	       type="text"
+	       default=""
+	       label="COM_ODYSSEY_FIELD_API_PLUGIN_LABEL"
+	       description="COM_ODYSSEY_FIELD_API_PLUGIN_DESC">
+	</field>
     </fieldset>
 
     <fieldset name="travels"
