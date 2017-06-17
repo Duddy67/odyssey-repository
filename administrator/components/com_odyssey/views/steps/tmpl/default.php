@@ -154,6 +154,12 @@ echo JLayoutHelper::render('list.sequencetools', array('dpt_data' => $this->stat
 		</div>
 	      <?php endif; ?>
 
+	      <?php if (!empty($item->travel_code)) : ?>
+		<div class="small break-word">
+		  <?php echo JText::sprintf('COM_ODYSSEY_LIST_TRAVEL_CODE', $this->escape($item->travel_code)); ?>
+		</div>
+	      <?php endif; ?>
+
 	      <div class="small">
 		<?php echo JText::_('JCATEGORY').': <span class="'.$muted.'">'.$this->escape($item->category_title).'</span>'; ?>
 	      </div>

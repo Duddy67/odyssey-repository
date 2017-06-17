@@ -22,6 +22,30 @@ class OdysseyControllerSteps extends JControllerAdmin
     $model = parent::getModel($name, $prefix, $config);
     return $model;
   }
+
+
+  public function updateAvailabilities()
+  {
+    // Check for request forgeries
+    JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
+
+    // Get items to update from the request.
+    $cid = $this->input->get('cid', array(), 'array');
+
+    if(empty($cid)) {
+      JLog::add(JText::_($this->text_prefix.'_NO_ITEM_SELECTED'), JLog::WARNING, 'jerror');
+    }
+    else {
+      $event = 'onOdysseyApiConnectorFunction';
+      JPluginHelper::importPlugin('odysseyapiconnector');
+      $dispatcher = JDispatcher::getInstance();
+      $results = $dispatcher->trigger($event, array('updateAvailabilities', array($cid)));
+    }
+
+    $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list, false));
+
+    return true;
+  }
 }
 
 

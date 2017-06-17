@@ -133,6 +133,10 @@ class OdysseyModelSteps extends JModelList
     $query->select('uc.name AS editor');
     $query->join('LEFT', '#__users AS uc ON uc.id=s.checked_out');
 
+    // Join over the travel to get the travel code if any.
+    $query->select('IFNULL(t.travel_code, "") AS travel_code');
+    $query->join('LEFT', '#__odyssey_travel AS t ON t.dpt_step_id=s.id');
+
     //Filter by title search.
     $search = $this->getState('filter.search');
     if(!empty($search)) {

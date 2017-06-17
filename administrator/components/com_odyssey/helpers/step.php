@@ -496,7 +496,7 @@ class StepHelper
 
     //Update the steps of the section with their new time gap.
     $query->update('#__odyssey_timegap_step_map')
-	  ->set('time_gap = CASE '.$when.' END ')
+	  ->set('time_gap = CASE '.$when.' ELSE time_gap END ')
 	  ->where('step_id IN('.implode(',', $ids).')')
 	  ->where('dpt_id='.(int)$stepSequence[0]['dpt_id']);
 //echo $query->__toString();

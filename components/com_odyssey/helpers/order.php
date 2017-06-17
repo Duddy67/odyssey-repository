@@ -467,7 +467,7 @@ class OrderHelper
     if(!empty($whens)) {
       $cases = '';
       foreach($whens as $key => $when) {
-	$cases .= $key.' = CASE '.$when.' END,';
+	$cases .= $key.' = CASE '.$when.' ELSE '.$key.' END,';
       }
 
       //Remove comma from the end of the string.
@@ -484,7 +484,7 @@ class OrderHelper
       if((int)$psgrIni['is_address'] && !empty($whensAddr)) {
 	$cases = '';
 	foreach($whensAddr as $key => $when) {
-	  $cases .= $key.' = CASE '.$when.' END,';
+	  $cases .= $key.' = CASE '.$when.' ELSE '.$key.' END,';
 	}
 
 	//Remove comma from the end of the string.

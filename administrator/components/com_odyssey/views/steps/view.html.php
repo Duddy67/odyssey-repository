@@ -34,7 +34,6 @@ class OdysseyViewSteps extends JViewLegacy
       return false;
     }
 
-
     //Display the tool bar.
     $this->addToolBar();
 
@@ -85,6 +84,19 @@ class OdysseyViewSteps extends JViewLegacy
     if($canDo->get('core.admin')) {
       JToolBarHelper::divider();
       JToolBarHelper::preferences('com_odyssey', 550);
+    }
+
+    //Check for a possible API connector plugin.
+    $parameters = JComponentHelper::getParams('com_odyssey');
+    if($parameters->get('api_connector') && !empty($parameters->get('api_plugin')) && $this->state->get('filter.step_type') == 'departure') {
+      //Check first that the plugin is enabled.
+      if(JPluginHelper::isEnabled('odysseyapiconnector', $parameters->get('plugin_name'))) {
+	JToolBarHelper::divider();
+	JToolbarHelper::custom('steps.updateAvailabilities', 'loop', '', 'COM_ODYSSEY_API_UPDATE_AVAILABILITIES', false);
+      }
+      else {
+	JFactory::getApplication()->enqueueMessage(JText::_('COM_ODYSSEY_API_CONNECTOR_PLUGIN_NOT_INSTALLED'), 'warning');
+      }
     }
   }
 

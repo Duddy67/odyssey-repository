@@ -144,10 +144,11 @@ class OdysseyHelper
    * @param string  Name of the filter to check.
    * @param boolean  Flag to specify we want to check the filter is the only one to
    *        be selected. 
+   * @param string  Value of the filter to check.
    *
    * @return boolean  True if filter matches the checking conditions, false otherwise.
    */
-  public static function checkSelectedFilter($filterName, $unique = false)
+  public static function checkSelectedFilter($filterName, $unique = false, $value = '')
   {
     $post = JFactory::getApplication()->input->post->getArray();
 
@@ -165,6 +166,10 @@ class OdysseyHelper
 	if($filter > 1) {
 	  return false;
 	}
+      }
+
+      if(!empty($value) && $post['filter'][$filterName] !== $value) {
+	return false;
       }
 
       return true;
@@ -492,7 +497,7 @@ class OdysseyHelper
     if(!empty($whens)) {
       $cases = '';
       foreach($whens as $key => $when) {
-	$cases .= $key.' = CASE '.$when.' END,';
+	$cases .= $key.' = CASE '.$when.' ELSE '.$key.' END,';
       }
 
       //Remove comma from the end of the string.
