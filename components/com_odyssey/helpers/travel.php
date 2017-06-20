@@ -113,7 +113,8 @@ class TravelHelper
     $settings['deposit_rate'] = $parameters->get('deposit_rate');
     $settings['run_at_command'] = $parameters->get('run_at_command');
     $settings['country_code'] = $parameters->get('country_code');
-    $settings['api_connector'] = $parameters->get('api_connector');
+    $settings['api_connector'] = $parameters->get('api_connector', 0);
+    $settings['api_plugin'] = $parameters->get('api_plugin', '');
 
     //Set the proper currency display.
     $settings['currency'] = $parameters->get('currency_code');
@@ -491,6 +492,9 @@ class TravelHelper
     if($userId) {
       $user = JFactory::getUser($userId);
       $recipient = $user->email;
+    }
+    elseif(isset($message['recipient_email']) && !empty($message['recipient_email'])) {
+      $recipient = $message['recipient_email'];
     }
 
     $mailer->addRecipient($recipient);

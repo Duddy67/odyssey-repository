@@ -36,6 +36,12 @@ class OdysseyControllerSteps extends JControllerAdmin
       JLog::add(JText::_($this->text_prefix.'_NO_ITEM_SELECTED'), JLog::WARNING, 'jerror');
     }
     else {
+      //Load the plugin language file.
+      $lang = JFactory::getLanguage();
+      $apiPlugin = JComponentHelper::getParams('com_odyssey')->get('api_plugin');
+      $lang->load('plg_odysseyapiconnector_'.$apiPlugin, JPATH_ROOT.'/plugins/odysseyapiconnector/'.$apiPlugin, $lang->getTag());
+
+      //Trigger the plugin event.
       $event = 'onOdysseyApiConnectorFunction';
       JPluginHelper::importPlugin('odysseyapiconnector');
       $dispatcher = JDispatcher::getInstance();

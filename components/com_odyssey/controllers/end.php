@@ -69,7 +69,17 @@ class OdysseyControllerEnd extends JControllerForm
 	  $emailType = $travel['booking_option'];
 	}
 
-	$this->setAllotment($travel);
+	//Check for possible API plugin.
+	if($settings['api_connector'] && $settings['api_plugin']) {
+	  //Trigger the plugin event.
+	  $event = 'onOdysseyApiConnectorFunction';
+	  JPluginHelper::importPlugin('odysseyapiconnector');
+	  $dispatcher = JDispatcher::getInstance();
+	  $results = $dispatcher->trigger($event, array('setDepartureAvailability', array($travel)));
+	}
+	else {
+	  $this->setAllotment($travel);
+	}
       }
       else { //The payment has failed.
 	$fields[] = 'payment_status="error"';
@@ -122,7 +132,17 @@ class OdysseyControllerEnd extends JControllerForm
     $db->setQuery($query);
     $db->execute();
 
-    $this->setAllotment($travel);
+    //Check for possible API plugin.
+    if($settings['api_connector'] && $settings['api_plugin']) {
+      //Trigger the plugin event.
+      $event = 'onOdysseyApiConnectorFunction';
+      JPluginHelper::importPlugin('odysseyapiconnector');
+      $dispatcher = JDispatcher::getInstance();
+      $results = $dispatcher->trigger($event, array('setDepartureAvailability', array($travel)));
+    }
+    else {
+      $this->setAllotment($travel);
+    }
 
     $userId = JFactory::getUser()->get('id');
     TravelHelper::sendEmail('take_option', $userId); 

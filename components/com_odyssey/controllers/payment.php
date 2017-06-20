@@ -31,6 +31,7 @@ class OdysseyControllerPayment extends JControllerForm
 
   public function setBooking()
   {
+    //Safety check.
     TravelHelper::checkBookingProcess();
 
     $user = JFactory::getUser();
@@ -43,6 +44,22 @@ class OdysseyControllerPayment extends JControllerForm
     $passengers = $session->get('passengers', array(), 'odyssey'); 
     $settings = $session->get('settings', array(), 'odyssey'); 
     $submit = $session->get('submit', 0, 'odyssey'); 
+
+    //Check for possible API plugin.
+    //Note: Ensure no order id exists which mean we're dealing with a brand new booking.
+    if(!isset($travel['order_id']) && $settings['api_connector'] && $settings['api_plugin']) {
+      //Trigger the plugin event.
+      $event = 'onOdysseyApiConnectorFunction';
+      JPluginHelper::importPlugin('odysseyapiconnector');
+      $dispatcher = JDispatcher::getInstance();
+      $results = $dispatcher->trigger($event, array('isDepartureAvailable', array($travel['travel_code'], $travel['date_time'],
+										  $travel['nb_psgr'], $travel['allotment'])));
+      if(!$results[0]) {
+	$this->setMessage(JText::_('COM_ODYSSEY_DEPARTURE_NOT_AVAILABLE'));
+	$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=travel&id='.$travel['travel_id'].'&catid='.$travel['catid'], false));
+	return true;
+      }
+    }
 
     if(!$submit) {
       //Set immediately submit flag to 1 to prevent the multiple clicks syndrome.
