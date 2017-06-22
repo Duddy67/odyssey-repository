@@ -73,6 +73,10 @@ Joomla.submitbutton = function(task)
 	  <?php
 		echo JLayoutHelper::render('joomla.edit.global', $this);
 		echo $this->form->getControlGroup('link_step_category');
+
+		if($this->item->step_type == 'departure') {
+		  echo $this->form->getControlGroup('travel_code');
+		}
 	  ?>
 	  </div>
 	</div>

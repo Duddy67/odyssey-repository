@@ -34,14 +34,15 @@ $catid = JFactory::getApplication()->input->get->get('catid', 0, 'uint');
 $itemType = JFactory::getApplication()->input->get->get('item_type', '', 'string');
 $name = JFactory::getApplication()->input->get->get('name', '', 'string');
 $alias = JFactory::getApplication()->input->get->get('alias', '', 'string');
+$travelCode = JFactory::getApplication()->input->get->get('travel_code', '', 'string');
 
 $checking = 1;
 
 //Set table and item names according to the item type.
-$tableName = '#__odyssey_travel';
+//$tableName = '#__odyssey_travel';
 $itemName = 'Travel';
 if($itemType == 'step') {
-  $tableName = '#__odyssey_step';
+  //$tableName = '#__odyssey_step';
   $itemName = 'Step';
 }
 
@@ -49,7 +50,7 @@ if($itemType == 'step') {
 $name = urldecode($name);
 $alias = urldecode($alias);
 
-if($task == 'travel.save2copy' || $task == 'step.save2copy') {
+/*if($task == 'travel.save2copy' || $task == 'step.save2copy') {
   //Get the name of the original item.
   $db = JFactory::getDbo();
   $query = $db->getQuery(true);
@@ -68,7 +69,7 @@ if($task == 'travel.save2copy' || $task == 'step.save2copy') {
   else {
     $alias = '';
   }
-}
+}*/
 
 //Run the simulation.
 
@@ -81,17 +82,28 @@ if(empty($alias)) {
 }
 
 $attributes = array('alias' => $alias, 'catid' => $catid);
+$field = 'alias';
 //Change the attributes to check according to the item type.
 if($itemType == 'step') {
   $attributes = array('group_alias' => $alias, 'step_type' => 'departure');
 }
 
-$result = array('checking' => $checking, 'alias' => $alias);
+$result = array('checking' => $checking, 'value' => $alias, 'field' => $field);
 
 // Verify that the alias is unique
 $table = JTable::getInstance($itemName, 'OdysseyTable');
 if($table->load($attributes) && ($table->id != $id || $id == 0)) {
   $result['checking'] = 0;
+}
+
+if($itemType == 'travel') {
+  // Verify also that the travel code (if any) is unique
+  $travelCode = preg_replace('/\s+/', '', $travelCode);
+  if(!empty($travelCode) && $table->load(array('travel_code' => $travelCode)) && ($table->id != $id || $id == 0)) {
+    $result['checking'] = 0;
+    $result['field'] = 'travel_code';
+    $result['value'] = $travelCode;
+  }
 }
 
 echo json_encode($result);

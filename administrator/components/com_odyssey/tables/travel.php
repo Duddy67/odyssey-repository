@@ -139,6 +139,13 @@ class OdysseyTableTravel extends JTable
       return false;
     }
 
+    // Verify that the travel code (if any) is unique
+    $this->travel_code = preg_replace('/\s+/', '', $this->travel_code);
+    if(!empty($this->travel_code) && $table->load(array('travel_code' => $this->travel_code)) && ($table->id != $this->id || $this->id == 0)) {
+      $this->setError(JText::_('COM_ODYSSEY_DATABASE_ERROR_TRAVEL_UNIQUE_CODE'));
+      return false;
+    }
+
     //Check again some values in case Javascript has failed.
     if(empty($this->dpt_step_id)) {
       $this->setError(JText::_('COM_ODYSSEY_ERROR_NO_DEPARTURE_STEP_SELECTED'));

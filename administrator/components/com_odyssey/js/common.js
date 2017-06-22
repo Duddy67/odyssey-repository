@@ -511,7 +511,7 @@
       return true;
     }
 
-    var checking;
+    var checking, field, value;
     var id = $('#jform_id').val();
     var catid = $('#jform_catid').val();
 
@@ -523,9 +523,10 @@
 
     var alias = $('#'+aliasId).val();
     var name = $('#jform_name').val();
+    var travelCode = $('#jform_travel_code').val();
 
     //Set the url parameters for the Ajax call.
-    var urlQuery = {'task':task, 'id':id, 'catid':catid, 'item_type':itemType, 'alias':encodeURIComponent(alias), 'name':encodeURIComponent(name)};
+    var urlQuery = {'task':task, 'id':id, 'catid':catid, 'item_type':itemType, 'alias':encodeURIComponent(alias), 'name':encodeURIComponent(name), 'travel_code':travelCode};
     //Ajax call which check for unique alias.
     $.ajax({
 	type: 'GET', 
@@ -536,7 +537,8 @@
 	//Get result.
 	success: function(result, textStatus, jqXHR) {
 	  checking = result.checking;
-	  alias = result.alias;
+	  value = result.value;
+	  field = result.field;
 	},
 	error: function(jqXHR, textStatus, errorThrown) {
 	  //Display the error.
@@ -550,12 +552,17 @@
 	langVar = 'COM_ODYSSEY_ERROR_DEPARTURE_UNIQUE_GROUP_ALIAS';
       }
 
+      if(itemType == 'travel' && field == 'travel_code') {
+	langVar = 'COM_ODYSSEY_DATABASE_ERROR_TRAVEL_UNIQUE_CODE';
+	aliasId = 'jform_travel_code';
+      }
+
       alert(Joomla.JText._(langVar));
       var $itemTab = $('[data-toggle="tab"][href="#details"]');
       $itemTab.show();
       $itemTab.tab('show');
       $('#'+aliasId).addClass('invalid');
-      $('#'+aliasId).val(alias);
+      $('#'+aliasId).val(value);
       return false;
     }
 

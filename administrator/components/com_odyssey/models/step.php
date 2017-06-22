@@ -55,17 +55,26 @@ class OdysseyModelStep extends JModelAdmin
   {
     $item = parent::getItem($pk = null);
 
+    $db = $this->getDbo();
+    $query = $db->getQuery(true);
     //Get the title of the category the step is linked to.
     if($item->id && $item->step_type == 'link') {
-      $db = $this->getDbo();
-      $query = $db->getQuery(true);
       $query->select('title')
 	    ->from('#__categories')
 	    ->where('id='.(int)$item->catid);
       $db->setQuery($query);
-      $categoryTitle = $db->loadResult();
+      $item->category_title = $db->loadResult();
+    }
+    elseif($item->id && $item->step_type == 'departure') {
+      $query->select('travel_code')
+	    ->from('#__odyssey_travel')
+	    ->where('dpt_step_id='.(int)$item->id);
+      $db->setQuery($query);
+      $item->travel_code = $db->loadResult();
 
-      $item->category_title = $categoryTitle;
+      if(empty($item->travel_code)) {
+	$item->travel_code = JText::_('COM_ODYSSEY_NO_TRAVEL_CODE_AVAILABLE');
+      }
     }
 
     return $item;
