@@ -27,7 +27,9 @@ class OdysseyModelTravel extends JModelAdmin
 
   public function getForm($data = array(), $loadData = true) 
   {
-    $form = $this->loadForm('com_odyssey.travel', 'travel', array('control' => 'jform', 'load_data' => $loadData));
+    //Check first for possible form override.
+    $path = OdysseyHelper::getOverridedFile(JPATH_ROOT.'/administrator/components/com_odyssey/models/forms/travel.xml');
+    $form = $this->loadForm('com_odyssey.travel', $path, array('control' => 'jform', 'load_data' => $loadData));
 
     if(empty($form)) {
       return false;

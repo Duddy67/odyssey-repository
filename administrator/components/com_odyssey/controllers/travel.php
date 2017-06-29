@@ -19,8 +19,8 @@ class OdysseyControllerTravel extends JControllerForm
   {
     //Get the jform data.
     $data = $this->input->post->get('jform', array(), 'array');
-$post = JFactory::getApplication()->input->post->getArray();
-var_dump($post);
+//$post = JFactory::getApplication()->input->post->getArray();
+//var_dump($post);
 //return;
 
     //Get current date and time (equal to NOW() in SQL).
