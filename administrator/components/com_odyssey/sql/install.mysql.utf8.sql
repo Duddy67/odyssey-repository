@@ -197,6 +197,8 @@ CREATE TABLE `#__odyssey_departure_step_map` (
   `date_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
   `date_time_2` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
   `max_passengers` TINYINT UNSIGNED NOT NULL ,
+  `nb_days` TINYINT UNSIGNED NOT NULL ,
+  `nb_nights` TINYINT UNSIGNED NOT NULL ,
   `allotment` SMALLINT UNSIGNED NOT NULL ,
   `altm_subtract` TINYINT(1) UNSIGNED NOT NULL ,
   `altm_locked` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,

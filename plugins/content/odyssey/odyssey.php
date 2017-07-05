@@ -316,6 +316,8 @@ class plgContentOdyssey extends JPlugin
 	    }
 
 	    $row->max_passengers = $post['max_passengers_'.$idNb];
+	    $row->nb_days = $post['nb_days_'.$idNb];
+	    $row->nb_nights = $post['nb_nights_'.$idNb];
 	    $row->allotment = $post['allotment_'.$idNb];
 	    $row->altm_subtract = $post['altm_subtract_'.$idNb];
 	    $departures[] = $row;

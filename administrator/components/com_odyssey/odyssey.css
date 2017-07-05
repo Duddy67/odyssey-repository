@@ -293,6 +293,8 @@ input[id^="ev-year-time-"] {
 }
 
 .wrap-dpt-data .allotment,
+.wrap-dpt-data .nb-days,
+.wrap-dpt-data .nb-nights,
 .wrap-dpt-data .max-passengers {
   float: left;
   width: 50px;
@@ -301,6 +303,8 @@ input[id^="ev-year-time-"] {
 .departure-item .city-label,
 .departure-item .allotment-label,
 .departure-item .subtract-label,
+.departure-item .nb-days-label,
+.departure-item .nb-nights-label,
 .departure-item .max-passengers-label {
   display: block;
   font-size: 13px;

@@ -265,6 +265,26 @@
     }
     $('#wrap-dpt-data-3-'+idNb).createHTMLTag('<input>', properties, 'departure-checkbox');
 
+    properties = {'id':'wrap-dpt-data-4-'+idNb};
+    $('#departure-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
+
+    properties = {'title':Joomla.JText._('COM_ODYSSEY_NB_DAYS_TITLE')};
+    $('#wrap-dpt-data-4-'+idNb).createHTMLTag('<span>', properties, 'nb-days-label');
+    $('#wrap-dpt-data-4-'+idNb+' .nb-days-label').text(Joomla.JText._('COM_ODYSSEY_NB_DAYS_LABEL'));
+
+    properties = {'type':'text', 'name':'nb_days_'+idNb, 'id':'nb-days-'+idNb, 'value':data.nb_days};
+    $('#wrap-dpt-data-4-'+idNb).createHTMLTag('<input>', properties, 'nb-days');
+
+    properties = {'id':'wrap-dpt-data-5-'+idNb};
+    $('#departure-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
+
+    properties = {'title':Joomla.JText._('COM_ODYSSEY_NB_NIGHTS_TITLE')};
+    $('#wrap-dpt-data-5-'+idNb).createHTMLTag('<span>', properties, 'nb-nights-label');
+    $('#wrap-dpt-data-5-'+idNb+' .nb-nights-label').text(Joomla.JText._('COM_ODYSSEY_NB_NIGHTS_LABEL'));
+
+    properties = {'type':'text', 'name':'nb_nights_'+idNb, 'id':'nb-nights-'+idNb, 'value':data.nb_nights};
+    $('#wrap-dpt-data-5-'+idNb).createHTMLTag('<input>', properties, 'nb-nights');
+
     properties = {'type':'hidden', 'name':'dpt_id_'+idNb, 'value':data.dpt_id};
     $('#departure-item-'+idNb).createHTMLTag('<input>', properties);
   };

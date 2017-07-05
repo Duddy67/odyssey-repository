@@ -155,6 +155,10 @@ class JavascriptHelper
     JText::script('COM_ODYSSEY_HOURS_MINUTES_MINUS_LABEL'); 
     JText::script('COM_ODYSSEY_ALLOTMENT_LABEL'); 
     JText::script('COM_ODYSSEY_ALLOTMENT_TITLE'); 
+    JText::script('COM_ODYSSEY_NB_DAYS_LABEL'); 
+    JText::script('COM_ODYSSEY_NB_DAYS_TITLE'); 
+    JText::script('COM_ODYSSEY_NB_NIGHTS_LABEL'); 
+    JText::script('COM_ODYSSEY_NB_NIGHTS_TITLE'); 
     JText::script('COM_ODYSSEY_SUBTRACT_LABEL'); 
     JText::script('COM_ODYSSEY_SUBTRACT_TITLE'); 
     JText::script('COM_ODYSSEY_STATUS_TITLE'); 

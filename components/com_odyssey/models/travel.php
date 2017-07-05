@@ -370,8 +370,8 @@ class OdysseyModelTravel extends JModelItem
     $query = $db->getQuery(true);
     //Get all the needed data in relation with the user's booking.
     $query->select('t.id AS travel_id, t.catid, t.dpt_step_id, t.name, t.alias, t.intro_text, t.travel_code, ds.dpt_id,'.
-	           'tp.price AS travel_price, IFNULL(tcp.price, 0) AS transit_price, ds.date_time, ds.date_time_2, ds.max_passengers,'.
-		   'ds.allotment, s.date_type, tp.psgr_nb AS nb_psgr, stc.time_offset, tx.rate AS tax_rate, c.name AS dpt_city_name')
+	           'tp.price AS travel_price, IFNULL(tcp.price, 0) AS transit_price, ds.date_time, ds.date_time_2, ds.max_passengers,ds.nb_days,'.
+		   'ds.nb_nights, ds.allotment, s.date_type, tp.psgr_nb AS nb_psgr, stc.time_offset, tx.rate AS tax_rate, c.name AS dpt_city_name')
 	  ->from('#__odyssey_travel AS t')
 	  ->join('INNER', '#__odyssey_step AS s ON s.id=t.dpt_step_id')
 	  ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=s.id AND ds.dpt_id='.$dptId)
