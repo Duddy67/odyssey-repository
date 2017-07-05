@@ -23,6 +23,7 @@ CREATE TABLE `#__odyssey_travel` (
   `extra_desc_4` MEDIUMTEXT NULL ,
   `travel_duration` CHAR(5) NOT NULL ,
   `price_range` CHAR(10) NOT NULL ,
+  `theme` CHAR(20) NOT NULL ,
   `image` VARCHAR(255) NOT NULL ,
   `checked_out` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `checked_out_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,

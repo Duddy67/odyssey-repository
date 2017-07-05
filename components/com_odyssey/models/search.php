@@ -64,6 +64,9 @@ class OdysseyModelSearch extends JModelList
     $price = $app->getUserStateFromRequest($this->context.'.filter.price', 'filter_price');
     $this->setState('filter.price', $price);
 
+    $theme = $app->getUserStateFromRequest($this->context.'.filter.theme', 'filter_theme');
+    $this->setState('filter.theme', $theme);
+
     // List state information.
     parent::populateState('t.name', 'asc');
   }
@@ -79,6 +82,7 @@ class OdysseyModelSearch extends JModelList
     $id .= ':'.$this->getState('filter.price');
     $id .= ':'.$this->getState('filter.duration');
     $id .= ':'.$this->getState('filter.date');
+    $id .= ':'.$this->getState('filter.theme');
 
     return parent::getStoreId($id);
   }
@@ -93,7 +97,7 @@ class OdysseyModelSearch extends JModelList
 
     // Select the required fields from the table.
     $query->select($this->getState('list.select', 't.id, t.alias, t.name, MIN(tp.price) AS price, t.travel_duration, t.catid,'.
-	                                          't.subtitle, t.intro_text, t.image'))
+	                                          't.theme, t.subtitle, t.intro_text, t.image'))
 	  ->from('#__odyssey_travel AS t')
 	  //Get the lowest price for each travel.
 	  ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id')
@@ -149,6 +153,12 @@ class OdysseyModelSearch extends JModelList
     $duration = $this->getState('filter.duration');
     if(!empty($duration)) {
       $query->where('t.travel_duration='.$db->Quote($duration));
+    }
+
+    //Filter by theme.
+    $theme = $this->getState('filter.theme');
+    if(!empty($theme)) {
+      $query->where('t.theme='.$db->Quote($theme));
     }
 
     //Filter by departure date.

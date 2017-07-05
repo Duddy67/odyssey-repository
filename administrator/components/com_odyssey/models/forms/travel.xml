@@ -62,6 +62,17 @@
 		<option value="2500_10000">COM_ODYSSEY_OPTION_PRICE_RANGE_2500_10000</option>
 	</field>
 
+	<field name="theme" type="list"
+		label="COM_ODYSSEY_FIELD_THEME_LABEL"
+		description="COM_ODYSSEY_FIELD_THEME_DESC"
+		class="input" required="true" default="">
+		<option value="">JSELECT</option>
+		<option value="discovery">COM_ODYSSEY_OPTION_THEME_DISCOVERY</option>
+		<option value="cultural">COM_ODYSSEY_OPTION_THEME_CULTURAL</option>
+		<option value="relaxing">COM_ODYSSEY_OPTION_THEME_RELAXING</option>
+		<option value="family">COM_ODYSSEY_OPTION_THEME_FAMILY</option>
+	</field>
+
 	<field name="traveltext" type="editor"
 	       label="COM_ODYSSEY_FIELD_DESCRIPTION_LABEL"
 	       description="COM_ODYSSEY_FIELD_DESCRIPTION_DESC"

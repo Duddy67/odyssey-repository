@@ -21,6 +21,8 @@
     $('#filter_duration').val('');
     $('#filter_date').prop('disabled', false);
     $('#filter_date').val('');
+    $('#filter_theme').prop('disabled', false);
+    $('#filter_theme').val('');
     //Reload the form.
     $('#siteForm').submit();
   };
@@ -33,6 +35,7 @@
     var city = $('#filter_city').val();
     var price = $('#filter_price').val();
     var duration = $('#filter_duration').val();
+    var theme = $('#filter_theme').val();
     var departure = $('#filter_date').val();
 
     if(region !== undefined && region !== '') {
@@ -56,9 +59,11 @@
     }
 
     if($('#filter_duration').children('option').length == 2) {
-      //If there is only 1 value left (plus the select value) there is no need to 
-      //enable the filter. Duration value can also be read in the result array.
       $('#filter_duration').prop('disabled', true);
+    }
+
+    if($('#filter_theme').children('option').length == 2) {
+      $('#filter_theme').prop('disabled', true);
     }
 
     //Single result.

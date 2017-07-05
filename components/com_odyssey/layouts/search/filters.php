@@ -10,8 +10,8 @@ defined('_JEXEC') or die;
 $data = $displayData;
 //Get the filter setting from the component global configuration.
 $searchFilters = $data['search_filters'];
-//Duration and date filters are always showed.
-$showedFilters = array('price', 'duration', 'date'); 
+//Those filters are always showed.
+$showedFilters = array('price', 'duration', 'theme', 'date'); 
 
 //Set the filters to show according to the filter setting.
 if($searchFilters != 'region' && $searchFilters != 'city' && $searchFilters != 'region_city') {

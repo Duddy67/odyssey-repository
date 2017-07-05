@@ -28,6 +28,10 @@
 			type="durationfilterlist"
 			onchange="this.form.submit();" >
 		</field>
+		<field name="theme"
+			type="themefilterlist"
+			onchange="this.form.submit();" >
+		</field>
 		<field name="date"
 			type="datefilterlist"
 			onchange="this.form.submit();" >
