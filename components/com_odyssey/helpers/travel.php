@@ -84,6 +84,43 @@ class TravelHelper
   }
 
 
+  public static function checkTravelOverlapping($travel)
+  {
+    $travel['overlapping'] = 1;
+    //The departure day is included into the travel duration.
+    $nbDays = $travel['nb_days'] - 1;
+    //Get the end date of the travel.
+    $endDate = UtilityHelper::getLimitDate($nbDays, $travel['date_picker']);
+
+    if($endDate <= $travel['date_time_2']) {
+      $travel['overlapping'] = 0;
+      return $travel;
+    }
+
+    //Get the second overlapping period.
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    $query->select('step_id, dpt_id, date_time, date_time_2')
+          ->from('#__odyssey_departure_step_map')
+	  ->where('date_time > '.$db->quote($travel['date_time_2']))
+	  ->where('step_id='.(int)$travel['dpt_step_id'])
+	  ->order('date_time ASC')
+	  ->setLimit('1');
+    $db->setQuery($query);
+    $period2 = $db->loadAssoc();
+
+    //$startPeriod2 = UtilityHelper::getLimitDate(1, $travel['date_time_2']);
+
+    //Compute the number of days for each period.
+    $travel['nb_days_period_1'] = UtilityHelper::getRemainingDays($travel['date_time_2'], $travel['date_picker']);
+    //The departure day is included into the travel duration.
+    $travel['nb_days_period_1'] = $travel['nb_days_period_1'] + 1;
+    $travel['nb_days_period_2'] = UtilityHelper::getRemainingDays($endDate, $travel['date_time_2']);
+
+    return $travel;
+  }
+
+
   //Return the global settings of the application.
   public static function getSettings()
   {

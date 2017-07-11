@@ -240,10 +240,14 @@ class UtilityHelper
   }
 
 
-  public static function getRemainingDays($endDate)
+  public static function getRemainingDays($endDate, $startDate = '')
   {
-    $now = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
-    $date1 = new DateTime($now);
+    if(empty($startDate)) {
+      //Use now date.
+      $startDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+    }
+
+    $date1 = new DateTime($startDate);
     $date2 = new DateTime($endDate);
 
     //Up to date.

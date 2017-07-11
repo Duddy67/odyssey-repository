@@ -26,6 +26,7 @@ class plgOdysseypaymentPaypal extends JPlugin
     $setExpressCheckout = $this->setExpressCheckout($travel, $addons, $settings);
     //Concatenate the 2 parts to get the complete query.
     $paypalQuery = $paypalQuery.$setExpressCheckout;
+//file_put_contents('debog_paypal.txt', print_r($paypalQuery, true));
 
     //Execute the query and get the result.
     $curl = $this->cURLSession($paypalQuery);

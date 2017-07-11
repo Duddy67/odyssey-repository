@@ -389,6 +389,8 @@ class OdysseyModelTravel extends JModelItem
     //Get the date picked by the customer.
     if($travel['date_type'] == 'period') {
       $travel['date_picker'] = $post['date_picker'];
+
+      //$travel = TravelHelper::checkTravelOverlapping($travel);
     }
 
     //Check for possible matching price rules.
