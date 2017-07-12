@@ -86,16 +86,21 @@ class TravelHelper
 
   public static function checkTravelOverlapping($travel)
   {
-    $travel['overlapping'] = 1;
     //The departure day is included into the travel duration.
     $nbDays = $travel['nb_days'] - 1;
     //Get the end date of the travel.
     $endDate = UtilityHelper::getLimitDate($nbDays, $travel['date_picker']);
 
+    //No overlapping.
     if($endDate <= $travel['date_time_2']) {
-      $travel['overlapping'] = 0;
       return $travel;
     }
+
+    //Compute the number of days for each period.
+    $travel['nb_days_period_1'] = UtilityHelper::getRemainingDays($travel['date_time_2'], $travel['date_picker']);
+    //The departure day is included into the travel duration.
+    $travel['nb_days_period_1'] = $travel['nb_days_period_1'] + 1;
+    $travel['nb_days_period_2'] = $travel['nb_days'] - $travel['nb_days_period_1'];
 
     //Get the second overlapping period.
     $db = JFactory::getDbo();
@@ -109,13 +114,69 @@ class TravelHelper
     $db->setQuery($query);
     $period2 = $db->loadAssoc();
 
-    //$startPeriod2 = UtilityHelper::getLimitDate(1, $travel['date_time_2']);
+    //There is no second overlapping period or this period starts after the end of the travel.
+    //Note: Add the seconds parameter to endDate or the comparison won't work properly.
+    if($period2 === null || $period2['date_time'] > $endDate.':00') {
+      return $travel;
+    }
 
-    //Compute the number of days for each period.
-    $travel['nb_days_period_1'] = UtilityHelper::getRemainingDays($travel['date_time_2'], $travel['date_picker']);
-    //The departure day is included into the travel duration.
-    $travel['nb_days_period_1'] = $travel['nb_days_period_1'] + 1;
-    $travel['nb_days_period_2'] = UtilityHelper::getRemainingDays($endDate, $travel['date_time_2']);
+    //In case there is a gap between the end of the period 1 and the start of the period 2.
+    for($i = 1; $i < $travel['nb_days']; $i++) {
+      if($period2['date_time'] > UtilityHelper::getLimitDate($i, $travel['date_time_2'], true, 'Y-m-d H:i:s')) {
+	//Readjust the days for each period.
+	$travel['nb_days_period_1']++;
+	$travel['nb_days_period_2']--;
+      }
+      else {
+	break;
+      }
+    }
+
+    $travel['period_2_dpt_id'] = $period2['dpt_id'];
+    $travel['overlapping'] = 1;
+
+    return $travel;
+  }
+
+
+  public static function updateTravelPrice($travel)
+  {
+    //Ensure travel is overlapping.
+    if(!$travel['overlapping']) {
+      return $travel;
+    }
+
+    //Compute travel and transit city prices for period 1.
+    $transitPricePeriod1 = $transitPricePeriod2 = 0;
+
+    $travelPricePeriod1 = $travel['nb_days_period_1'] * ($travel['travel_price'] / $travel['nb_days']);
+
+    if($travel['transit_price']) {
+      $transitPricePeriod1 = $travel['nb_days_period_1'] * ($travel['transit_price'] / $travel['nb_days']);
+    }
+
+    //Get both travel and transit city prices during the period 2.
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    $query->select('t.price AS travel_price, IFNULL(tc.price, 0) AS transit_price')
+          ->from('#__odyssey_travel_price AS t')
+	  ->join('LEFT', '#__odyssey_transit_city_price AS tc ON  tc.travel_id=t.travel_id AND tc.dpt_step_id=t.dpt_step_id'.
+	                 ' AND tc.dpt_id=t.dpt_id AND tc.psgr_nb=t.psgr_nb AND tc.city_id='.(int)$travel['city_id'])
+	  ->where('t.travel_id='.(int)$travel['travel_id'].' AND t.dpt_step_id='.(int)$travel['dpt_step_id']) 
+	  ->where('t.dpt_id='.(int)$travel['period_2_dpt_id'].' AND t.psgr_nb='.(int)$travel['nb_psgr']);
+    $db->setQuery($query);
+    $prices = $db->loadAssoc();
+
+    //Compute travel and transit city prices for period 2.
+    $travelPricePeriod2 = $travel['nb_days_period_2'] * ($prices['travel_price'] / $travel['nb_days']);
+
+    if($prices['transit_price']) {
+      $transitPricePeriod2 = $travel['nb_days_period_2'] * ($prices['transit_price'] / $travel['nb_days']);
+    }
+
+    //Adds up prices from the 2 periods to get final prices.
+    $travel['travel_price'] = $travelPricePeriod1 + $travelPricePeriod2;
+    $travel['transit_price'] = $transitPricePeriod1 + $transitPricePeriod2;
 
     return $travel;
   }
