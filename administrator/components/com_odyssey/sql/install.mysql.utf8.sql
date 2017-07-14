@@ -502,6 +502,7 @@ CREATE TABLE `#__odyssey_order` (
   `admin_locked` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1 ,
   `already_alloted` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
   `limit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
+  `overlapping` TINYINT(1) UNSIGNED NOT NULL ,
   `published` TINYINT NOT NULL DEFAULT 0 ,
   `checked_out` INT NOT NULL DEFAULT 0 ,
   `checked_out_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,

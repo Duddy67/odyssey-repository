@@ -75,6 +75,10 @@ Joomla.submitbutton = function(task)
 	  <?php
 		echo $this->form->getControlGroup('travel_name');
 		echo $this->item->order_details;
+
+		if($this->item->overlapping) {
+		  echo '<div class="alert">'.JText::_('COM_ODYSSEY_OVERLAPPING_INFORMATION').'</div>';
+		}
 	    ?>
 	</div>
 

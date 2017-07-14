@@ -59,6 +59,10 @@ Joomla.submitbutton = function(task)
 	  <?php
 		echo JLayoutHelper::render('joomla.edit.global', $this); 
 		echo $this->form->getControlGroup('order_details');
+
+		if($this->item->overlapping) {
+		  echo '<div class="alert">'.JText::_('COM_ODYSSEY_OVERLAPPING_INFORMATION').'</div>';
+		}
 	    ?>
 	</div>
       </div>

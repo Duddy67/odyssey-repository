@@ -554,10 +554,10 @@ label[class^="price-psgr-label"] {
 
 .thumbnail { /* Bootstrap class overrided */
   float: left;
-  padding: 20px 8px 10px 0 !important;
+  padding: 20px 8px 10px 8px !important;
   margin-right: 20px;
   margin-bottom: 20px;
-  width: 100px;
+  width: 110px;
   overflow: auto;
   text-align: center;
 }

@@ -9,6 +9,7 @@ defined('_JEXEC') or die; //No direct access to this file.
 
 require_once JPATH_COMPONENT.'/helpers/travel.php';
 require_once JPATH_COMPONENT.'/helpers/pricerule.php';
+require_once JPATH_COMPONENT.'/helpers/overlapping.php';
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/utility.php';
 
 
@@ -393,11 +394,11 @@ class OdysseyModelTravel extends JModelItem
     if($travel['date_type'] == 'period') {
       $travel['date_picker'] = $post['date_picker'];
 
-      $travel = TravelHelper::checkTravelOverlapping($travel);
+      $travel = OverlappingHelper::checkTravelOverlapping($travel);
 
       if($travel['overlapping']) {
 	//Recalculate travel price according to the overlapping.
-	$travel = TravelHelper::updateTravelPrice($travel);
+	$travel = OverlappingHelper::updateTravelPrice($travel);
       }
     }
 
@@ -470,6 +471,11 @@ class OdysseyModelTravel extends JModelItem
     $db->setQuery($query);
     $addons = $db->loadAssocList();
 
+    if($travel['overlapping']) {
+      //Recalculate the addon prices according to the overlapping.
+      $addons = OverlappingHelper::updateAddonPrices($travel, $addons, $stepIds);
+    }
+
     $addonIds = $addonOptions = array();
 
     foreach($addons as $key => $addon) {
@@ -503,6 +509,11 @@ class OdysseyModelTravel extends JModelItem
       $db->setQuery($query);
 
       $addonOptions = $db->loadAssocList();
+
+      if($travel['overlapping']) {
+	//Recalculate the addon option prices according to the overlapping.
+	$addonOptions = OverlappingHelper::updateAddonOptionPrices($travel, $addonOptions, $stepIds, $addonIds);
+      }
     }
 
     //Get the possible addon price rules linked to this travel.
@@ -563,6 +574,11 @@ class OdysseyModelTravel extends JModelItem
     $db->setQuery($query);
     $addons = $db->loadAssocList();
 
+    if($travel['overlapping']) {
+      //Recalculate the addon prices according to the overlapping.
+      $addons = OverlappingHelper::updateSelectedAddonPrices($travel, $addons, $selAddonIds);
+    }
+
     if(!empty($selAddonOptionIds)) {
       //Get the selected addon options linked to the selected addons.
       $query->clear();
@@ -591,6 +607,11 @@ class OdysseyModelTravel extends JModelItem
 	    ->order('sa.step_id, ao.ordering');
       $db->setQuery($query);
       $addonOptions = $db->loadAssocList();
+
+      if($travel['overlapping']) {
+	//Recalculate the addon prices according to the overlapping.
+	$addonOptions = OverlappingHelper::updateSelectedAddonOptionPrices($travel, $addonOptions, $selAddonOptionIds);
+      }
     }
     else {
       $addonOptions = array();

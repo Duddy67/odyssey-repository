@@ -116,6 +116,10 @@ $bookingDetails .= '<tr><td></td><td></td><td>'.
                  UtilityHelper::formatNumber($finalAmount, $settings['digits_precision']).' '.$currency.'</td></tr>';
 $bookingDetails .= '</table>';
 
+if($travel['overlapping']) {
+  $bookingDetails .= '<div class="alert">'.JText::_('COM_ODYSSEY_OVERLAPPING_INFORMATION').'</div>';
+}
+
 echo $bookingDetails;
 ?>
 </div>
