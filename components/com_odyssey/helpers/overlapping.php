@@ -19,7 +19,8 @@ class OverlappingHelper
     $endDate = UtilityHelper::getLimitDate($nbDays, $travel['date_picker']);
 
     //No overlapping.
-    if($endDate <= $travel['date_time_2']) {
+    //Note: We need at least a 2 days travel to compute an overlapping price.
+    if($endDate <= $travel['date_time_2'] || $travel['nb_days'] < 2) {
       return $travel;
     }
 
