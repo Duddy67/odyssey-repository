@@ -13,14 +13,18 @@ class OverlappingHelper
 {
   public static function checkTravelOverlapping($travel)
   {
+    //We need at least a 2 days travel to compute an overlapping price.
+    if($travel['nb_days'] < 2) {
+      return $travel;
+    }
+
     //The departure day is included into the travel duration.
     $nbDays = $travel['nb_days'] - 1;
     //Get the end date of the travel.
     $endDate = UtilityHelper::getLimitDate($nbDays, $travel['date_picker']);
 
     //No overlapping.
-    //Note: We need at least a 2 days travel to compute an overlapping price.
-    if($endDate <= $travel['date_time_2'] || $travel['nb_days'] < 2) {
+    if($endDate <= $travel['date_time_2']) {
       return $travel;
     }
 

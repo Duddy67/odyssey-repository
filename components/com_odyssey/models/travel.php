@@ -472,8 +472,9 @@ class OdysseyModelTravel extends JModelItem
     $addons = $db->loadAssocList();
 
     if($travel['overlapping']) {
+      //TODO: More calculation is required for addons.
       //Recalculate the addon prices according to the overlapping.
-      $addons = OverlappingHelper::updateAddonPrices($travel, $addons, $stepIds);
+      //$addons = OverlappingHelper::updateAddonPrices($travel, $addons, $stepIds);
     }
 
     $addonIds = $addonOptions = array();
@@ -511,8 +512,9 @@ class OdysseyModelTravel extends JModelItem
       $addonOptions = $db->loadAssocList();
 
       if($travel['overlapping']) {
+	//TODO: More calculation is required for addon options.
 	//Recalculate the addon option prices according to the overlapping.
-	$addonOptions = OverlappingHelper::updateAddonOptionPrices($travel, $addonOptions, $stepIds, $addonIds);
+	//$addonOptions = OverlappingHelper::updateAddonOptionPrices($travel, $addonOptions, $stepIds, $addonIds);
       }
     }
 
@@ -575,8 +577,9 @@ class OdysseyModelTravel extends JModelItem
     $addons = $db->loadAssocList();
 
     if($travel['overlapping']) {
+      //TODO: More calculation is required for addons.
       //Recalculate the addon prices according to the overlapping.
-      $addons = OverlappingHelper::updateSelectedAddonPrices($travel, $addons, $selAddonIds);
+      //$addons = OverlappingHelper::updateSelectedAddonPrices($travel, $addons, $selAddonIds);
     }
 
     if(!empty($selAddonOptionIds)) {
@@ -609,8 +612,9 @@ class OdysseyModelTravel extends JModelItem
       $addonOptions = $db->loadAssocList();
 
       if($travel['overlapping']) {
+	//TODO: More calculation is required for addon options.
 	//Recalculate the addon prices according to the overlapping.
-	$addonOptions = OverlappingHelper::updateSelectedAddonOptionPrices($travel, $addonOptions, $selAddonOptionIds);
+	//$addonOptions = OverlappingHelper::updateSelectedAddonOptionPrices($travel, $addonOptions, $selAddonOptionIds);
       }
     }
     else {
