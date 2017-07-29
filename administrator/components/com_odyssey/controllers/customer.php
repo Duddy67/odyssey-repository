@@ -50,7 +50,7 @@ class OdysseyControllerCustomer extends JControllerForm
       $body = JText::sprintf('COM_ODYSSEY_EMAIL_SENDING_DOCUMENT_BODY', $user->get('username'), $document['file_name'], $websiteUrl);
       $message = array('subject' => $subject, 'body' => $body);
       //Informs the customer.
-      TravelHelper::sendEmail('sending_document', $data['id'], 0, $message);
+      TravelHelper::sendEmail('sending_document', $data['id'], 0, false, $message);
 
       $this->setMessage(JText::sprintf('COM_ODYSSEY_FILE_SUCCESSFULLY_UPLOADED', $document['file_name']));
     }

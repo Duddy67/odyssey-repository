@@ -475,7 +475,7 @@ class TravelHelper
 
 
   //Send an appropriate email to customers according to the performed action.
-  public static function sendEmail($emailType, $userId = 0, $orderId = 0, $message = array())
+  public static function sendEmail($emailType, $userId = 0, $orderId = 0, $toAdmin = false, $message = array())
   {
     //A reference to the global mail object (JMail) is fetched through the JFactory object. 
     //This is the object creating our mail.
@@ -486,10 +486,12 @@ class TravelHelper
 		    $config->get('fromname'));
 
     $mailer->setSender($sender);
-    //By default the email is sent to the administrator.
-    $recipient = $config->get('mailfrom');
 
-    if($userId) {
+    //Set the recipient address according to the passed parameters.
+    if($toAdmin && !$userId) {
+      $recipient = $config->get('mailfrom');
+    }
+    elseif($userId) {
       $user = JFactory::getUser($userId);
       $recipient = $user->email;
     }
@@ -501,7 +503,7 @@ class TravelHelper
 
     if(empty($message)) {
       //Get the proper email message according to the email type.
-      $message = TravelHelper::getEmailMessage($emailType, $userId, $orderId);
+      $message = TravelHelper::getEmailMessage($emailType, $userId, $orderId, $toAdmin);
     }
 //file_put_contents('debog_send_email.txt', print_r($message, true)); 
     //Set the subject and body of the email.
@@ -530,7 +532,7 @@ class TravelHelper
 
 
   //Build the email subject and body according to the email type.
-  public static function getEmailMessage($emailType, $userId, $orderId = 0)
+  public static function getEmailMessage($emailType, $userId, $orderId, $toAdmin)
   {
     $bookingOptions = array('take_option', 'deposit', 'whole_price',
 			    'remaining', 'deposit_payment_error',
@@ -580,67 +582,73 @@ class TravelHelper
     $limitDate = JHTML::_('date', $limitDate, JText::_('DATE_FORMAT_LC2'));
     $finalAmount = UtilityHelper::formatNumber($result->final_amount).' '.$currency;
 
+    //Set the admin body option.
+    $admin = '';
+    if($toAdmin) {
+      $admin = 'ADMIN_';
+    }
+
     //Get the corresponding subject and body.
     switch($emailType) {
       case 'take_option':
 	$subject = JText::sprintf('COM_ODYSSEY_EMAIL_TAKE_OPTION_CONFIRMATION_SUBJECT', $result->travel_name);
-	$body = JText::sprintf('COM_ODYSSEY_EMAIL_TAKE_OPTION_CONFIRMATION_BODY', $result->firstname, $result->lastname,
-										  $result->travel_name, 
-										  $limitDate,
-										  $result->order_details,
-										  $finalAmount, $websiteUrl);
+	$body = JText::sprintf('COM_ODYSSEY_EMAIL_TAKE_OPTION_CONFIRMATION_'.$admin.'BODY', $result->firstname, $result->lastname,
+											    $result->travel_name, 
+											    $limitDate,
+											    $result->order_details,
+											    $finalAmount, $websiteUrl);
 	break;
 
       case 'deposit':
 	$subject = JText::sprintf('COM_ODYSSEY_EMAIL_DEPOSIT_CONFIRMATION_SUBJECT', $result->travel_name);
-	$body = JText::sprintf('COM_ODYSSEY_EMAIL_DEPOSIT_CONFIRMATION_BODY', $result->firstname, $result->lastname,
-									      $amount, $result->travel_name, 
-									      $outstandingBalance,
-									      $result->order_details,
-									      $finalAmount, $websiteUrl);
+	$body = JText::sprintf('COM_ODYSSEY_EMAIL_DEPOSIT_CONFIRMATION_'.$admin.'BODY', $result->firstname, $result->lastname,
+											$amount, $result->travel_name, 
+											$outstandingBalance,
+											$result->order_details,
+											$finalAmount, $websiteUrl);
 	break;
 
       case 'deposit_payment_error':
 	$subject = JText::sprintf('COM_ODYSSEY_EMAIL_DEPOSIT_PAYMENT_ERROR_SUBJECT', $result->travel_name);
-	$body = JText::sprintf('COM_ODYSSEY_EMAIL_DEPOSIT_PAYMENT_ERROR_BODY', $result->firstname, $result->lastname,
-									       $amount, $result->travel_name, 
-									       $settings['company'],
-									       $result->order_details,
-									       $finalAmount, $websiteUrl);
+	$body = JText::sprintf('COM_ODYSSEY_EMAIL_DEPOSIT_PAYMENT_ERROR_'.$admin.'BODY', $result->firstname, $result->lastname,
+											 $amount, $result->travel_name, 
+											 $settings['company'],
+											 $result->order_details,
+											 $finalAmount, $websiteUrl);
 	break;
 
       case 'whole_price':
 	$subject = JText::sprintf('COM_ODYSSEY_EMAIL_WHOLE_PRICE_CONFIRMATION_SUBJECT', $result->travel_name);
-	$body = JText::sprintf('COM_ODYSSEY_EMAIL_WHOLE_PRICE_CONFIRMATION_BODY', $result->firstname, $result->lastname,
-										  $amount, $result->travel_name, 
-										  $result->order_details,
-										  $finalAmount, $websiteUrl);
+	$body = JText::sprintf('COM_ODYSSEY_EMAIL_WHOLE_PRICE_CONFIRMATION_'.$admin.'BODY', $result->firstname, $result->lastname,
+											    $amount, $result->travel_name, 
+											    $result->order_details,
+											    $finalAmount, $websiteUrl);
 	break;
 
       case 'whole_price_payment_error':
 	$subject = JText::sprintf('COM_ODYSSEY_EMAIL_WHOLE_PRICE_PAYMENT_ERROR_SUBJECT', $result->travel_name);
-	$body = JText::sprintf('COM_ODYSSEY_EMAIL_WHOLE_PRICE_PAYMENT_ERROR_BODY', $result->firstname, $result->lastname,
-										   $amount, $result->travel_name, 
-										   $settings['company'],
-										   $result->order_details,
-										   $finalAmount, $websiteUrl);
+	$body = JText::sprintf('COM_ODYSSEY_EMAIL_WHOLE_PRICE_PAYMENT_ERROR_'.$admin.'BODY', $result->firstname, $result->lastname,
+											     $amount, $result->travel_name, 
+											     $settings['company'],
+											     $result->order_details,
+											     $finalAmount, $websiteUrl);
 	break;
 
       case 'remaining':
 	$subject = JText::sprintf('COM_ODYSSEY_EMAIL_REMAINING_CONFIRMATION_SUBJECT', $result->travel_name);
-	$body = JText::sprintf('COM_ODYSSEY_EMAIL_REMAINING_CONFIRMATION_BODY', $result->firstname, $result->lastname,
-										$amount, $result->travel_name, 
-										$result->order_details,
-										$finalAmount, $websiteUrl);
+	$body = JText::sprintf('COM_ODYSSEY_EMAIL_REMAINING_CONFIRMATION_'.$admin.'BODY', $result->firstname, $result->lastname,
+											  $amount, $result->travel_name, 
+											  $result->order_details,
+											  $finalAmount, $websiteUrl);
 	break;
 
       case 'remaining_payment_error':
 	$subject = JText::sprintf('COM_ODYSSEY_EMAIL_REMAINING_PAYMENT_ERROR_SUBJECT', $result->travel_name);
-	$body = JText::sprintf('COM_ODYSSEY_EMAIL_REMAINING_PAYMENT_ERROR_BODY', $result->firstname, $result->lastname,
-										 $amount, $result->travel_name, 
-										 $settings['company'],
-										 $result->order_details,
-										 $finalAmount, $websiteUrl);
+	$body = JText::sprintf('COM_ODYSSEY_EMAIL_REMAINING_PAYMENT_ERROR_'.$admin.'BODY', $result->firstname, $result->lastname,
+											   $amount, $result->travel_name, 
+											   $settings['company'],
+											   $result->order_details,
+											   $finalAmount, $websiteUrl);
 	break;
     }
 

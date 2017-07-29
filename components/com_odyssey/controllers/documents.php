@@ -47,7 +47,7 @@ class OdysseyControllerDocuments extends JControllerAdmin
       $body = JText::sprintf('COM_ODYSSEY_EMAIL_SENDING_DOCUMENT_BODY', $document['file_name'], $user->get('username'), $websiteUrl);
       $message = array('subject' => $subject, 'body' => $body);
       //Informs the administrator.
-      TravelHelper::sendEmail('sending_document', 0, 0, $message);
+      TravelHelper::sendEmail('sending_document', 0, 0, true, $message);
 
       $this->setMessage(JText::sprintf('COM_ODYSSEY_FILE_SUCCESSFULLY_UPLOADED', $document['file_name']));
     }

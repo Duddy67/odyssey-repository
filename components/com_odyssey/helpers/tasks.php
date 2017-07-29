@@ -64,7 +64,13 @@ $lang->load('com_odyssey', JPATH_ROOT.'/components/com_odyssey', $langTag, true)
 $parameters = JComponentHelper::getParams('com_odyssey');
 
 //Initialise some variables.
-$websiteUrl = JURI::base();
+
+//As we're in an external file we have to remove the last part of the path to get the
+//website url.
+$length = strlen('components/com_odyssey/helpers/');
+$length = $length - ($length * 2);
+$websiteUrl = substr(JURI::root(), 0, $length);
+
 $finalAmount = UtilityHelper::formatNumber($result->final_amount).' '.$result->currency_code;
 $limitDate = JHTML::_('date', $result->limit_date, JText::_('DATE_FORMAT_LC2'));
 
@@ -86,6 +92,12 @@ if($result->outstanding_balance == $result->final_amount || $result->outstanding
 								       $limitDate,
 								       $result->order_details,
 								       $finalAmount, $websiteUrl);
+      //Prepare the body to send to the administrator. 
+      $adminBody = JText::sprintf('COM_ODYSSEY_EMAIL_OPTION_REMINDER_ADMIN_BODY', $result->firstname, $result->lastname,
+										  $result->travel_name, 
+										  $limitDate,
+										  $result->order_details,
+										  $finalAmount, $websiteUrl);
       break;
 
     case 'cancelling_option':
@@ -95,6 +107,12 @@ if($result->outstanding_balance == $result->final_amount || $result->outstanding
 									 $limitDate,
 									 $result->order_details,
 									 $finalAmount, $websiteUrl);
+      //Prepare the body to send to the administrator. 
+      $adminBody = JText::sprintf('COM_ODYSSEY_EMAIL_CANCELLING_OPTION_ADMIN_BODY', $result->firstname, $result->lastname,
+										    $result->travel_name, 
+										    $limitDate,
+										    $result->order_details,
+										    $finalAmount, $websiteUrl);
       break;
 
     case 'deposit_reminder':
@@ -106,6 +124,14 @@ if($result->outstanding_balance == $result->final_amount || $result->outstanding
 								        $limitDate,
 								        $result->order_details,
 								        $finalAmount, $websiteUrl);
+      //Prepare the body to send to the administrator. 
+      $adminBody = JText::sprintf('COM_ODYSSEY_EMAIL_DEPOSIT_REMINDER_ADMIN_BODY', $result->firstname, $result->lastname,
+										   $outstandingBalance,
+										   $result->travel_name, 
+										   $remainingPayment,
+										   $limitDate,
+										   $result->order_details,
+										   $finalAmount, $websiteUrl);
       break;
 
     case 'warning_payment':
@@ -117,12 +143,24 @@ if($result->outstanding_balance == $result->final_amount || $result->outstanding
 								       $limitDate,
 								       $result->order_details,
 								       $finalAmount, $websiteUrl);
+      //Prepare the body to send to the administrator. 
+      $adminBody = JText::sprintf('COM_ODYSSEY_EMAIL_WARNING_PAYMENT_ADMIN_BODY', $result->firstname, $result->lastname,
+										  $outstandingBalance,
+										  $result->travel_name, 
+										  $remainingPayment,
+										  $limitDate,
+										  $result->order_details,
+										  $finalAmount, $websiteUrl);
       break;
   }
 
   $message = array('subject' => $subject, 'body' => $body);
   //Send the appropriate email to the customer.
-  TravelHelper::sendEmail($task, $result->customer_id, $orderId, $message);
+  TravelHelper::sendEmail($task, $result->customer_id, $orderId, false, $message);
+
+  $message = array('subject' => $subject, 'body' => $adminBody);
+  //Send the appropriate email to the administrator.
+  TravelHelper::sendEmail($task, 0, $orderId, true, $message);
 
   if($task == 'cancelling_option') {
     //Cancel statusses.

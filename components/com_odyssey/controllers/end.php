@@ -94,6 +94,8 @@ class OdysseyControllerEnd extends JControllerForm
 
       $userId = JFactory::getUser()->get('id');
       TravelHelper::sendEmail($emailType, $userId); 
+      //Send email to the administrator as well.
+      TravelHelper::sendEmail($emailType, 0, 0, true); 
 
       if($utility['payment_result'] && $travel['booking_option'] == 'deposit' && $settings['run_at_command']) {
 	$this->schedulingTasks($travel, $settings, 'deposit');
@@ -146,6 +148,8 @@ class OdysseyControllerEnd extends JControllerForm
 
     $userId = JFactory::getUser()->get('id');
     TravelHelper::sendEmail('take_option', $userId); 
+    //Send email to the administrator as well.
+    TravelHelper::sendEmail('take_option', 0, 0, true); 
 
     if($settings['run_at_command']) {
       $this->schedulingTasks($travel, $settings, 'take_option');
@@ -238,8 +242,8 @@ class OdysseyControllerEnd extends JControllerForm
     }
 
       //For test purposes.
-      //$reminderDate = '15:00 2017-01-20';
-      //$limitDate = '15:01 2017-01-20';
+      //$reminderDate = '13:40 2017-07-29';
+      //$limitDate = '13:41 2017-07-29';
 
       $orderId = $travel['order_id'];
       $uri = JUri::getInstance();
