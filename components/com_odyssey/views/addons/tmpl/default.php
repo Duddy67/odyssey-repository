@@ -30,7 +30,7 @@ $session = JFactory::getSession();
 $travel = $session->get('travel', array(), 'odyssey'); 
 $settings = $session->get('settings', array(), 'odyssey'); 
 //echo '<pre>';
-//var_dump($addons);
+//var_dump($travel);
 //echo '</pre>';
 
 ?>

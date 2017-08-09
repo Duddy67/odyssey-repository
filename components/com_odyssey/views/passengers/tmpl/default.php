@@ -92,6 +92,11 @@ for($i = 0; $i < (int)$travel['nb_psgr']; $i++) {
       //Set the hidden fields manualy as the JFormField class is weirdly built.
       echo '<input type="hidden" name="'.$field->__get('name').'" id="'.$field->__get('id').'" value="'.$field->__get('value').'">';
     }
+    //Exclusive field dedicated to a specific passenger (first, second etc...).
+    elseif($field->getAttribute('excl_psgr') !== null && $field->getAttribute('excl_psgr') != $psgrNb) {
+      //Hide the field and set it to the corresponding empty value.
+      echo '<input type="hidden" name="'.$field->__get('name').'" id="'.$field->__get('id').'" value="'.$field->getAttribute('empty_val').'">';
+    }
     else {
       //Display label and field.
       echo $field->getControlGroup();

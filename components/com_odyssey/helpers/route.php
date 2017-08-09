@@ -123,15 +123,55 @@ abstract class OdysseyHelperRoute
   }
 
 
-  public static function getTagRoute($id)
+  public static function getTagRoute($id, $path, $language = 0)
   {
-    $needles = array('tag'  => array((int) $id));
-
     if($id < 1) {
       $link = '';
     }
     else {
       $link = 'index.php?option=com_odyssey&view=tag&id='.$id;
+      //Converts the tag path into an item array.
+      $items = explode('/', $path);
+      $ids = array();
+
+      if(count($items) > 1) {
+	$paths = $slash = $in = '';
+	$db = JFactory::getDbo();
+	$query = $db->getQuery(true);
+
+	//Build recursively the path values for the IN MySQL clause (eg: 'item1','item1/item2', etc...). 
+	foreach($items as $item) {
+	  $paths .= $slash.$item;
+	  $in .= $db->quote($paths).',';
+	  $slash = '/';
+	}
+
+	//Remove comma from the end of the string.
+	$in = substr($in, 0, -1);
+
+	//Gets the parent item ids. 
+	$query->select('id')
+	      ->from('#__tags')
+	      ->where('path IN('.$in.')')
+	      ->order('level DESC');
+	$db->setQuery($query);
+	$ids = $db->loadColumn();
+      }
+      else {
+	//The tag is a first level item therefore it has no parent.
+	$ids[] = $id;
+      }
+
+      $needles = array('tag'  => $ids);
+
+      if($language && $language != "*" && JLanguageMultilang::isEnabled()) {
+	self::buildLanguageLookup();
+
+	if(isset(self::$lang_lookup[$language])) {
+	  $link .= '&lang=' . self::$lang_lookup[$language];
+	  $needles['language'] = $language;
+	}
+      }
 
       if($item = self::_findItem($needles)) {
 	$link .= '&Itemid='.$item;

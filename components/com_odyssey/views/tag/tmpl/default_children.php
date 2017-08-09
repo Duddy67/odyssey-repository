@@ -23,7 +23,7 @@ $class = ' class="first"';
 	?>
 	<li<?php echo $class; ?>>
 		<?php $class = ''; ?>
-			<span class="item-title"><a href="<?php echo JRoute::_(OdysseyHelperRoute::getTagRoute($child->id));?>">
+			<span class="item-title"><a href="<?php echo JRoute::_(OdysseyHelperRoute::getTagRoute($child->id, $child->path));?>">
 				<?php echo $this->escape($child->title); ?></a>
 			</span>
 

@@ -31,6 +31,7 @@ class OdysseyControllerEnd extends JControllerForm
       $settings = $session->get('settings', array(), 'odyssey'); 
       $travel = $session->get('travel', array(), 'odyssey'); 
       $addons = $session->get('addons', array(), 'odyssey'); 
+      $userId = JFactory::getUser()->get('id');
 
       $utility = OrderHelper::getTemporaryData($travel['order_id'], true);
 
@@ -75,7 +76,7 @@ class OdysseyControllerEnd extends JControllerForm
 	  $event = 'onOdysseyApiConnectorFunction';
 	  JPluginHelper::importPlugin('odysseyapiconnector');
 	  $dispatcher = JDispatcher::getInstance();
-	  $results = $dispatcher->trigger($event, array('setDepartureAvailability', array($travel)));
+	  $results = $dispatcher->trigger($event, array('setDepartureAvailability', array($travel, $addons, $settings, $userId)));
 	}
 	else {
 	  $this->setAllotment($travel);
@@ -92,7 +93,6 @@ class OdysseyControllerEnd extends JControllerForm
       $db->setQuery($query);
       $db->execute();
 
-      $userId = JFactory::getUser()->get('id');
       TravelHelper::sendEmail($emailType, $userId); 
       //Send email to the administrator as well.
       TravelHelper::sendEmail($emailType, 0, 0, true); 

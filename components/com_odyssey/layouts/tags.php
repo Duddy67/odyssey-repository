@@ -22,7 +22,7 @@ if(isset($displayData['item']->tag_id)) {
     <?php if($tagId == $tag->tag_id) : ?> 
       <span class="label label-warning"><?php echo $this->escape($tag->title); ?></span>
   <?php else : ?> 
-      <a href="<?php echo JRoute::_(OdysseyHelperRoute::getTagRoute($tag->tag_id));?>" class="label label-success"><?php echo $this->escape($tag->title); ?></a>
+      <a href="<?php echo JRoute::_(OdysseyHelperRoute::getTagRoute($tag->tag_id, $tag->path));?>" class="label label-success"><?php echo $this->escape($tag->title); ?></a>
   <?php endif; ?> 
   </li>
 <?php endforeach; ?>
