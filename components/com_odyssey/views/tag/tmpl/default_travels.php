@@ -41,13 +41,13 @@ JHtml::_('behavior.framework');
 		$active = $menu->getActive();
 		$itemId = $active->id;
 		$link1 = JRoute::_('index.php?option=com_users&view=login&Itemid='.$itemId);
-		$returnURL = JRoute::_(OdysseyHelperRoute::getTravelRoute($item->slug, $item->catid));
+		$returnURL = JRoute::_(OdysseyHelperRoute::getTravelRoute($item->slug, $item->tag_ids, 0, true));
 		$link = new JUri($link1);
 		$link->setVar('return', base64_encode($returnURL));
 	      endif; ?>
 
 	<?php if($item->params->get('access-view')) : //Set the link to the travel page.
-	      $link = JRoute::_(OdysseyHelperRoute::getTravelRoute($item->slug, $item->catid));
+	      $link = JRoute::_(OdysseyHelperRoute::getTravelRoute($item->slug, $item->tag_ids, 0, true));
 	  endif; ?>
 
 	  <a href="<?php echo $link;?>"><?php echo $this->escape($item->name); ?></a>

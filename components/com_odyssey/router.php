@@ -31,15 +31,13 @@ function OdysseyBuildRoute(&$query)
     unset($query['id']);
   }
 
-  if(isset($query['catid'])) {
-    $segments[] = $query['catid'];
-    unset($query['catid']);
-  }
-
   if(isset($query['layout'])) {
     $segments[] = $query['layout'];
     unset($query['layout']);
   }
+
+  unset($query['catid']);
+  unset($query['tagid']);
 
   return $segments;
 }
@@ -75,8 +73,6 @@ function OdysseyParseRoute($segments)
 	   $vars['view'] = 'travel';
 	   $id = explode(':', $segments[1]);
 	   $vars['id'] = (int)$id[0];
-	   $catid = explode(':', $segments[2]);
-	   $vars['catid'] = (int)$catid[0];
 	   break;
     case 'form':
 	   $vars['view'] = 'form';

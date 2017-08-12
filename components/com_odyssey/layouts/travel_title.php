@@ -19,8 +19,15 @@ $nowDate = $displayData['now_date'];
   <div class="page-header">
     <?php if($params->get('show_name')) : ?>
 	    <h2>
-	      <?php if($params->get('link_name') && $params->get('access-view')) : ?>
-		<a href="<?php echo JRoute::_(OdysseyHelperRoute::getTravelRoute($item->slug, $item->catid)); ?>">
+	      <?php if($params->get('link_name') && $params->get('access-view')) : 
+
+		    $link = JRoute::_(OdysseyHelperRoute::getTravelRoute($item->slug, $item->catid));
+		    //If the tag view is used the getTravelRoute function calling is slighly different.
+		    if(isset($item->tag_ids)) {
+		      $link = JRoute::_(OdysseyHelperRoute::getTravelRoute($item->slug, $item->tag_ids, 0, true));
+		    }
+		?>
+		<a href="<?php echo $link; ?>">
 		      <?php echo $this->escape($item->name); ?></a>
 	      <?php else : ?>
 		<?php echo $this->escape($item->name); ?>

@@ -25,7 +25,7 @@ $doc->addStyleSheet(JURI::base().'modules/mod_odysplay/css/owl.theme.default.css
 
 <div class="owl-carousel">
 <?php foreach($travels as $travel) : 
-	$link = JRoute::_(OdysseyHelperRoute::getTravelRoute($travel->slug, $travel->catid, $travel->language));
+	$link = JRoute::_(OdysseyHelperRoute::getTravelRoute($travel->slug, $travel->tag_ids, 0, true));
 ?>
   <div class="odysplay-travel">
     <?php if($params->get('show_name')) : ?>
@@ -64,7 +64,7 @@ $doc->addStyleSheet(JURI::base().'modules/mod_odysplay/css/owl.theme.default.css
     <?php if($params->get('show_tags')) : ?>
       <div class="travel-tags">
       <?php foreach($travel->tags->itemTags as $tag) : ?> 
-	<a href="<?php echo JRoute::_(OdysseyHelperRoute::getTagRoute($tag->tag_id));?>" class="label label-success"><?php echo $tag->title; ?></a>
+	<a href="<?php echo JRoute::_(OdysseyHelperRoute::getTagRoute($tag->tag_id.':'.$tag->alias, $tag->path));?>" class="label label-success"><?php echo $tag->title; ?></a>
       <?php endforeach; ?>
       </div>
     <?php endif; ?>

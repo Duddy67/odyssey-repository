@@ -73,6 +73,16 @@ class ModOdysplayHelper {
       // Get the tags
       $travel->tags = new JHelperTags;
       $travel->tags->getItemTags('com_odyssey.travel', $travel->id);
+
+      //Gets all the tag ids linked to the item.
+      $tagIds = array();
+      foreach($travel->tags->itemTags as $itemTag) {
+	if($itemTag->published == 1) {
+	  $tagIds[] = $itemTag->id;
+	}
+      }
+
+      $travel->tag_ids = $tagIds;
     }
 
     if($params->get('show_price')) {

@@ -32,7 +32,7 @@ $subdir = 0;
 	?>
 	<li<?php echo $class; ?>>
 		<?php $class = ''; ?>
-			<span class="item-title"><a href="<?php echo JRoute::_(OdysseyHelperRoute::getTagRoute($child->id, $child->path));?>">
+		  <span class="item-title"><a href="<?php echo JRoute::_(OdysseyHelperRoute::getTagRoute($child->id.':'.$child->alias, $child->path));?>">
 				<?php echo $this->escape($child->title); ?></a>
 			</span>
 

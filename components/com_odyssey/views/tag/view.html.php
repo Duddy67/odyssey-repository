@@ -128,6 +128,16 @@ class OdysseyViewTag extends JViewLegacy
       $item->currency = $currency;
       //Store all the item ids.
       $itemIds[] = $item->id;
+
+      //Gets all the tag ids linked to the item.
+      $tagIds = array();
+      foreach($item->tags->itemTags as $itemTag) {
+	if($itemTag->published == 1) {
+	  $tagIds[] = $itemTag->id;
+	}
+      }
+
+      $item->tag_ids = $tagIds;
     }
 
     if(!empty($itemIds)) {

@@ -24,23 +24,29 @@ abstract class OdysseyHelperRoute
   /**
    * @param   integer  The route of the travel
    */
-  public static function getTravelRoute($id, $catid, $language = 0)
+  public static function getTravelRoute($id, $itemid, $language = 0, $tagView = false)
   {
     $needles = array('travel' => array((int) $id));
 
     //Create the link
     $link = 'index.php?option=com_odyssey&view=travel&id='.$id;
 
-    if($catid > 1) {
+    if($itemid > 1) {
       $categories = JCategories::getInstance('Odyssey');
-      $category = $categories->get($catid);
+      $category = $categories->get($itemid);
 
       if($category) {
 	$needles['category'] = array_reverse($category->getPath());
 	$needles['categories'] = $needles['category'];
-	$link .= '&catid='.$catid;
+	$link .= '&catid='.$itemid;
       }
     }
+    //When the tag view is used, $itemid is passed as an array with the tag ids linked to the travel.
+    elseif($tagView && count($itemid) > 1) {
+      $needles['tag'] = $itemid;
+      $link .= '&tagid='.$itemid[0];
+    }
+
 
     if($language && $language != "*" && JLanguageMultilang::isEnabled()) {
       self::buildLanguageLookup();
@@ -125,7 +131,7 @@ abstract class OdysseyHelperRoute
 
   public static function getTagRoute($id, $path, $language = 0)
   {
-    if($id < 1) {
+    if((int)$id < 1) {
       $link = '';
     }
     else {
@@ -139,7 +145,7 @@ abstract class OdysseyHelperRoute
 	$db = JFactory::getDbo();
 	$query = $db->getQuery(true);
 
-	//Build recursively the path values for the IN MySQL clause (eg: 'item1','item1/item2', etc...). 
+	//Build recursively the path values for the IN MySQL clause (eg: 'item1','item1/item2', etc...).
 	foreach($items as $item) {
 	  $paths .= $slash.$item;
 	  $in .= $db->quote($paths).',';
@@ -149,17 +155,22 @@ abstract class OdysseyHelperRoute
 	//Remove comma from the end of the string.
 	$in = substr($in, 0, -1);
 
-	//Gets the parent item ids. 
+	//Gets the parent item ids.
 	$query->select('id')
 	      ->from('#__tags')
-	      ->where('path IN('.$in.')')
-	      ->order('level DESC');
+	      ->where('path IN('.$in.') AND published=1');
+
+	if($language && $language != "*" && JLanguageMultilang::isEnabled()) {
+	  $query->where('language='.$db->quote($language));
+	}
+
+	      $query->order('level DESC');
 	$db->setQuery($query);
 	$ids = $db->loadColumn();
       }
       else {
 	//The tag is a first level item therefore it has no parent.
-	$ids[] = $id;
+	$ids[] = (int)$id;
       }
 
       $needles = array('tag'  => $ids);
