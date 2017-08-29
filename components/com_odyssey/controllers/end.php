@@ -121,6 +121,7 @@ class OdysseyControllerEnd extends JControllerForm
     $settings = $session->get('settings', array(), 'odyssey'); 
     //Get the limit date against the validity period of the option.
     $limitDate = UtilityHelper::getLimitDate($settings['option_validity_period']);
+    $userId = JFactory::getUser()->get('id');
 
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
@@ -136,17 +137,17 @@ class OdysseyControllerEnd extends JControllerForm
 
     //Check for possible API plugin.
     if($settings['api_connector'] && $settings['api_plugin']) {
+      $addons = $session->get('addons', array(), 'odyssey'); 
       //Trigger the plugin event.
       $event = 'onOdysseyApiConnectorFunction';
       JPluginHelper::importPlugin('odysseyapiconnector');
       $dispatcher = JDispatcher::getInstance();
-      $results = $dispatcher->trigger($event, array('setDepartureAvailability', array($travel)));
+      $results = $dispatcher->trigger($event, array('setDepartureAvailability', array($travel, $addons, $settings, $userId)));
     }
     else {
       $this->setAllotment($travel);
     }
 
-    $userId = JFactory::getUser()->get('id');
     TravelHelper::sendEmail('take_option', $userId); 
     //Send email to the administrator as well.
     TravelHelper::sendEmail('take_option', 0, 0, true); 

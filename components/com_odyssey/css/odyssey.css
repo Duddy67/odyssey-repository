@@ -167,6 +167,12 @@
   font-size: 14px;
 }
 
+.summary-addon-option,
+.details-addon-option {
+  padding-left: 10px !important;
+  font-style: italic;
+}
+
 .travel-pricerules {
   background-color: #ddff99;
 }

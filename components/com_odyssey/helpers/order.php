@@ -58,7 +58,7 @@ class OrderHelper
 	  }
 	}
 
-	$orderDetails .= '<tr><td>'.$option['name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_ADDON_OPTION').'</td>';
+	$orderDetails .= '<tr><td class="details-addon-option">'.$option['name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_ADDON_OPTION').'</td>';
 
 	if($option['price'] > 0) {
 	  $orderDetails .= '<td>';

@@ -71,7 +71,7 @@ foreach($addons as $addon) {
   }
 
   foreach($addon['options'] as $option) {
-    $bookingDetails .= '<tr><td>'.$option['name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_ADDON_OPTION').'</td>';
+    $bookingDetails .= '<tr><td class="summary-addon-option">'.$option['name'].'</td><td>'.JText::_('COM_ODYSSEY_HEADING_ADDON_OPTION').'</td>';
 
     if($option['price'] > 0) {
       $bookingDetails .= '<td>';

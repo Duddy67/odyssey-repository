@@ -46,7 +46,7 @@ class OdysseyControllerPayment extends JControllerForm
     $submit = $session->get('submit', 0, 'odyssey'); 
 
     //Check for possible API plugin.
-    //Note: Ensure no order id exists which mean we're dealing with a brand new booking.
+    //Note: Ensure no order id exists yet  which mean we're dealing with a brand new booking.
     if(!isset($travel['order_id']) && $settings['api_connector'] && $settings['api_plugin']) {
       //Trigger the plugin event.
       $event = 'onOdysseyApiConnectorFunction';

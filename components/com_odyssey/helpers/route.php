@@ -42,7 +42,7 @@ abstract class OdysseyHelperRoute
       }
     }
     //When the tag view is used, $itemid is passed as an array with the tag ids linked to the travel.
-    elseif($tagView && count($itemid) > 1) {
+    elseif($tagView && !empty($itemid)) {
       $needles['tag'] = $itemid;
       $link .= '&tagid='.$itemid[0];
     }

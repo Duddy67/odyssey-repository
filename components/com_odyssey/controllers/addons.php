@@ -22,9 +22,6 @@ class OdysseyControllerAddons extends JControllerForm
 
     //Get the addon form.
     $post = JFactory::getApplication()->input->post->getArray();
-    echo '<pre>';
-    var_dump($post);
-    echo '</pre>';
 
     //Build id path arrays from which all the valid item ids can be retrieved.
     //
@@ -115,34 +112,26 @@ class OdysseyControllerAddons extends JControllerForm
 	//single select).
 	if(isset($selAddonIds[$stepId]) && in_array($addonId, $selAddonIds[$stepId])) {
 	  //Store the selected addon option id into the id path array.
-	  if(isset($selAddonOptionIds[$stepId][$addonId])) {
-	    if($selType == 'multi') {
-	      //Use a loop as we deal with an array.
-	      foreach($addonOptionIds as $addonOptionId) {
-		$selAddonOptionIds[$stepId][$addonId][] = $addonOptionId;
-	      }
-	    }
-	    else {
-	      $selAddonOptionIds[$stepId][$addonId][] = $addonOptionId;
-	    }
+	  if(!isset($selAddonOptionIds[$stepId])) {
+	    //Creates the step id index
+	    $selAddonOptionIds[$stepId] = array();
 	  }
-	  else {
-	    if($selType == 'multi') {
-	      //Assign directly the array of addon ids.
-	      $selAddonOptionIds[$stepId] = array($addonId => $addonOptionIds);
-	    }
-	    else {
-	      $selAddonOptionIds[$stepId] = array($addonId => array($addonOptionId));
-	    }
+
+	  if($selType == 'multi') {
+	    //Assign directly the array of addon option ids.
+	    $selAddonOptionIds[$stepId][$addonId] = $addonOptionIds;
+	  }
+	  else { //single
+	    $selAddonOptionIds[$stepId][$addonId] = array($addonOptionId);
 	  }
 	}
       }
     }
 
-    echo '<pre>';
-    var_dump($selAddonIds);
-    var_dump($selAddonOptionIds);
-    echo '</pre>';
+    //echo '<pre>';
+    //var_dump($post);
+    //var_dump($selAddonOptionIds);
+    //echo '</pre>';
 //return;
 
     //
