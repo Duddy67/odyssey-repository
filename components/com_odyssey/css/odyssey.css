@@ -253,3 +253,12 @@
   text-align: center;
 }
 
+/* Prevent prices to "float" all over the page when loading takes time. */
+[id^=price-psgr-] {
+  visibility: hidden;
+}
+
+[id^=normal-price-psgr-] {
+  visibility: hidden;
+}
+
