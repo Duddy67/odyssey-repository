@@ -192,7 +192,7 @@ class OrderHelper
     $values1 = $values2 = array();
     foreach($addons as $addon) {
       $values1[] = (int)$orderId.','.(int)$addon['step_id'].','.(int)$addon['addon_id'].','.
-		  $db->quote($addon['name']).','.(float)$addon['price'];
+		  $db->quote($addon['name']).','.$db->quote($addon['addon_code']).','.(float)$addon['price'];
 
       foreach($addon['options'] as $addonOption) {
 	$values2[] = (int)$orderId.','.(int)$addon['step_id'].','.(int)$addon['addon_id'].','.
@@ -201,7 +201,7 @@ class OrderHelper
     }
 
     if(!empty($values1)) {
-      $columns = array('order_id','step_id','addon_id','name','price');
+      $columns = array('order_id','step_id','addon_id','name','addon_code','price');
       $query->insert('#__odyssey_order_addon')
 	    ->columns($columns)
 	    ->values($values1);

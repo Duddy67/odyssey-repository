@@ -49,6 +49,11 @@
 		<option value="0">JNO</option>
 	</field>
 
+	<field name="addon_code" type="text"
+	       label="COM_ODYSSEY_FIELD_ADDON_CODE_LABEL"
+	       description="COM_ODYSSEY_FIELD_ADDON_CODE_DESC" 
+	       class="inputbox" />
+
 	<field name="description" type="editor"
 		label="COM_ODYSSEY_FIELD_DESCRIPTION_LABEL"
 		description="COM_ODYSSEY_FIELD_DESCRIPTION_DESC"

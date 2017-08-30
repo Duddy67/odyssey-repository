@@ -555,7 +555,7 @@ class OdysseyModelTravel extends JModelItem
     $query = $db->getQuery(true);
     //Get the selected addons (or addons by default).
     $query->select('sa.step_id, IFNULL(ts.time_gap, "000:00:00") AS time_gap, sa.ordering, a.name, a.description,'.
-	           'a.id AS addon_id, IFNULL(ap.price, 0) AS price')
+	           'a.id AS addon_id, a.addon_code, IFNULL(ap.price, 0) AS price')
 	  ->from('#__odyssey_step_addon_map AS sa')
 	  ->join('INNER', '#__odyssey_addon AS a ON a.id=sa.addon_id')
 	  ->join('LEFT', '#__odyssey_timegap_step_map AS ts ON ts.step_id=sa.step_id')

@@ -270,6 +270,7 @@ CREATE TABLE `#__odyssey_addon` (
   `group_nb` CHAR(13) NOT NULL ,
   `option_type` CHAR(10) NOT NULL ,
   `global` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
+  `addon_code` VARCHAR(50) NOT NULL ,
   `description` TEXT NULL ,
   `published` TINYINT NOT NULL DEFAULT 0 ,
   `checked_out` INT UNSIGNED NOT NULL DEFAULT 0 ,
@@ -544,6 +545,7 @@ CREATE TABLE `#__odyssey_order_addon` (
   `step_id` INT UNSIGNED NOT NULL ,
   `addon_id` INT UNSIGNED NOT NULL ,
   `name` VARCHAR(255) NOT NULL ,
+  `addon_code` VARCHAR(50) NOT NULL ,
   `price` DECIMAL(14,5) NOT NULL ,
   INDEX `idx_order_id` (`order_id` ASC) ,
   INDEX `idx_addon_id` (`addon_id` ASC) )
