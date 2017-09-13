@@ -585,7 +585,8 @@ class OdysseyModelTravel extends JModelItem
     if(!empty($selAddonOptionIds)) {
       //Get the selected addon options linked to the selected addons.
       $query->clear();
-      $query->select('sa.step_id, ao.name, sa.addon_id, ao.id AS addon_option_id, ao.ordering, IFNULL(ap.price, 0) AS price')
+      $query->select('sa.step_id, ao.name, ao.code, sa.addon_id, ao.id AS addon_option_id,'.
+	             'ao.ordering, IFNULL(ap.price, 0) AS price')
 	    ->from('#__odyssey_addon_option AS ao')
 	    ->join('INNER', '#__odyssey_step_addon_map AS sa ON sa.addon_id=ao.addon_id')
 	    ->join('LEFT', '#__odyssey_addon_option_price AS ap ON ap.travel_id='.(int)$travel['travel_id'].' AND ap.step_id=sa.step_id'.
@@ -631,6 +632,7 @@ class OdysseyModelTravel extends JModelItem
 	  //Keep only the relevant data.
 	  $option['addon_option_id'] = $addonOption['addon_option_id'];
 	  $option['name'] = $addonOption['name'];
+	  $option['code'] = $addonOption['code'];
 	  $option['price'] = $addonOption['price'];
 
 	  $addons[$key]['options'][] = $option;

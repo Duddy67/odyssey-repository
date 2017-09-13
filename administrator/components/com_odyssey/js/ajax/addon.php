@@ -27,7 +27,7 @@ $query = $db->getQuery(true);
 $data = $options = array();
 
 //Get the addon options if any.
-$query->select('id AS option_id, ordering AS option_ordering, name AS option_name, published')
+$query->select('id AS option_id, ordering AS option_ordering, name AS option_name, code AS option_code, published')
       ->from('#__odyssey_addon_option')
       ->where('addon_id='.(int)$addonId)
       ->order('ordering');

@@ -183,11 +183,20 @@
   margin-top: 5px;
 }
 
-.item-name {
+.item-name, 
+.item-code {
   float: left;
   border: 1px solid #ccc;
   width: 40%;
   margin-right: 20px;
+}
+
+.option-item .item-name {
+  width: 20%;
+}
+
+.option-item .item-code {
+  width: 15%;
 }
 
 .target-item .item-name {
@@ -201,6 +210,7 @@
 .operator-select-label,
 .item-amount-label,
 .item-quantity-label,
+.item-code-label,
 .departures-label,
 .published-label,
 .departure-number,
@@ -220,6 +230,7 @@
 
 .departures-label,
 .departure-number,
+.item-code-label,
 .item-name-label {
   display: block;
   float: left;

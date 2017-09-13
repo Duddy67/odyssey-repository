@@ -106,7 +106,7 @@ class OrderHelper
 
       foreach($addon['options'] as $addonOption) {
 	$values2[] = (int)$orderId.','.(int)$addon['step_id'].','.(int)$addon['addon_id'].','.
-		    (int)$addonOption['addon_option_id'].','.$db->quote($addonOption['name']).','.(float)$addonOption['price'];
+		    (int)$addonOption['addon_option_id'].','.$db->quote($addonOption['name']).','.$db->quote($addonOption['code']).','.(float)$addonOption['price'];
       }
     }
 
@@ -127,7 +127,7 @@ class OrderHelper
 
 
     if(!empty($values2)) {
-      $columns = array('order_id','step_id','addon_id','addon_option_id','name','price');
+      $columns = array('order_id','step_id','addon_id','addon_option_id','name','code','price');
       $query->clear();
       $query->insert('#__odyssey_order_addon_option')
 	    ->columns($columns)

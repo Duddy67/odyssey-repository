@@ -339,6 +339,12 @@
       //Shift states of checkboxes.
       checkbox.prop('checked', checkboxToReverse.prop('checked'))
       checkboxToReverse.prop('checked', tmp);
+
+      //Get the code of the current item.
+      var currentItemCode = $('#'+itemType+'-code-'+idNb).val();
+      //Reverse the order of the code items.
+      $('#'+itemType+'-code-'+idNb).val($('#'+itemType+'-code-'+idNbToReverse).val());
+      $('#'+itemType+'-code-'+idNbToReverse).val(currentItemCode);
     }
   };
 

@@ -552,6 +552,7 @@ class plgContentOdyssey extends JPlugin
 	  //Store the addon option attributes.
 	  $addonOption = array('id' => $post['option_id_'.$idNb], 
 	                 'name' => $post['option_name_'.$idNb],  
+	                 'code' => $post['option_code_'.$idNb],  
 	                 'published' => $published,  
 	                 'ordering' => $post['option_ordering_'.$idNb]);
 

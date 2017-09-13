@@ -53,6 +53,15 @@
     var properties = {'type':'text', 'name':'option_name_'+idNb, 'id':'option-name-'+idNb, 'value':data.option_name};
     $('#option-item-'+idNb).createHTMLTag('<input>', properties, 'item-name');
 
+    //Create the "code" label.
+    properties = {'title':Joomla.JText._('COM_ODYSSEY_ITEM_CODE_TITLE')};
+    $('#option-item-'+idNb).createHTMLTag('<span>', properties, 'item-code-label');
+    $('#option-item-'+idNb+' .item-code-label').text(Joomla.JText._('COM_ODYSSEY_ITEM_CODE_LABEL'));
+
+    //Create the "code" input.
+    var properties = {'type':'text', 'name':'option_code_'+idNb, 'id':'option-code-'+idNb, 'value':data.option_code};
+    $('#option-item-'+idNb).createHTMLTag('<input>', properties, 'item-code');
+
     //Create the "published" label.
     properties = {'title':Joomla.JText._('COM_ODYSSEY_PUBLISHED_TITLE')};
     $('#option-item-'+idNb).createHTMLTag('<span>', properties, 'published-label');

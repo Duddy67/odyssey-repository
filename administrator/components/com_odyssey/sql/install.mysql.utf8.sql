@@ -293,6 +293,7 @@ CREATE TABLE `#__odyssey_addon_option` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `addon_id` INT UNSIGNED NOT NULL ,
   `name` VARCHAR(80) NOT NULL ,
+  `code` VARCHAR(50) NOT NULL ,
   `published` TINYINT(1) UNSIGNED NOT NULL ,
   `ordering` INT NOT NULL ,
   PRIMARY KEY (`id`) ,
@@ -562,6 +563,7 @@ CREATE TABLE `#__odyssey_order_addon_option` (
   `addon_id` INT UNSIGNED NOT NULL ,
   `addon_option_id` INT UNSIGNED NOT NULL ,
   `name` VARCHAR(255) NOT NULL ,
+  `code` VARCHAR(50) NOT NULL ,
   `price` DECIMAL(14,5) NOT NULL ,
   INDEX `idx_order_id` (`order_id` ASC) ,
   INDEX `idx_addon_option_id` (`addon_option_id` ASC) )
