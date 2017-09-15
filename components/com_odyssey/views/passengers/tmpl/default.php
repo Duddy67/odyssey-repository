@@ -83,8 +83,15 @@ for($i = 0; $i < (int)$travel['nb_psgr']; $i++) {
       $field->setValue($this->customerData[$name]);
       $field->__set('readonly', 'readonly');
     }
+    //Sets fields with the passenger data of the customer.
+    elseif($psgrNb == 1 && isset($this->customerData['passenger'][$name])) {
+      $field->setValue($this->customerData['passenger'][$name]);
+      //Data value can be modify.
+      $field->__set('readonly', '');
+    }
     else { //Set fields to empty value for all the other passengers. 
       $field->setValue('');
+      //Data value can be modify.
       $field->__set('readonly', '');
     }
 

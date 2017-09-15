@@ -448,6 +448,23 @@ class TravelHelper
     $db->setQuery($query);
     $customerData = $db->loadAssoc();
 
+    //Get also the data specific to the customer as a passenger such as birthdate, passport number etc..
+    $query->clear();
+    $query->select('*')
+	  ->from('#__odyssey_passenger')
+	  ->where('customer_id='.(int)$userId.' AND customer=1');
+    $db->setQuery($query);
+    $passenger = $db->loadAssoc();
+    //Removes the unwanted attributes from the data.
+    $attribs = array('id','customer_id','customer','firstname','lastname');
+    foreach($passenger as $key => $value) {
+      if(in_array($key, $attribs)) {
+	unset($passenger[$key]);
+      }
+    }
+
+    $customerData['passenger'] = $passenger;
+
     return $customerData;
   }
 
@@ -505,7 +522,7 @@ class TravelHelper
       //Get the proper email message according to the email type.
       $message = TravelHelper::getEmailMessage($emailType, $userId, $orderId, $toAdmin);
     }
-//file_put_contents('debog_send_email.txt', print_r($message, true)); 
+
     //Set the subject and body of the email.
     $body = $message['body'];
     $mailer->setSubject($message['subject']);

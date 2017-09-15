@@ -294,7 +294,6 @@ class OrderHelper
 	$query->insert('#__odyssey_passenger')
 	      ->columns($attributes)
 	      ->values($value);
-	      echo $query;
 	$db->setQuery($query);
 	$db->execute();
 
