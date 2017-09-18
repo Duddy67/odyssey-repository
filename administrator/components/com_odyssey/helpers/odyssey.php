@@ -59,6 +59,9 @@ class OdysseyHelper
     JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_TAXES'),
 				      'index.php?option=com_odyssey&view=taxes', $viewName == 'taxes');
 
+    JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_TESTIMONIES'),
+				      'index.php?option=com_odyssey&view=testimonies', $viewName == 'testimonies');
+
     JHtmlSidebar::addEntry(JText::_('COM_ODYSSEY_SUBMENU_CATEGORIES'),
 				      'index.php?option=com_categories&extension=com_odyssey', $viewName == 'categories');
 

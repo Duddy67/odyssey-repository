@@ -15,6 +15,7 @@ CREATE TABLE `#__odyssey_travel` (
   `show_steps` TINYINT(1) UNSIGNED NOT NULL ,
   `show_grouped_steps` TINYINT(1) UNSIGNED NOT NULL ,
   `departure_number` CHAR(3) NOT NULL ,
+  `show_testimonies` TINYINT(1) UNSIGNED NOT NULL ,
   `published` TINYINT NOT NULL DEFAULT 0 ,
   `catid` INT UNSIGNED NOT NULL ,
   `extra_desc_1` MEDIUMTEXT NULL ,
@@ -779,6 +780,30 @@ CREATE TABLE `#__odyssey_document` (
   `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
   PRIMARY KEY  (`id`) )
 ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+-- -----------------------------------------------------
+-- Table `#__odyssey_testimony` 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `#__odyssey_testimony`;
+CREATE TABLE `#__odyssey_testimony` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `travel_id` INT UNSIGNED NOT NULL ,
+  `title` VARCHAR(80) NOT NULL ,
+  `testimony_text` MEDIUMTEXT NULL ,
+  `author_name` VARCHAR(80) ,
+  `facebook` VARCHAR(80) ,
+  `twitter` VARCHAR(80) ,
+  `google_plus` VARCHAR(80) ,
+  `pinterest` VARCHAR(80) ,
+  `published` TINYINT NOT NULL DEFAULT 0 ,
+  `checked_out` INT UNSIGNED NOT NULL DEFAULT 0 ,
+  `checked_out_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
+  `created_by` INT UNSIGNED NOT NULL ,
+  `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
+  `modified` DATETIME NULL DEFAULT '0000-00-00 00:00:00' ,
+  PRIMARY KEY (`id`) )
+ENGINE = MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------

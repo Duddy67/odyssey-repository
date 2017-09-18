@@ -77,6 +77,10 @@ $item = $this->item;
   <?php endif; ?>
 </div>
 
+<?php if(!empty($this->testimonies)) : ?>
+  <?php echo JLayoutHelper::render('testimonies', $this->testimonies, JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
+<?php endif; ?>
+
 <?php
 //Load the jQuery scripts.
 $doc = JFactory::getDocument();

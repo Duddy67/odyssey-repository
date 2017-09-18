@@ -19,7 +19,8 @@ $items = array('travels' => 'airplane',
 	       'countries' => 'flag',
 	       'currencies' => 'coin-dollar',
 	       'paymentmodes' => 'credit-card',
-	       'taxes' => 'pie-chart');
+	       'taxes' => 'pie-chart',
+	       'testimonies' => 'file-2');
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_odyssey&view=odyssey');?>" method="post" name="adminForm" id="adminForm">

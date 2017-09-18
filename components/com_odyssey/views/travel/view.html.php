@@ -25,6 +25,7 @@ class OdysseyViewTravel extends JViewLegacy
   protected $uri;
   protected $travelData;
   protected $steps;
+  protected $testimonies;
 
   public function display($tpl = null)
   {
@@ -56,6 +57,10 @@ class OdysseyViewTravel extends JViewLegacy
 
     if($this->item->show_steps) {
       $this->steps = StepHelper::getStepSequence($this->item->dpt_step_id, $this->item->departure_number);
+    }
+
+    if($this->item->show_testimonies) {
+      $this->testimonies = $this->getModel()->getTestimonies($this->item->id);
     }
 
     //Get the default currency.

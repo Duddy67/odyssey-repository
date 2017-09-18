@@ -84,8 +84,8 @@ class OdysseyModelTravel extends JModelItem
       $query->select($this->getState('list.select', 't.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,t.published,t.image,'.
 				     't.subtitle,t.checked_out,t.checked_out_time,t.created,t.created_by,t.access,t.params,t.metadata,'.
 				     't.metakey,t.metadesc,t.hits,t.publish_up,t.publish_down,t.language,t.modified,t.modified_by,'.
-				     't.dpt_step_id,t.show_steps,t.show_grouped_steps,t.departure_number,t.extra_desc_1,'.
-				     't.extra_desc_2,t.extra_desc_3,t.extra_desc_4,MIN(tp.price) AS lowest_price'))
+				     't.dpt_step_id,t.show_steps,t.show_grouped_steps,t.show_testimonies,t.departure_number,'.
+				     't.extra_desc_1,t.extra_desc_2,t.extra_desc_3,t.extra_desc_4,MIN(tp.price) AS lowest_price'))
 	    ->from($db->quoteName('#__odyssey_travel').' AS t')
 	    //Get the lowest price of this travel for one passenger.
 	    ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id')
@@ -643,6 +643,20 @@ class OdysseyModelTravel extends JModelItem
     $addons = PriceruleHelper::getMatchingAddonPriceRules($addons, $travel);
 
     return $addons;
+  }
+
+
+  public function getTestimonies($travelId)
+  {
+    $db = $this->getDbo();
+    $query = $db->getQuery(true);
+    //Get the testimonies linked to the travel.
+    $query->select('title, testimony_text, author_name, facebook, twitter, google_plus, pinterest')
+	  ->from('#__odyssey_testimony')
+	  ->where('travel_id='.(int)$travelId.' AND published=1');
+    $db->setQuery($query);
+
+    return $db->loadAssocList();
   }
 
 

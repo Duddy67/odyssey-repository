@@ -36,6 +36,15 @@
 	       maxlength="3"
 	       default="1" />
 
+	<field name="show_testimonies" type="radio"
+		class="btn-group btn-group-yesno"
+		label="COM_ODYSSEY_FIELD_SHOW_TESTIMONIES_LABEL"
+		description="COM_ODYSSEY_FIELD_SHOW_TESTIMONIES_DESC"
+		default="0">
+		<option value="1">JYES</option>
+		<option value="0">JNO</option>
+	</field>
+
 	<field name="travel_duration" type="list"
 		label="COM_ODYSSEY_FIELD_TRAVEL_DURATION_LABEL"
 		description="COM_ODYSSEY_FIELD_TRAVEL_DURATION_DESC"

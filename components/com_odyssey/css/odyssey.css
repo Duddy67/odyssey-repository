@@ -107,6 +107,7 @@
 
 .addon,
 .step,
+.testimony,
 .addon-option,
 .addon-options {
   padding: 5px;
@@ -251,6 +252,27 @@
   overflow: hidden;
   width: 100%;
   text-align: center;
+}
+
+.testimonies h1 {
+  font-size: 18px;
+}
+
+.testimony-title {
+  font-size: 16px;
+}
+
+.testimony-author {
+  font-size: 13px;
+}
+
+.testimony-text {
+  margin-bottom: 20px;
+}
+
+.social-network {
+  padding: 5px;
+  margin-right: 20px;
 }
 
 /* Prevent prices to "float" all over the page when loading takes time. */
