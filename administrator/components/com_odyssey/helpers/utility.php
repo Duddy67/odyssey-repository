@@ -281,5 +281,21 @@ class UtilityHelper
 
     return $date->format($format);
   }
+
+
+  public static function getFactoryFilePath()
+  {
+    //Path to the factory.php file before the 3.8.0 Joomla's version.
+    $factoryFilePath = 'libraries/joomla/factory.php';
+
+    $jversion = new JVersion();
+    //Check Joomla's version.
+    if($jversion->getShortVersion() >= '3.8.0') {
+      //Set to the file new location.
+      $factoryFilePath = 'libraries/src/Factory.php';
+    }
+
+    return $factoryFilePath;
+  }
 }
 

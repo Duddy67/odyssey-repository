@@ -11,11 +11,13 @@ define('JPATH_BASE', substr(dirname(__DIR__), 0, $length));
 define('JPATH_COMPONENT_ADMINISTRATOR', JPATH_BASE.'/administrator/components/com_odyssey');
 //JPATH_COMPONENT variable must also be difined as it is used in the step.php file.
 define('JPATH_COMPONENT', JPATH_COMPONENT_ADMINISTRATOR);
+require_once (JPATH_BASE.'/administrator/components/com_odyssey/helpers/utility.php');
 
 //Get the required files
 require_once (JPATH_BASE.'/includes/defines.php');
 require_once (JPATH_BASE.'/includes/framework.php');
-require_once (JPATH_BASE.'/libraries/joomla/factory.php');
+//We need to use Joomla's database class 
+require_once (JPATH_BASE.'/'.UtilityHelper::getFactoryFilePath());
 //We need to access to both travel and step table classes.
 require_once (JPATH_COMPONENT_ADMINISTRATOR.'/tables/travel.php');
 require_once (JPATH_COMPONENT_ADMINISTRATOR.'/tables/step.php');

@@ -7,13 +7,13 @@ $length = strlen('/administrator/components/com_odyssey/js');
 $length = $length - ($length * 2);
 //
 define('JPATH_BASE', substr(dirname(__DIR__), 0, $length));
+require_once (JPATH_BASE.'/administrator/components/com_odyssey/helpers/utility.php');
 
 //Get the required files
 require_once (JPATH_BASE.'/includes/defines.php');
 require_once (JPATH_BASE.'/includes/framework.php');
 //We need to use Joomla's database class 
-require_once (JPATH_BASE.'/libraries/joomla/factory.php');
-require_once (JPATH_BASE.'/administrator/components/com_odyssey/helpers/utility.php');
+require_once (JPATH_BASE.'/'.UtilityHelper::getFactoryFilePath());
 //Create the application
 $mainframe = JFactory::getApplication('site');
 $mainframe->initialise();
