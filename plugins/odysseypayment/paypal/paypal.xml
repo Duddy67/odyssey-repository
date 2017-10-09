@@ -19,11 +19,11 @@
 
 	    <fieldset name="basic">
 
-		<field name="server" type="text" label="PLG_ODYSSEY_PAYMENT_PAYPAL_SERVER_LABEL"
-		  description="PLG_ODYSSEY_PAYMENT_PAYPAL_SERVER_DESC" size="40" />
+		<field name="server_url" type="text" label="PLG_ODYSSEY_PAYMENT_PAYPAL_SERVER_URL_LABEL"
+		  description="PLG_ODYSSEY_PAYMENT_PAYPAL_SERVER_URL_DESC" size="40" />
 
-		<field name="api" type="text" label="PLG_ODYSSEY_PAYMENT_PAYPAL_API_LABEL"
-		  description="PLG_ODYSSEY_PAYMENT_PAYPAL_API_DESC" size="40" />
+		<field name="api_endpoint" type="text" label="PLG_ODYSSEY_PAYMENT_PAYPAL_API_ENDPOINT_LABEL"
+		  description="PLG_ODYSSEY_PAYMENT_PAYPAL_API_ENDPOINT_DESC" size="40" />
 
 		<field name="api_version" type="text" label="PLG_ODYSSEY_PAYMENT_PAYPAL_API_VERSION_LABEL"
 		  description="PLG_ODYSSEY_PAYMENT_PAYPAL_API_VERSION_DESC" />

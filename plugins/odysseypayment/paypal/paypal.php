@@ -20,16 +20,11 @@ class plgOdysseypaymentPaypal extends JPlugin
   //Grab the event triggered by the payment controller.
   public function onOdysseyPaymentPaypal($travel, $addons, $settings, $utility)
   {
-    //Get the first part of the query where all the basic parameters are set.
-    $paypalQuery = $this->getPaypalQuery();
     //Get the SetExpressCheckout query.
-    $setExpressCheckout = $this->setExpressCheckout($travel, $addons, $settings);
-    //Concatenate the 2 parts to get the complete query.
-    $paypalQuery = $paypalQuery.$setExpressCheckout;
-//file_put_contents('debog_paypal.txt', print_r($paypalQuery, true));
+    $paypalQuery = $this->setExpressCheckout($travel, $addons, $settings);
 
     //Execute the query and get the result.
-    $curl = $this->cURLSession($paypalQuery);
+    $curl = $this->cURLSession('SetExpressCheckout', $paypalQuery);
 
     //Load Paypal plugin language.
     $lang = JFactory::getLanguage();
@@ -58,16 +53,16 @@ class plgOdysseypaymentPaypal extends JPlugin
 	$utility['paypal_step'] = 'setExpressCheckout';
 
 	//Get the Paypal server url from the plugin parameters.
-	$paypalServer = $this->params->get('server');
+	$paypalServerUrl = $this->params->get('server_url');
 
 	//Remove slash from the end of the string if any.
-	if(preg_match('#\/$#', $paypalServer)) {
-	  $paypalServer = substr($paypalServer, 0, -1);
+	if(preg_match('#\/$#', $paypalServerUrl)) {
+	  $paypalServerUrl = substr($paypalServerUrl, 0, -1);
 	}
 
 	//Redirect the user on the Paypal web site (add the token into url).
 	//Note: Redirection is perform by the setPayment controller function.
-	$utility['redirect_url'] = $paypalServer.'/webscr&cmd=_express-checkout&token='.$paypalParamsArray['TOKEN'];
+	$utility['redirect_url'] = $paypalServerUrl.'/webscr&cmd=_express-checkout&token='.$paypalParamsArray['TOKEN'];
 
 	return $utility;
       }
@@ -98,7 +93,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 
       //Paypal server has redirected the user on our site and sent us back the
       //token previously created and the payer id.
-      $token = JRequest::getVar('token', '', 'GET', 'str');
+      $token = JFactory::getApplication()->input->get('token', '', 'str');
 
       //Check the token previously created against the one just passed by Paypal.
       if($token !== $utility['paypal_token']) {
@@ -108,15 +103,14 @@ class plgOdysseypaymentPaypal extends JPlugin
 	return $utility;
       }
 
-      //Get the first part of the query where all the basic parameters are set.
-      $paypalQuery = $this->getPaypalQuery();
-      //Get the GetExpressCheckoutDetails query.
-      $getExpressCheckoutDetails = $this->getExpressCheckoutDetails($utility);
-      //Concatenate the 2 parts to get the complete query.
-      $paypalQuery = $paypalQuery.$getExpressCheckoutDetails;
+      //Once Paypal query has succeeded, we might want more details about the 
+      //transaction. We can get them with the GetExpressCheckoutDetails method.
+
+      //Set the GetExpressCheckoutDetails query.
+      $paypalQuery = array('TOKEN' => $utility['paypal_token']);
 
       //Execute the query and get the result.
-      $curl = $this->cURLSession($paypalQuery);
+      $curl = $this->cURLSession('GetExpressCheckoutDetails', $paypalQuery);
 
       if(!$curl[0]) { //curl failed
 	//Display an error message.
@@ -196,15 +190,11 @@ class plgOdysseypaymentPaypal extends JPlugin
       //transaction with the DoExpressCheckoutPayment method which is the 
       //last step of the Paypal payment procedure. 
 
-      //Get the first part of the query where all the basic parameters are set.
-      $paypalQuery = $this->getPaypalQuery();
       //Get the DoExpressCheckoutPayment query.
-      $doExpressCheckoutPayment = $this->doExpressCheckoutPayment($travel, $addons, $settings, $utility);
-      //Concatenate the 2 parts to get the complete query.
-      $paypalQuery = $paypalQuery.$doExpressCheckoutPayment;
+      $paypalQuery = $this->doExpressCheckoutPayment($travel, $addons, $settings, $utility);
 
       //Execute the query and get the result.
-      $curl = $this->cURLSession($paypalQuery);
+      $curl = $this->cURLSession('DoExpressCheckoutPayment', $paypalQuery);
 
       if(!$curl[0]) { //curl failed
 	//Display an error message.
@@ -267,53 +257,52 @@ class plgOdysseypaymentPaypal extends JPlugin
   }
 
 
-  //Build the beginning of the Paypal query with the basic 
-  //parameters such as api, password, signature etc...
-  protected function getPaypalQuery()
-  {
-    //Get the component parameters set into the plugin panel.
-    $paypalApi = $this->params->get('api');
-    $version = $this->params->get('api_version');
-    $user = $this->params->get('user');
-    $password = $this->params->get('password');
-    $signature = $this->params->get('signature');
-
-    //Remove slash from the end of the string if any.
-    if(preg_match('#\/$#', $paypalApi)) {
-      $paypalApi = substr($paypalApi, 0, -1);
-    }
-
-    $query = $paypalApi.'/nvp?VERSION='.$version.'&USER='.$user.
-                               '&PWD='.$password.'&SIGNATURE='.$signature;
-
-    return $query;
-  }
-
-
   //Create a cURL session and execute the query passed in argument.
   //Return an array where:
   //id 0 = boolean (true: succeeded, false: failed).
   //id 1 = string (result of the query if succeed or error message).
-  protected function cURLSession($paypalQuery)
+  protected function cURLSession($method, $paypalQuery)
   {
-    //Initialize the cURL session.
-    $ch = curl_init($paypalQuery);
-    //Ignore the verification of the SSL certificat.
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    //Return transfert into string format.
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    //Execute the url query.
-    $paypalResult = curl_exec($ch);
+    //Our request parameters
+    $requestParams = array('METHOD' => $method,
+			   'VERSION' => $this->params->get('api_version'));
+
+    $credentials = array('USER' => $this->params->get('user'), 
+	                 'PWD' => $this->params->get('password'), 
+			 'SIGNATURE' => $this->params->get('signature'));
+
+    //Concatenates the whole request.
+    $request = array_merge($requestParams, $credentials, $paypalQuery);
+
+    //Building our NVP string
+    $request = http_build_query($request);
+
+    //cURL settings
+    $curlOptions = array (CURLOPT_URL => $this->params->get('api_endpoint'),
+			  CURLOPT_VERBOSE => 1,
+			  CURLOPT_SSL_VERIFYPEER => true,
+			  CURLOPT_SSL_VERIFYHOST => 2,
+			  //CURLOPT_CAINFO => dirname(__FILE__) . '/cacert.pem', //CA cert file
+			  CURLOPT_RETURNTRANSFER => 1,
+			  CURLOPT_POST => 1,
+			  CURLOPT_POSTFIELDS => $request);
+
+    $ch = curl_init();
+
+    curl_setopt_array($ch, $curlOptions);
+
+    //Sending our request - $response will hold the API response
+    $response = curl_exec($ch);
 
     $result = array();
     //Store result.
-    if(!$paypalResult) { //curl failed
+    if(curl_errno($ch)) { //curl failed
       $result[] = false;
       $result[] = curl_error($ch);
     }
     else {
       $result[] = true;
-      $result[] = $paypalResult;
+      $result[] = $response;
     }
 
     //Close the cURL session.
@@ -334,31 +323,18 @@ class plgOdysseypaymentPaypal extends JPlugin
 
     //We can add custom parameter to the query, but we need 
     //GetExpressCheckoutDetails to recover it.
-    $query = '&METHOD=SetExpressCheckout'.
-	     '&CANCELURL='.urlencode(JUri::base().'index.php?option=com_odyssey&view=payment&task=payment.cancelPayment&payment=paypal').
-	     '&RETURNURL='.urlencode(JUri::base().'index.php?option=com_odyssey&view=payment&task=payment.response&payment=paypal');
-
+    $query = array('CANCELURL' => JUri::base().'index.php?option=com_odyssey&view=payment&task=payment.cancelPayment&payment=paypal',
+		   'RETURNURL' => JUri::base().'index.php?option=com_odyssey&view=payment&task=payment.response&payment=paypal');
     //Get the query for the detail order.
-    $query .= $this->buildPaypalDetailOrder($travel, $addons, $settings);
+    $detailOrder = $this->buildPaypalDetailOrder($travel, $addons, $settings);
+    $query = array_merge($query, $detailOrder);
 
-    $query .= '&PAYMENTREQUEST_0_CURRENCYCODE='.$currencyCode.
-	      '&PAYMENTREQUEST_0_DESC='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_SHOP_DESC')).
-	      '&NOSHIPPING=1'.
-	      '&LOCALECODE='.$countryCode.
-	      '&PAYMENTREQUEST_0_PAYMENTACTION=Sale'.
-	      '&PAYMENTREQUEST_0_CUSTOM=123456789'; //Add custom parameter.
-//file_put_contents('debog_paypal.txt', print_r($query, true));
-    return $query;
-  }
-
-
-  //Once Paypal query has succeeded, we might want more details about the 
-  //transaction. We can get them with the GetExpressCheckoutDetails method.
-  protected function getExpressCheckoutDetails($utility)
-  {
-    //Build the query.
-    $query = '&METHOD=GetExpressCheckoutDetails'.
-	     '&TOKEN='.$utility['paypal_token'];
+    $query['PAYMENTREQUEST_0_CURRENCYCODE'] = $currencyCode;
+    $query['PAYMENTREQUEST_0_DESC'] = JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_SHOP_DESC');
+    $query['NOSHIPPING'] = 1;
+    $query['LOCALECODE'] = $countryCode;
+    $query['PAYMENTREQUEST_0_PAYMENTACTION'] = 'Sale'; 
+    $query['PAYMENTREQUEST_0_CUSTOM'] = '123456789';
 
     return $query;
   }
@@ -371,16 +347,14 @@ class plgOdysseypaymentPaypal extends JPlugin
   protected function doExpressCheckoutPayment($travel, $addons, $settings, $utility)
   {
     $currencyCode = $settings['currency_code'];
-
-    $query = '&METHOD=DoExpressCheckoutPayment'.
-	     '&TOKEN='.$utility['paypal_token']. //Add the token sent back by Paypal.
-
+    $query = array('TOKEN' => $utility['paypal_token']);
     //Get the query for the detail order.
-    $query .= $this->buildPaypalDetailOrder($travel, $addons, $settings);
+    $detailOrder = $this->buildPaypalDetailOrder($travel, $addons, $settings);
+    $query = array_merge($query, $detailOrder);
 
-    $query .= '&PAYMENTREQUEST_0_CURRENCYCODE='.$currencyCode.
-	      '&PayerID='.$utility['transaction_data']['PAYERID']. //Add payment id sent back by Paypal.
-	      '&PAYMENTREQUEST_0_PAYMENTACTION=Sale'; //Indicate a final sale.
+    $query['PAYMENTREQUEST_0_CURRENCYCODE'] = $currencyCode;
+    $query['PayerID'] = $utility['transaction_data']['PAYERID'];
+    $query['PAYMENTREQUEST_0_PAYMENTACTION'] = 'Sale';
 
     return $query;
   }
@@ -393,7 +367,6 @@ class plgOdysseypaymentPaypal extends JPlugin
     $rounding = $settings['rounding_rule'];
     $digits = $settings['digits_precision'];
     $travelPruleAmount = 0;
-    $detailOrder = '';
     //Load Paypal plugin language.
     $lang = JFactory::getLanguage();
     $lang->load('plg_odysseypayment_paypal', dirname(__FILE__));
@@ -407,24 +380,23 @@ class plgOdysseypaymentPaypal extends JPlugin
       $travelPrice = $travel['normal_price'];
     }
 
-    $detailOrder .= '&L_PAYMENTREQUEST_0_NAME0='.urlencode($travel['name']).
-		    '&L_PAYMENTREQUEST_0_QTY0=1'. 
-		    '&L_PAYMENTREQUEST_0_AMT0='.UtilityHelper::formatNumber($travelPrice);
-		    //'&L_PAYMENTREQUEST_0_DESC0='.urlencode(JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_INCL_TAX', $travel['tax_rate']));
+    $detailOrder = array('L_PAYMENTREQUEST_0_NAME0' => $travel['name'], 
+	                 'L_PAYMENTREQUEST_0_QTY0' => 1,
+			 'L_PAYMENTREQUEST_0_AMT0' => UtilityHelper::formatNumber($travelPrice));
 
     //Now move to the addons.
     $id = 0;
     foreach($addons as $addon) {
       $id++;
-      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode($addon['name']).
-	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
-		      '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($addon['price']);
+      $detailOrder['L_PAYMENTREQUEST_0_NAME'.$id] = $addon['name'];
+      $detailOrder['L_PAYMENTREQUEST_0_QTY'.$id] = 1;
+      $detailOrder['L_PAYMENTREQUEST_0_AMT'.$id] = UtilityHelper::formatNumber($addon['price']);
 
       foreach($addon['options'] as $option) {
 	$id = $id + 1;
-	$detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode($option['name']).
-			'&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
-			'&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($option['price']);
+	$detailOrder['L_PAYMENTREQUEST_0_NAME'.$id] = $option['name'];
+	$detailOrder['L_PAYMENTREQUEST_0_QTY'.$id] = 1;
+	$detailOrder['L_PAYMENTREQUEST_0_AMT'.$id] = UtilityHelper::formatNumber($option['price']);
       }
     }
 
@@ -443,19 +415,17 @@ class plgOdysseypaymentPaypal extends JPlugin
     //Paypal will substract or add this value.
     if($travelPruleAmount) {
       $id = $id + 1;
-      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_PRICERULES')).
-	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
-	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($travelPruleAmount);
-	              //'&L_PAYMENTREQUEST_0_DESC'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_PRICERULES_DESC'));
+      $detailOrder['L_PAYMENTREQUEST_0_NAME'.$id] = JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_PRICERULES');
+      $detailOrder['L_PAYMENTREQUEST_0_QTY'.$id] = 1;
+      $detailOrder['L_PAYMENTREQUEST_0_AMT'.$id] = UtilityHelper::formatNumber($travelPruleAmount);
     }
 
     //Add the transit city extra cost if any.
     if($travel['transit_price'] > 0) {
       $id = $id + 1;
-      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.
-	               urlencode(JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_EXTRA_COST_TRANSIT_CITY', $travel['dpt_city_name'])).
-	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
-	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($travel['transit_price']);
+      $detailOrder['L_PAYMENTREQUEST_0_NAME'.$id] = JText::sprintf('PLG_ODYSSEY_PAYMENT_PAYPAL_EXTRA_COST_TRANSIT_CITY', $travel['dpt_city_name']);
+      $detailOrder['L_PAYMENTREQUEST_0_QTY'.$id] = 1;
+      $detailOrder['L_PAYMENTREQUEST_0_AMT'.$id] = UtilityHelper::formatNumber($travel['transit_price']);
     }
 
     //The whole price of the travel.
@@ -470,9 +440,9 @@ class plgOdysseypaymentPaypal extends JPlugin
       //$sumToSubtract = $sumToSubtract - ($sumToSubtract * 2);
       $sumToSubtract = '-'.(string)$sumToSubtract;
 
-      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_SUBTRACTED_AMOUNT')).
-	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
-	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($sumToSubtract);
+      $detailOrder['L_PAYMENTREQUEST_0_NAME'.$id] = JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_SUBTRACTED_AMOUNT');
+      $detailOrder['L_PAYMENTREQUEST_0_QTY'.$id] = 1;
+      $detailOrder['L_PAYMENTREQUEST_0_AMT'.$id] = UtilityHelper::formatNumber($sumToSubtract);
     }
     //The client pay the remaining amount of the travel.
     elseif($travel['booking_option'] == 'remaining') {
@@ -482,20 +452,19 @@ class plgOdysseypaymentPaypal extends JPlugin
       //$sumToSubtract = $sumToSubtract - ($sumToSubtract * 2);
       $sumToSubtract = '-'.(string)$sumToSubtract;
 
-      $detailOrder .= '&L_PAYMENTREQUEST_0_NAME'.$id.'='.urlencode(JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_DEPOSIT_ALREADY_PAID')).
-	              '&L_PAYMENTREQUEST_0_QTY'.$id.'=1'. 
-	              '&L_PAYMENTREQUEST_0_AMT'.$id.'='.UtilityHelper::formatNumber($sumToSubtract);
+      $detailOrder['L_PAYMENTREQUEST_0_NAME'.$id] = JText::_('PLG_ODYSSEY_PAYMENT_PAYPAL_DEPOSIT_ALREADY_PAID');
+      $detailOrder['L_PAYMENTREQUEST_0_QTY'.$id] = 1;
+      $detailOrder['L_PAYMENTREQUEST_0_AMT'.$id] = UtilityHelper::formatNumber($sumToSubtract);
     }
 
     //Display the item amount.
     //Note: Item amount is equal to final amount as there is no extra amount such as
     //shipping cost.
-    $detailOrder .= '&PAYMENTREQUEST_0_ITEMAMT='.UtilityHelper::formatNumber($finalAmount);
+    $detailOrder['PAYMENTREQUEST_0_ITEMAMT'] = UtilityHelper::formatNumber($finalAmount);
 
     //Display the final amount.
-    $detailOrder .= '&PAYMENTREQUEST_0_AMT='.UtilityHelper::formatNumber($finalAmount);
+    $detailOrder['PAYMENTREQUEST_0_AMT'] = UtilityHelper::formatNumber($finalAmount);
 
-//file_put_contents('debog_paypal.txt', print_r($detailOrder, true));
     return $detailOrder;
   }
 
