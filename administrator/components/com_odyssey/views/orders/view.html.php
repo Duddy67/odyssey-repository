@@ -60,12 +60,6 @@ class OdysseyViewOrders extends JViewLegacy
 
     //Note: We check the user permissions only against the component since 
     //the order items have no categories.
-    if($canDo->get('core.create')) {
-      JToolBarHelper::addNew('order.add', 'JTOOLBAR_NEW');
-    }
-
-    //Notes: The Edit icon might not be displayed since it's not (yet ?) possible 
-    //to edit several items at a time.
     if($canDo->get('core.edit') || $canDo->get('core.edit.own')) {
       JToolBarHelper::editList('order.edit', 'JTOOLBAR_EDIT');
     }
