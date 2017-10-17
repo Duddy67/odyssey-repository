@@ -126,6 +126,26 @@ Joomla.submitbutton = function(task)
 	</div>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
 
+      <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'travel-extrafields', JText::_('COM_ODYSSEY_TAB_EXTRA_FIELDS')); ?>
+	<div class="row-fluid">
+	  <div class="span8 form-vertical">
+	    <?php
+	            $i = 1;
+		    //Searches for extra fields
+	            while(!empty($this->form->getControlGroup('extra_field_'.$i))) {
+		      //Sets the corresponding value (if available).
+		      if(!empty($this->item->extra_fields) && isset($this->item->extra_fields['extra_field_'.$i])) {
+			 $this->form->setValue('extra_field_'.$i, null, $this->item->extra_fields['extra_field_'.$i]);
+		      }
+		      //Displays the extra field.
+		      echo $this->form->getControlGroup('extra_field_'.$i);
+		      $i++;
+		    }
+	    ?>
+	  </div>
+	</div>
+      <?php echo JHtml::_('bootstrap.endTab'); ?>
+
 	<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'travel-countryfilter', JText::_('COM_ODYSSEY_TAB_SEARCH_FILTERS')); ?>
 	  <div class="row-fluid">
 	    <div class="span12 form-horizontal">

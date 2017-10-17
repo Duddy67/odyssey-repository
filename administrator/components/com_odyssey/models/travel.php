@@ -70,6 +70,11 @@ class OdysseyModelTravel extends JModelAdmin
 	$item->tags = new JHelperTags;
 	$item->tags->getTagIds($item->id, 'com_odyssey.travel');
       }
+
+      if(!empty($item->extra_fields)) {
+	//Gets the extrafield array back.
+	$item->extra_fields = json_decode($item->extra_fields, true);
+      }
     }
 
     return $item;

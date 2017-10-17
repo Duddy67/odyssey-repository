@@ -19,15 +19,29 @@ class OdysseyControllerTravel extends JControllerForm
   {
     //Get the jform data.
     $data = $this->input->post->get('jform', array(), 'array');
-//$post = JFactory::getApplication()->input->post->getArray();
-//var_dump($post);
-//return;
+/*$post = JFactory::getApplication()->input->post->getArray();
+var_dump($data);
+return;*/
+
+    $extraFields = array();
+    $i = 1;
+    //Searches for extra fields.
+    while(isset($data['extra_field_'.$i])) {
+      //Stores the extra field value.
+      $extraFields['extra_field_'.$i] = $data['extra_field_'.$i];
+      //Removes the now unwanted attribute.
+      unset($data['extra_field_'.$i]);
+      $i++;
+    }
+
+    //Turns the extrafields data array into JSON.
+    $data['extra_fields'] = json_encode($extraFields);
 
     //Get current date and time (equal to NOW() in SQL).
     //$now = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
 
     //Reset the jform data array 
-    //$this->input->post->set('jform', $data);
+    $this->input->post->set('jform', $data);
 
     //Hand over to the parent function.
     return parent::save($key = null, $urlVar = null);

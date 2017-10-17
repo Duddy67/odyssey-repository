@@ -22,6 +22,7 @@ CREATE TABLE `#__odyssey_travel` (
   `extra_desc_2` MEDIUMTEXT NULL ,
   `extra_desc_3` MEDIUMTEXT NULL ,
   `extra_desc_4` MEDIUMTEXT NULL ,
+  `extra_fields` MEDIUMTEXT NULL ,
   `travel_duration` CHAR(5) NOT NULL ,
   `price_range` CHAR(10) NOT NULL ,
   `theme` CHAR(20) NOT NULL ,
