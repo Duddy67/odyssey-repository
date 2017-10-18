@@ -52,8 +52,7 @@ class OdysseyControllerPayment extends JControllerForm
       $event = 'onOdysseyApiConnectorFunction';
       JPluginHelper::importPlugin('odysseyapiconnector');
       $dispatcher = JDispatcher::getInstance();
-      $results = $dispatcher->trigger($event, array('isDepartureAvailable', array($travel['travel_code'], $travel['date_time'],
-										  $travel['nb_psgr'], $travel['allotment'])));
+      $results = $dispatcher->trigger($event, array('isDepartureAvailable', array($travel)));
       if(!$results[0]) {
 	$this->setMessage(JText::_('COM_ODYSSEY_DEPARTURE_NOT_AVAILABLE'));
 	$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=travel&id='.$travel['travel_id'].'&catid='.$travel['catid'], false));

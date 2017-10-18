@@ -24,6 +24,7 @@
 }
 
 .recipient-item,
+.departure-item, 
 .condition-item,
 .target-item {
   width: 100%;
@@ -57,7 +58,10 @@
   margin-bottom: 20px;
 }
 
-.wrap-dpt-row {
+.wrap-dpt-row,
+.wrap-dpt-row2 {
+  float: left;
+  width: 80%;
 }
 
 .wrap-dpt-row .chzn-container {
@@ -306,9 +310,14 @@ input[id^="ev-year-time-"] {
 .wrap-dpt-data .allotment,
 .wrap-dpt-data .nb-days,
 .wrap-dpt-data .nb-nights,
+.wrap-dpt-data .code,
 .wrap-dpt-data .max-passengers {
   float: left;
   width: 50px;
+}
+
+.wrap-dpt-data .code {
+  width: 80px;
 }
 
 .departure-item .city-label,
@@ -316,6 +325,7 @@ input[id^="ev-year-time-"] {
 .departure-item .subtract-label,
 .departure-item .nb-days-label,
 .departure-item .nb-nights-label,
+.departure-item .code-label,
 .departure-item .max-passengers-label {
   display: block;
   font-size: 13px;

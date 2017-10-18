@@ -219,8 +219,12 @@
 
     //Create the second departure data row.
 
+    //Wrap all of the data departure in a div.
+    properties = {'id':'wrap-dpt-row2-'+idNb};
+    $('#departure-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-row2');
+
     properties = {'id':'wrap-dpt-data-1-'+idNb};
-    $('#departure-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
+    $('#wrap-dpt-row2-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
 
     properties = {'title':Joomla.JText._('COM_ODYSSEY_MAX_PASSENGERS_TITLE')};
     $('#wrap-dpt-data-1-'+idNb).createHTMLTag('<span>', properties, 'max-passengers-label');
@@ -230,7 +234,7 @@
     $('#wrap-dpt-data-1-'+idNb).createHTMLTag('<input>', properties, 'max-passengers');
 
     properties = {'id':'wrap-dpt-data-2-'+idNb};
-    $('#departure-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
+    $('#wrap-dpt-row2-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
 
     properties = {'title':Joomla.JText._('COM_ODYSSEY_ALLOTMENT_TITLE')};
     $('#wrap-dpt-data-2-'+idNb).createHTMLTag('<span>', properties, 'allotment-label');
@@ -240,7 +244,7 @@
     $('#wrap-dpt-data-2-'+idNb).createHTMLTag('<input>', properties, 'allotment');
 
     properties = {'id':'wrap-dpt-data-3-'+idNb};
-    $('#departure-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
+    $('#wrap-dpt-row2-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
 
     properties = {'title':Joomla.JText._('COM_ODYSSEY_SUBTRACT_TITLE')};
     $('#wrap-dpt-data-3-'+idNb).createHTMLTag('<span>', properties, 'subtract-label');
@@ -266,7 +270,7 @@
     $('#wrap-dpt-data-3-'+idNb).createHTMLTag('<input>', properties, 'departure-checkbox');
 
     properties = {'id':'wrap-dpt-data-4-'+idNb};
-    $('#departure-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
+    $('#wrap-dpt-row2-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
 
     properties = {'title':Joomla.JText._('COM_ODYSSEY_NB_DAYS_TITLE')};
     $('#wrap-dpt-data-4-'+idNb).createHTMLTag('<span>', properties, 'nb-days-label');
@@ -276,7 +280,7 @@
     $('#wrap-dpt-data-4-'+idNb).createHTMLTag('<input>', properties, 'nb-days');
 
     properties = {'id':'wrap-dpt-data-5-'+idNb};
-    $('#departure-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
+    $('#wrap-dpt-row2-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
 
     properties = {'title':Joomla.JText._('COM_ODYSSEY_NB_NIGHTS_TITLE')};
     $('#wrap-dpt-data-5-'+idNb).createHTMLTag('<span>', properties, 'nb-nights-label');
@@ -284,6 +288,16 @@
 
     properties = {'type':'text', 'name':'nb_nights_'+idNb, 'id':'nb-nights-'+idNb, 'value':data.nb_nights};
     $('#wrap-dpt-data-5-'+idNb).createHTMLTag('<input>', properties, 'nb-nights');
+
+    properties = {'id':'wrap-dpt-data-6-'+idNb};
+    $('#wrap-dpt-row2-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
+
+    properties = {'title':Joomla.JText._('COM_ODYSSEY_CODE_TITLE')};
+    $('#wrap-dpt-data-6-'+idNb).createHTMLTag('<span>', properties, 'code-label');
+    $('#wrap-dpt-data-6-'+idNb+' .code-label').text(Joomla.JText._('COM_ODYSSEY_CODE_LABEL'));
+
+    properties = {'type':'text', 'name':'code_'+idNb, 'id':'code-'+idNb, 'value':data.code};
+    $('#wrap-dpt-data-6-'+idNb).createHTMLTag('<input>', properties, 'code');
 
     properties = {'type':'hidden', 'name':'dpt_id_'+idNb, 'value':data.dpt_id};
     $('#departure-item-'+idNb).createHTMLTag('<input>', properties);

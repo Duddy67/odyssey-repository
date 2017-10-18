@@ -85,7 +85,7 @@ Joomla.submitbutton = function(task)
 
     <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'step-departures', JText::_('COM_ODYSSEY_TAB_DEPARTURES')); ?>
       <div class="row-fluid">
-	<div class="span8" id="departures">
+	<div class="span10" id="departures">
 	  <div class="form-vertical">
 	    <?php echo $this->form->getControlGroup('date_type'); ?>
 	    <div id="departure">

@@ -161,6 +161,8 @@ class JavascriptHelper
     JText::script('COM_ODYSSEY_NB_DAYS_TITLE'); 
     JText::script('COM_ODYSSEY_NB_NIGHTS_LABEL'); 
     JText::script('COM_ODYSSEY_NB_NIGHTS_TITLE'); 
+    JText::script('COM_ODYSSEY_CODE_LABEL'); 
+    JText::script('COM_ODYSSEY_CODE_TITLE'); 
     JText::script('COM_ODYSSEY_SUBTRACT_LABEL'); 
     JText::script('COM_ODYSSEY_SUBTRACT_TITLE'); 
     JText::script('COM_ODYSSEY_STATUS_TITLE'); 
