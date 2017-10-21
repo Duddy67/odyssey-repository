@@ -128,6 +128,16 @@
 		      <option value="80">80 %</option>
 		      <option value="90">90 %</option>
 	      </field>
+
+	      <field name="module_image" type="media"
+		     label="MOD_ODYSPLAY_FIELD_MODULE_IMAGE_LABEL"
+		     description="MOD_ODYSPLAY_FIELD_MODULE_IMAGE_DESC" />
+
+	      <field name="module_text" type="editor"
+		     label="MOD_ODYSPLAY_FIELD_MODULE_TEXT_LABEL" 
+		     description="MOD_ODYSPLAY_FIELD_MODULE_TEXT_DESC"
+		     filter="JComponentHelper::filterText" buttons="false" />
+
 	  </fieldset>
 	  <fieldset name="advanced">
 	    <field name="moduleclass_sfx" type="text" default=""

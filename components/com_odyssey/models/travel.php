@@ -85,7 +85,8 @@ class OdysseyModelTravel extends JModelItem
 				     't.subtitle,t.checked_out,t.checked_out_time,t.created,t.created_by,t.access,t.params,t.metadata,'.
 				     't.metakey,t.metadesc,t.hits,t.publish_up,t.publish_down,t.language,t.modified,t.modified_by,'.
 				     't.dpt_step_id,t.show_steps,t.show_grouped_steps,t.show_testimonies,t.departure_number,'.
-				     't.extra_desc_1,t.extra_desc_2,t.extra_desc_3,t.extra_desc_4,MIN(tp.price) AS lowest_price'))
+				     't.extra_desc_1,t.extra_desc_2,t.extra_desc_3,t.extra_desc_4,'.
+				     't.extra_fields,MIN(tp.price) AS lowest_price'))
 	    ->from($db->quoteName('#__odyssey_travel').' AS t')
 	    //Get the lowest price of this travel for one passenger.
 	    ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id')
@@ -370,7 +371,7 @@ class OdysseyModelTravel extends JModelItem
     $db = $this->getDbo();
     $query = $db->getQuery(true);
     //Get all the needed data in relation with the user's booking.
-    $query->select('t.id AS travel_id, t.catid, t.dpt_step_id, t.name, t.alias, t.intro_text, t.travel_code, ds.dpt_id,'.
+    $query->select('t.id AS travel_id, t.catid, t.dpt_step_id, t.name, t.alias, t.intro_text, t.travel_code, t.extra_fields, ds.dpt_id,'.
 	           'tp.price AS travel_price, IFNULL(tcp.price, 0) AS transit_price, ds.date_time, ds.date_time_2,'.
 		   'ds.max_passengers,ds.nb_days,ds.nb_nights, ds.code AS dpt_code, ds.allotment, s.date_type,'.
 		   'tp.psgr_nb AS nb_psgr, stc.time_offset, tx.rate AS tax_rate, c.name AS dpt_city_name, c.id AS city_id')
@@ -415,6 +416,10 @@ class OdysseyModelTravel extends JModelItem
     if(!empty($pruleIds)) {
       //Add the price rule data to the travel.
       $travel = PriceruleHelper::getMatchingTravelPriceRules($pruleIds, $travel);
+    }
+
+    if(!empty($travel['extra_fields'])) {
+      $travel['extra_fields'] = json_decode($travel['extra_fields'], true);
     }
 
     //TODO: Check data against the booking form variables.

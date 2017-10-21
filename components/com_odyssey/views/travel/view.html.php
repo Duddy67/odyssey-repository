@@ -68,6 +68,11 @@ class OdysseyViewTravel extends JViewLegacy
     $this->item->currency = $currency;
     $this->nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
 
+    if(!empty($this->item->extra_fields)) {
+      //Gets the extrafield array back.
+      $this->item->extra_fields = json_decode($this->item->extra_fields, true);
+    }
+
     //Load the javascript code to hide buttons.
     TravelHelper::javascriptUtilities();
     $this->setDocument();

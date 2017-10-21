@@ -10,17 +10,25 @@ defined('_JEXEC') or die; // No direct access.
 //Get the component settings.
 $parameters = JComponentHelper::getParams('com_odyssey');
 $digitsPrecision = $parameters->get('digits_precision');
-
 //Include css files.
 $doc = JFactory::getDocument();
 $doc->addStyleSheet(JURI::base().'modules/mod_odysplay/css/odysplay.css');
 $doc->addStyleSheet(JURI::base().'modules/mod_odysplay/css/owl.carousel.css');
 $doc->addStyleSheet(JURI::base().'modules/mod_odysplay/css/owl.theme.default.css');
+
+$backgroungImage = '';
+if(!empty($params->get('module_image'))) {
+  $backgroungImage = ' style="background-image: url('.$params->get('module_image').');"';
+}
 ?>
 
-<div class="odysplay-module">
+<div class="odysplay-module" <?php echo $backgroungImage; ?>>
 <?php if($module->showtitle) : ?>
   <h1 class="module-title"><?php echo $module->title; ?></h1>
+<?php endif; ?>
+
+<?php if(!empty($params->get('module_text'))) : ?>
+  <?php echo $params->get('module_text'); ?>
 <?php endif; ?>
 
 <div class="owl-carousel">

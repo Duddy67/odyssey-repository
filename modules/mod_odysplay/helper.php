@@ -23,7 +23,7 @@ class ModOdysplayHelper {
     $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
 
     $query->select('t.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,'.
-		   't.image,t.published,t.travel_duration,t.created,'.
+		   't.image,t.published,t.travel_duration,t.created,t.theme,t.extra_fields,'.
 		   't.created_by,t.access,t.params,t.metadata,t.metakey,t.metadesc,t.hits,'.
 		   't.publish_up,t.publish_down,t.language,t.modified,t.modified_by')
 	  ->from($db->qn('#__odyssey_travel').' AS t');
@@ -106,6 +106,11 @@ class ModOdysplayHelper {
 	  }
 	}
       }
+    }
+
+    if(!empty($travel->extra_fields)) {
+      //Gets the extrafield array back.
+      $travel->extra_fields = json_decode($travel->extra_fields, true);
     }
 
     return $travels;
