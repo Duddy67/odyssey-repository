@@ -319,6 +319,7 @@ class plgContentOdyssey extends JPlugin
 	    $row->nb_days = $post['nb_days_'.$idNb];
 	    $row->nb_nights = $post['nb_nights_'.$idNb];
 	    $row->code = $post['code_'.$idNb];
+	    $row->published = $post['published_'.$idNb];
 	    $row->allotment = $post['allotment_'.$idNb];
 	    $row->altm_subtract = $post['altm_subtract_'.$idNb];
 	    $departures[] = $row;

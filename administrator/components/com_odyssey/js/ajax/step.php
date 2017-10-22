@@ -88,7 +88,8 @@ if($stepType == 'departure') {
       $departures[] = array('date_time' => $dateTime, 'date_time_2' => $dateTime2, 'city_id' => $result['city_id'],
 			    'dpt_id' => $result['dpt_id'], 'max_passengers' => $result['max_passengers'],
 			    'nb_days' => $result['nb_days'], 'nb_nights' => $result['nb_nights'], 'code' => $result['code'],
-			    'allotment' => $result['allotment'], 'altm_subtract' => $result['altm_subtract']);
+			    'published' => $result['published'], 'allotment' => $result['allotment'],
+			    'altm_subtract' => $result['altm_subtract']);
     }
     elseif($dateType == 'every_year') {
       //Extract month date and time values from the datetime value.

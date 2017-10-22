@@ -191,6 +191,7 @@ class OdysseyModelTravel extends JModelItem
 	  ->where('d.step_id='.(int)$dptStepId)
 	  //Fetch only departures scheduled after the booking limit date.
 	  ->where('(d.date_time >= '.$db->quote($bookingDate).' OR d.date_time_2 >= '.$db->quote($bookingDate).')')
+	  ->where('d.published=1')
 	  ->order('d.date_time, p.psgr_nb');
     $db->setQuery($query);
     $results = $db->loadAssocList();

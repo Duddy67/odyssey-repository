@@ -299,6 +299,32 @@
     properties = {'type':'text', 'name':'code_'+idNb, 'id':'code-'+idNb, 'value':data.code};
     $('#wrap-dpt-data-6-'+idNb).createHTMLTag('<input>', properties, 'code');
 
+    properties = {'id':'wrap-dpt-data-7-'+idNb};
+    $('#wrap-dpt-row2-'+idNb).createHTMLTag('<div>', properties, 'wrap-dpt-data');
+
+    properties = {'title':Joomla.JText._('COM_ODYSSEY_PUBLISHED_TITLE')};
+    $('#wrap-dpt-data-7-'+idNb).createHTMLTag('<span>', properties, 'published-label');
+    $('#wrap-dpt-data-7-'+idNb+' .published-label').text(Joomla.JText._('COM_ODYSSEY_PUBLISHED_LABEL'));
+
+    $('#wrap-dpt-data-7-'+idNb).createHTMLTag('<span>', properties, 'yes-label');
+    $('#wrap-dpt-data-7-'+idNb+' .yes-label').text(Joomla.JText._('JYES'));
+
+    properties = {'type':'radio', 'name':'published_'+idNb, 'id':'published-'+idNb, 'value':1};
+    //Yes button is checked by default.
+    if(data.published === undefined || data.published == 1) {
+      properties.checked = true;
+    }
+    $('#wrap-dpt-data-7-'+idNb).createHTMLTag('<input>', properties, 'departure-checkbox');
+
+    $('#wrap-dpt-data-7-'+idNb).createHTMLTag('<span>', properties, 'no-label');
+    $('#wrap-dpt-data-7-'+idNb+' .no-label').text(Joomla.JText._('JNO'));
+
+    properties = {'type':'radio', 'name':'published_'+idNb, 'id':'published-'+idNb, 'value':0};
+    if(data.published == 0) {
+      properties.checked = true;
+    }
+    $('#wrap-dpt-data-7-'+idNb).createHTMLTag('<input>', properties, 'departure-checkbox');
+
     properties = {'type':'hidden', 'name':'dpt_id_'+idNb, 'value':data.dpt_id};
     $('#departure-item-'+idNb).createHTMLTag('<input>', properties);
   };

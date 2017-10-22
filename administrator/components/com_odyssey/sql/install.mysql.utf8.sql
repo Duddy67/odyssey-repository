@@ -203,6 +203,7 @@ CREATE TABLE `#__odyssey_departure_step_map` (
   `nb_nights` TINYINT UNSIGNED NOT NULL ,
   `allotment` SMALLINT UNSIGNED NOT NULL ,
   `code` VARCHAR(50) NOT NULL ,
+  `published` SMALLINT UNSIGNED NOT NULL ,
   `altm_subtract` TINYINT(1) UNSIGNED NOT NULL ,
   `altm_locked` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
   INDEX `idx_step_id` (`step_id` ASC) )
