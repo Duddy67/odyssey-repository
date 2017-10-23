@@ -69,6 +69,19 @@ class OdysseyModelTravel extends JModelAdmin
 	//Get tags for this item.
 	$item->tags = new JHelperTags;
 	$item->tags->getTagIds($item->id, 'com_odyssey.travel');
+
+	//Get possible travel code from the departure step.
+	$db = $this->getDbo();
+	$query = $db->getQuery(true);
+	$query->select('travel_code')
+	      ->from('#__odyssey_step')
+	      ->where('id='.(int)$item->dpt_step_id);
+	$db->setQuery($query);
+	$item->travel_code = $db->loadResult();
+
+	if(empty($item->travel_code)) {
+	  $item->travel_code = JText::_('COM_ODYSSEY_NO_TRAVEL_CODE_AVAILABLE');
+	}
       }
 
       if(!empty($item->extra_fields)) {

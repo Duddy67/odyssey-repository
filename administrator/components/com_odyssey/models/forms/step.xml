@@ -48,7 +48,7 @@
 	<field name="travel_code" type="text"
 	       label="COM_ODYSSEY_FIELD_TRAVEL_CODE_LABEL"
 	       description="COM_ODYSSEY_FIELD_TRAVEL_CODE_DESC" 
-	       readonly="true" class="readonly" filter="unset" />
+	       class="inputbox" />
 
 	<field name="subtitle" type="text"
 	       label="COM_ODYSSEY_FIELD_SUBTITLE_LABEL"

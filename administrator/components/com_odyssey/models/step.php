@@ -65,17 +65,6 @@ class OdysseyModelStep extends JModelAdmin
       $db->setQuery($query);
       $item->category_title = $db->loadResult();
     }
-    elseif($item->id && $item->step_type == 'departure') {
-      $query->select('travel_code')
-	    ->from('#__odyssey_travel')
-	    ->where('dpt_step_id='.(int)$item->id);
-      $db->setQuery($query);
-      $item->travel_code = $db->loadResult();
-
-      if(empty($item->travel_code)) {
-	$item->travel_code = JText::_('COM_ODYSSEY_NO_TRAVEL_CODE_AVAILABLE');
-      }
-    }
 
     return $item;
   }

@@ -558,7 +558,7 @@
 	langVar = 'COM_ODYSSEY_ERROR_DEPARTURE_UNIQUE_GROUP_ALIAS';
       }
 
-      if(itemType == 'travel' && field == 'travel_code') {
+      if(itemType == 'step' && field == 'travel_code') {
 	langVar = 'COM_ODYSSEY_DATABASE_ERROR_TRAVEL_UNIQUE_CODE';
 	aliasId = 'jform_travel_code';
       }

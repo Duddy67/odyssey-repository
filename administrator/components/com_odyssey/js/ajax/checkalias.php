@@ -98,7 +98,7 @@ if($table->load($attributes) && ($table->id != $id || $id == 0)) {
   $result['checking'] = 0;
 }
 
-if($itemType == 'travel') {
+if($itemType == 'step') {
   // Verify also that the travel code (if any) is unique
   $travelCode = preg_replace('/\s+/', '', $travelCode);
   if(!empty($travelCode) && $table->load(array('travel_code' => $travelCode)) && ($table->id != $id || $id == 0)) {
