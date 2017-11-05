@@ -24,7 +24,7 @@ class OdysseyControllerSteps extends JControllerAdmin
   }
 
 
-  public function updateAvailabilities()
+  public function updateSteps()
   {
     // Check for request forgeries
     JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
@@ -32,21 +32,16 @@ class OdysseyControllerSteps extends JControllerAdmin
     // Get items to update from the request.
     $cid = $this->input->get('cid', array(), 'array');
 
-    if(empty($cid)) {
-      JLog::add(JText::_($this->text_prefix.'_NO_ITEM_SELECTED'), JLog::WARNING, 'jerror');
-    }
-    else {
-      //Load the plugin language file.
-      $lang = JFactory::getLanguage();
-      $apiPlugin = JComponentHelper::getParams('com_odyssey')->get('api_plugin');
-      $lang->load('plg_odysseyapiconnector_'.$apiPlugin, JPATH_ROOT.'/plugins/odysseyapiconnector/'.$apiPlugin, $lang->getTag());
+    //Load the plugin language file.
+    $lang = JFactory::getLanguage();
+    $apiPlugin = JComponentHelper::getParams('com_odyssey')->get('api_plugin');
+    $lang->load('plg_odysseyapiconnector_'.$apiPlugin, JPATH_ROOT.'/plugins/odysseyapiconnector/'.$apiPlugin, $lang->getTag());
 
-      //Trigger the plugin event.
-      $event = 'onOdysseyApiConnectorFunction';
-      JPluginHelper::importPlugin('odysseyapiconnector');
-      $dispatcher = JDispatcher::getInstance();
-      $results = $dispatcher->trigger($event, array('updateAvailabilities', array($cid)));
-    }
+    //Trigger the plugin event.
+    $event = 'onOdysseyApiConnectorFunction';
+    JPluginHelper::importPlugin('odysseyapiconnector');
+    $dispatcher = JDispatcher::getInstance();
+    $results = $dispatcher->trigger($event, array('updateSteps', array($cid)));
 
     $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list, false));
 

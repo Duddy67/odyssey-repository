@@ -92,7 +92,7 @@ class OdysseyViewSteps extends JViewLegacy
       //Check first that the plugin is enabled.
       if(JPluginHelper::isEnabled('odysseyapiconnector', $parameters->get('plugin_name'))) {
 	JToolBarHelper::divider();
-	JToolbarHelper::custom('steps.updateAvailabilities', 'loop', '', 'COM_ODYSSEY_API_UPDATE_AVAILABILITIES', false);
+	JToolbarHelper::custom('steps.updateSteps', 'loop', '', 'COM_ODYSSEY_API_UPDATE_STEPS', false);
       }
       else {
 	JFactory::getApplication()->enqueueMessage(JText::_('COM_ODYSSEY_API_CONNECTOR_PLUGIN_NOT_INSTALLED'), 'warning');
