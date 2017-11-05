@@ -80,8 +80,8 @@
       $('#jform_group_alias').prop('readonly', false);
       $('#jform_group_alias').removeClass('readonly');
 
-      //Show the travel code field.
-      $('#jform_travel_code').parent().parent().css({'visibility':'visible','display':'block'});
+      //Show the code field.
+      $('#jform_code').parent().parent().css({'visibility':'visible','display':'block'});
 
       //Show the category drop down list.
       $('#jform_catid').parent().parent().css({'visibility':'visible','display':'block'});
@@ -109,8 +109,8 @@
       $('#jform_group_alias').prop('readonly', true);
       $('#jform_group_alias').addClass('readonly');
 
-      //Hide the travel code field.
-      $('#jform_travel_code').parent().parent().css({'visibility':'hidden','display':'none'});
+      //Hide the code field.
+      $('#jform_code').parent().parent().css({'visibility':'hidden','display':'none'});
 
       //Hide the category drop down list.
       $('#jform_catid').parent().parent().css({'visibility':'hidden','display':'none'});

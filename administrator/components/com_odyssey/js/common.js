@@ -529,10 +529,10 @@
 
     var alias = $('#'+aliasId).val();
     var name = $('#jform_name').val();
-    var travelCode = $('#jform_travel_code').val();
+    var code = $('#jform_code').val();
 
     //Set the url parameters for the Ajax call.
-    var urlQuery = {'task':task, 'id':id, 'catid':catid, 'item_type':itemType, 'alias':encodeURIComponent(alias), 'name':encodeURIComponent(name), 'travel_code':travelCode};
+    var urlQuery = {'task':task, 'id':id, 'catid':catid, 'item_type':itemType, 'alias':encodeURIComponent(alias), 'name':encodeURIComponent(name), 'code':code};
     //Ajax call which check for unique alias.
     $.ajax({
 	type: 'GET', 
@@ -558,9 +558,9 @@
 	langVar = 'COM_ODYSSEY_ERROR_DEPARTURE_UNIQUE_GROUP_ALIAS';
       }
 
-      if(itemType == 'step' && field == 'travel_code') {
+      if(itemType == 'step' && field == 'code') {
 	langVar = 'COM_ODYSSEY_DATABASE_ERROR_TRAVEL_UNIQUE_CODE';
-	aliasId = 'jform_travel_code';
+	aliasId = 'jform_code';
       }
 
       alert(Joomla.JText._(langVar));

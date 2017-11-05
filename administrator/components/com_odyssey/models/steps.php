@@ -118,7 +118,7 @@ class OdysseyModelSteps extends JModelList
 
     // Select the required fields from the table.
     $query->select($this->getState('list.select', 's.id,s.name,s.created,s.group_alias,s.step_type,s.catid,'.
-				   's.travel_code,s.subtitle,s.published,s.created_by,s.checked_out,s.checked_out_time'));
+				   's.code,s.subtitle,s.published,s.created_by,s.checked_out,s.checked_out_time'));
     $query->from('#__odyssey_step AS s');
 
     //Get the user name.
@@ -132,10 +132,6 @@ class OdysseyModelSteps extends JModelList
     // Join over the users for the checked out user.
     $query->select('uc.name AS editor');
     $query->join('LEFT', '#__users AS uc ON uc.id=s.checked_out');
-
-    // Join over the travel to get the travel code if any.
-    //$query->select('IFNULL(t.travel_code, "") AS travel_code');
-    //$query->join('LEFT', '#__odyssey_travel AS t ON t.dpt_step_id=s.id');
 
     //Filter by title search.
     $search = $this->getState('filter.search');

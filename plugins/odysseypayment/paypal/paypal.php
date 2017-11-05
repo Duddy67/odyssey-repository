@@ -276,7 +276,7 @@ class plgOdysseypaymentPaypal extends JPlugin
 
     //Building our NVP string
     $request = http_build_query($request);
-
+//file_put_contents('debog_fucking_paypal.txt', print_r($request, true));
     //cURL settings
     $curlOptions = array (CURLOPT_URL => $this->params->get('api_endpoint'),
 			  CURLOPT_VERBOSE => 1,

@@ -36,7 +36,7 @@ $catid = JFactory::getApplication()->input->get->get('catid', 0, 'uint');
 $itemType = JFactory::getApplication()->input->get->get('item_type', '', 'string');
 $name = JFactory::getApplication()->input->get->get('name', '', 'string');
 $alias = JFactory::getApplication()->input->get->get('alias', '', 'string');
-$travelCode = JFactory::getApplication()->input->get->get('travel_code', '', 'string');
+$code = JFactory::getApplication()->input->get->get('code', '', 'string');
 
 $checking = 1;
 
@@ -99,12 +99,12 @@ if($table->load($attributes) && ($table->id != $id || $id == 0)) {
 }
 
 if($itemType == 'step') {
-  // Verify also that the travel code (if any) is unique
-  $travelCode = preg_replace('/\s+/', '', $travelCode);
-  if(!empty($travelCode) && $table->load(array('travel_code' => $travelCode)) && ($table->id != $id || $id == 0)) {
+  // Verify also that the code (if any) is unique
+  $code = preg_replace('/\s+/', '', $code);
+  if(!empty($code) && $table->load(array('code' => $code)) && ($table->id != $id || $id == 0)) {
     $result['checking'] = 0;
-    $result['field'] = 'travel_code';
-    $result['value'] = $travelCode;
+    $result['field'] = 'code';
+    $result['value'] = $code;
   }
 }
 

@@ -75,7 +75,7 @@ Joomla.submitbutton = function(task)
 		echo $this->form->getControlGroup('link_step_category');
 
 		if($this->item->step_type == 'departure' || empty($this->item->id)) {
-		  echo $this->form->getControlGroup('travel_code');
+		  echo $this->form->getControlGroup('code');
 		}
 	  ?>
 	  </div>

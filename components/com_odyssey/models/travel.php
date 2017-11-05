@@ -374,7 +374,7 @@ class OdysseyModelTravel extends JModelItem
     //Get all the needed data in relation with the user's booking.
     $query->select('t.id AS travel_id, t.catid, t.dpt_step_id, t.name, t.alias, t.intro_text, t.extra_fields, ds.dpt_id,'.
 	           'tp.price AS travel_price, IFNULL(tcp.price, 0) AS transit_price, ds.date_time, ds.date_time_2,'.
-		   'ds.max_passengers,ds.nb_days,ds.nb_nights, ds.code AS dpt_code, ds.allotment, s.date_type, s.travel_code,'.
+		   'ds.max_passengers,ds.nb_days,ds.nb_nights, ds.code AS dpt_code, ds.allotment, s.date_type, s.code,'.
 		   'tp.psgr_nb AS nb_psgr, stc.time_offset, tx.rate AS tax_rate, c.name AS dpt_city_name, c.id AS city_id')
 	  ->from('#__odyssey_travel AS t')
 	  ->join('INNER', '#__odyssey_step AS s ON s.id=t.dpt_step_id')
@@ -562,7 +562,7 @@ class OdysseyModelTravel extends JModelItem
     $query = $db->getQuery(true);
     //Get the selected addons (or addons by default).
     $query->select('sa.step_id, IFNULL(ts.time_gap, "000:00:00") AS time_gap, sa.ordering, a.name, a.description,'.
-	           'a.id AS addon_id, a.addon_code, IFNULL(ap.price, 0) AS price')
+	           'a.id AS addon_id, a.code, IFNULL(ap.price, 0) AS price')
 	  ->from('#__odyssey_step_addon_map AS sa')
 	  ->join('INNER', '#__odyssey_addon AS a ON a.id=sa.addon_id')
 	  ->join('LEFT', '#__odyssey_timegap_step_map AS ts ON ts.step_id=sa.step_id')

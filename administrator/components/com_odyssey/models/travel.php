@@ -73,14 +73,14 @@ class OdysseyModelTravel extends JModelAdmin
 	//Get possible travel code from the departure step.
 	$db = $this->getDbo();
 	$query = $db->getQuery(true);
-	$query->select('travel_code')
+	$query->select('code')
 	      ->from('#__odyssey_step')
 	      ->where('id='.(int)$item->dpt_step_id);
 	$db->setQuery($query);
-	$item->travel_code = $db->loadResult();
+	$item->code = $db->loadResult();
 
-	if(empty($item->travel_code)) {
-	  $item->travel_code = JText::_('COM_ODYSSEY_NO_TRAVEL_CODE_AVAILABLE');
+	if(empty($item->code)) {
+	  $item->code = JText::_('COM_ODYSSEY_NO_TRAVEL_CODE_AVAILABLE');
 	}
       }
 

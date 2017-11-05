@@ -52,7 +52,7 @@ Joomla.submitbutton = function(task)
 		  echo $this->form->getControlGroup('locked_addon_type');
 		  echo $this->form->getControlGroup('nb_persons');
 		  echo $this->form->getControlGroup('global');
-		  echo $this->form->getControlGroup('addon_code');
+		  echo $this->form->getControlGroup('code');
 		  echo $this->form->getControlGroup('group_nb');
 		  echo $this->form->getControlGroup('description');
 	      ?>
