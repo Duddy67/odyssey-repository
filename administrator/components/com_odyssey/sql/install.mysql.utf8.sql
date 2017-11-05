@@ -166,7 +166,7 @@ CREATE TABLE `#__odyssey_step` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(225) NOT NULL ,
   `group_alias` VARCHAR(225) NOT NULL ,
-  `code` VARCHAR(255) NOT NULL ,
+  `code` VARCHAR(50) NOT NULL ,
   `step_type` CHAR(10) NOT NULL,
   `date_type` CHAR(11) NOT NULL ,
   `dpt_step_id` INT UNSIGNED NOT NULL DEFAULT 0 ,
@@ -644,6 +644,7 @@ DROP TABLE IF EXISTS `#__odyssey_city`;
 CREATE TABLE `#__odyssey_city` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(80) NOT NULL ,
+  `code` VARCHAR(50) NOT NULL ,
   `country_code` CHAR(3) NOT NULL ,
   `region_code` CHAR(6) NOT NULL ,
   `lang_var` VARCHAR(80) ,

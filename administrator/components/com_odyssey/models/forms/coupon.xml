@@ -5,8 +5,8 @@
   <fieldset name="details">
 
 	<field name="code" type="text"
-		label="COM_ODYSSEY_FIELD_CODE_LABEL"
-		description="COM_ODYSSEY_FIELD_CODE_DESC"
+		label="COM_ODYSSEY_FIELD_COUPON_CODE_LABEL"
+		description="COM_ODYSSEY_FIELD_COUPON_CODE_DESC"
 		required="true" />
 
 	<field name="login_mandatory" type="radio"

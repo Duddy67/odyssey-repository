@@ -156,7 +156,7 @@ echo JLayoutHelper::render('list.sequencetools', array('dpt_data' => $this->stat
 
 	      <?php if (!empty($item->code)) : ?>
 		<div class="small break-word">
-		  <?php echo JText::sprintf('COM_ODYSSEY_LIST_TRAVEL_CODE', $this->escape($item->code)); ?>
+		  <?php echo JText::sprintf('COM_ODYSSEY_LIST_CODE', $this->escape($item->code)); ?>
 		</div>
 	      <?php endif; ?>
 

@@ -46,8 +46,8 @@
 	       readonly="true" class="readonly" />
 
 	<field name="code" type="text"
-	       label="COM_ODYSSEY_FIELD_TRAVEL_CODE_LABEL"
-	       description="COM_ODYSSEY_FIELD_TRAVEL_CODE_DESC" 
+	       label="COM_ODYSSEY_FIELD_CODE_LABEL"
+	       description="COM_ODYSSEY_FIELD_CODE_DESC" 
 	       class="inputbox" />
 
 	<field name="subtitle" type="text"

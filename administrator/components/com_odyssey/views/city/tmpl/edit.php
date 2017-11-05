@@ -38,6 +38,7 @@ Joomla.submitbutton = function(task)
 		  echo $this->form->getControlGroup('country_code');
 		  echo $this->form->getControlGroup('region_code');
 		  echo $this->form->getControlGroup('lang_var');
+		  echo $this->form->getControlGroup('code');
 		  echo $this->form->getControlGroup('description');
 	      ?>
 	  </div>

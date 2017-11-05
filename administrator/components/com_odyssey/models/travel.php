@@ -80,7 +80,7 @@ class OdysseyModelTravel extends JModelAdmin
 	$item->code = $db->loadResult();
 
 	if(empty($item->code)) {
-	  $item->code = JText::_('COM_ODYSSEY_NO_TRAVEL_CODE_AVAILABLE');
+	  $item->code = JText::_('COM_ODYSSEY_NO_CODE_AVAILABLE');
 	}
       }
 

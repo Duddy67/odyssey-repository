@@ -34,6 +34,8 @@
 			<option value="c.published DESC">JSTATUS_DESC</option>
 			<option value="c.name ASC">COM_ODYSSEY_NAME_ASC</option>
 			<option value="c.name DESC">COM_ODYSSEY_NAME_DESC</option>
+			<option value="c.code ASC">COM_ODYSSEY_CODE_ASC</option>
+			<option value="c.code DESC">COM_ODYSSEY_CODE_DESC</option>
 			<option value="user ASC">JAUTHOR_ASC</option>
 			<option value="user DESC">JAUTHOR_DESC</option>
 			<option value="c.created ASC">JDATE_ASC</option>

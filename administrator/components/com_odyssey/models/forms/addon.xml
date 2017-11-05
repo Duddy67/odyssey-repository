@@ -50,8 +50,8 @@
 	</field>
 
 	<field name="code" type="text"
-	       label="COM_ODYSSEY_FIELD_ADDON_CODE_LABEL"
-	       description="COM_ODYSSEY_FIELD_ADDON_CODE_DESC" 
+	       label="COM_ODYSSEY_FIELD_CODE_LABEL"
+	       description="COM_ODYSSEY_FIELD_CODE_DESC" 
 	       class="inputbox" />
 
 	<field name="description" type="editor"
