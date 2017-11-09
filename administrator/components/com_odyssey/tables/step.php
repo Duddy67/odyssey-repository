@@ -10,8 +10,8 @@ defined('_JEXEC') or die('Restricted access');
  
 // import Joomla table library
 jimport('joomla.database.table');
-require_once JPATH_COMPONENT.'/helpers/step.php';
-require_once JPATH_COMPONENT.'/helpers/odyssey.php';
+require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/step.php';
+require_once JPATH_ROOT.'/administrator/components/com_odyssey/helpers/odyssey.php';
 
 
 /**
@@ -63,6 +63,15 @@ class OdysseyTableStep extends JTable
 
     $post = JFactory::getApplication()->input->post->getArray();
     $addonIds = $transitCityIds = array();
+
+    //Note: When steps are created from an API connector plugin, the checkings below have to be
+    //skipped as steps are not created in the same way. So the plugin set a no_check
+    //variable in the POST array to indicate that the checkings have to be ignored. 
+    $noCheck = false;
+    if(isset($post['no_check'])) {
+      $noCheck = true;
+    }
+
 
     if($this->step_type == 'departure') {
       //Set the group alias of the departure step.
@@ -174,7 +183,7 @@ class OdysseyTableStep extends JTable
 	}
       }
 
-      if(!$dptExists) {
+      if(!$dptExists && !$noCheck) {
 	$this->setError(JText::_('COM_ODYSSEY_ERROR_NO_DEPARTURE_DEFINED'));
 	return false;
       }
@@ -222,7 +231,7 @@ class OdysseyTableStep extends JTable
 	}
       }
 
-      if(!$cityExists) {
+      if(!$cityExists && !$noCheck) {
 	$this->setError(JText::_('COM_ODYSSEY_ERROR_NO_CITY_SELECTED'));
 	return false;
       }

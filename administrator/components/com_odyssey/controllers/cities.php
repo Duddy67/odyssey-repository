@@ -23,6 +23,30 @@ class OdysseyControllerCities extends JControllerAdmin
     return $model;
   }
 
+
+  public function updateCities()
+  {
+    // Check for request forgeries
+    JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
+
+    // Get items to update from the request.
+    $cid = $this->input->get('cid', array(), 'array');
+
+    //Load the plugin language file.
+    $lang = JFactory::getLanguage();
+    $apiPlugin = JComponentHelper::getParams('com_odyssey')->get('api_plugin');
+    $lang->load('plg_odysseyapiconnector_'.$apiPlugin, JPATH_ROOT.'/plugins/odysseyapiconnector/'.$apiPlugin, $lang->getTag());
+
+    //Trigger the plugin event.
+    $event = 'onOdysseyApiConnectorFunction';
+    JPluginHelper::importPlugin('odysseyapiconnector');
+    $dispatcher = JDispatcher::getInstance();
+    $results = $dispatcher->trigger($event, array('updateCities', array($cid)));
+
+    $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_list, false));
+
+    return true;
+  }
 }
 
 

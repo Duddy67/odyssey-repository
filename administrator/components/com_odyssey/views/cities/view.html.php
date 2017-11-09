@@ -85,6 +85,19 @@ class OdysseyViewCities extends JViewLegacy
       JToolBarHelper::deleteList('', 'cities.delete', 'JTOOLBAR_DELETE');
     }
 
+    //Check for a possible API connector plugin.
+    $parameters = JComponentHelper::getParams('com_odyssey');
+    if($parameters->get('api_connector') && !empty($parameters->get('api_plugin'))) {
+      //Check first that the plugin is enabled.
+      if(JPluginHelper::isEnabled('odysseyapiconnector', $parameters->get('plugin_name'))) {
+	JToolBarHelper::divider();
+	JToolbarHelper::custom('cities.updateCities', 'loop', '', 'COM_ODYSSEY_API_UPDATE_CITIES', false);
+      }
+      else {
+	JFactory::getApplication()->enqueueMessage(JText::_('COM_ODYSSEY_API_CONNECTOR_PLUGIN_NOT_INSTALLED'), 'warning');
+      }
+    }
+
     if($canDo->get('core.admin')) {
       JToolBarHelper::divider();
       JToolBarHelper::preferences('com_odyssey', 550);
