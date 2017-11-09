@@ -96,7 +96,7 @@ class ConnectorHelper
       return false;
     }
 
-    return true;
+    return $newDptId;
   }
 
 
