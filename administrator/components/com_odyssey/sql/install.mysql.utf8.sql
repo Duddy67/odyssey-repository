@@ -275,6 +275,8 @@ CREATE TABLE `#__odyssey_addon` (
   `option_type` CHAR(10) NOT NULL ,
   `global` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
   `code` VARCHAR(50) NOT NULL ,
+  `from_nb_psgr` TINYINT UNSIGNED NOT NULL DEFAULT 0 ,
+  `to_nb_psgr` TINYINT UNSIGNED NOT NULL DEFAULT 0 ,
   `description` TEXT NULL ,
   `published` TINYINT NOT NULL DEFAULT 0 ,
   `checked_out` INT UNSIGNED NOT NULL DEFAULT 0 ,

@@ -473,6 +473,8 @@ class OdysseyModelTravel extends JModelItem
 	  //For hosting type addons we check that the number of passengers/persons is matching.
 	  //Zero means no limit and IS NULL is to get the other addon types. 
 	  ->where('(h.nb_persons='.(int)$travel['nb_psgr'].' OR h.nb_persons=0 OR h.nb_persons IS NULL)')
+	  //Check the range of number of passengers for each addon.
+	  ->where('((a.from_nb_psgr=0 AND a.to_nb_psgr=0) OR (a.from_nb_psgr <= '.(int)$travel['nb_psgr'].' AND a.to_nb_psgr >= '.(int)$travel['nb_psgr'].'))')
 	  ->group('sa.step_id, sa.addon_id')
 	  ->order('a.global DESC, ts.time_gap, sa.ordering');
     $db->setQuery($query);

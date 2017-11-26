@@ -53,6 +53,19 @@ var_dump($post);
       }
     }
 
+    //Check the from_nb_psgr and to_nb_psgr fields values are sensible.
+    if(!ctype_digit($data['from_nb_psgr'])) {
+      $data['from_nb_psgr'] = 0;
+    }
+
+    if(!ctype_digit($data['to_nb_psgr'])) {
+      $data['to_nb_psgr'] = 0;
+    }
+
+    if($data['from_nb_psgr'] > $data['to_nb_psgr']) {
+      $data['from_nb_psgr'] = $data['to_nb_psgr'];
+    }
+
     //Reset the jform data array 
     $this->input->post->set('jform', $data);
 
