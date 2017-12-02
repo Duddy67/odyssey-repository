@@ -33,7 +33,7 @@ if(!empty($params->get('module_image'))) {
 
 <div class="owl-carousel">
 <?php foreach($travels as $travel) : 
-	$link = JRoute::_(OdysseyHelperRoute::getTravelRoute($travel->slug, $travel->tag_ids, 0, true));
+	$link = JRoute::_(OdysseyHelperRoute::getTravelRoute($travel->slug, $travel->catid));
 ?>
   <div class="odysplay-travel">
     <?php if($params->get('show_name')) : ?>

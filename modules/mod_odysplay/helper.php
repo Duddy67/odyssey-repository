@@ -83,6 +83,11 @@ class ModOdysplayHelper {
       }
 
       $travel->tag_ids = $tagIds;
+
+      if(!empty($travel->extra_fields)) {
+	//Gets the extrafield array back.
+	$travel->extra_fields = json_decode($travel->extra_fields, true);
+      }
     }
 
     if($params->get('show_price')) {
@@ -106,11 +111,6 @@ class ModOdysplayHelper {
 	  }
 	}
       }
-    }
-
-    if(!empty($travel->extra_fields)) {
-      //Gets the extrafield array back.
-      $travel->extra_fields = json_decode($travel->extra_fields, true);
     }
 
     return $travels;
