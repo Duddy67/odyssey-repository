@@ -97,7 +97,7 @@ class OdysseyModelSearch extends JModelList
 
     // Select the required fields from the table.
     $query->select($this->getState('list.select', 't.id, t.alias, t.name, MIN(tp.price) AS price, t.travel_duration, t.catid,'.
-	                                          't.theme, t.subtitle, t.intro_text, t.image'))
+	                                          't.theme, t.subtitle, t.intro_text, t.image, ds.nb_days, ds.nb_nights, t.extra_fields'))
 	  ->from('#__odyssey_travel AS t')
 	  //Get the lowest price for each travel.
 	  ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id')

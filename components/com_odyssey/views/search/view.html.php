@@ -89,6 +89,11 @@ class OdysseyViewSearch extends JViewLegacy
       if(!in_array($item->catid, $catIds)) {
 	$catIds[] = $item->catid;
       }
+
+      if(!empty($item->extra_fields)) {
+	//Gets the extrafield array back.
+	$item->extra_fields = json_decode($item->extra_fields, true);
+      }
     }
 
     if(!empty($itemIds)) {

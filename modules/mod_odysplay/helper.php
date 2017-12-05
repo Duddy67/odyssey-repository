@@ -22,11 +22,12 @@ class ModOdysplayHelper {
     $nullDate = $db->quote($db->getNullDate());
     $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
 
-    $query->select('t.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,'.
+    $query->select('t.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,t.subtitle,'.
 		   't.image,t.published,t.travel_duration,t.created,t.theme,t.extra_fields,'.
 		   't.created_by,t.access,t.params,t.metadata,t.metakey,t.metadesc,t.hits,'.
-		   't.publish_up,t.publish_down,t.language,t.modified,t.modified_by')
-	  ->from($db->qn('#__odyssey_travel').' AS t');
+		   't.publish_up,t.publish_down,t.language,t.modified,t.modified_by,ds.nb_days,ds.nb_nights')
+	  ->from($db->qn('#__odyssey_travel').' AS t')
+	  ->join('INNER', '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id');
 
     // Join on category table.
     $query->select('ca.title AS category_title, ca.alias AS category_alias, ca.access AS category_access')
@@ -38,6 +39,7 @@ class ModOdysplayHelper {
 	  ->where('(t.publish_up = '.$nullDate.' OR t.publish_up <= '.$nowDate.')')
 	  ->where('(t.publish_down = '.$nullDate.' OR t.publish_down >= '.$nowDate.')')
 	  ->where('t.id IN('.implode(',', $travelIds).')')
+	  ->group('t.id')
 	  ->order($params->get('ordering'));
     $travels = $db->setQuery($query)
 		  ->loadObjectList();
