@@ -320,6 +320,18 @@ ENGINE = MyISAM DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
+-- Table `#__odyssey_addon_routing`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `#__odyssey_addon_routing`;
+CREATE TABLE `#__odyssey_addon_routing` (
+  `addon_id` INT UNSIGNED NOT NULL ,
+  `nb_persons` TINYINT UNSIGNED NOT NULL ,
+  INDEX `idx_addon_id` (`addon_id` ASC) ,
+  INDEX `idx_nb_persons` (`nb_persons` ASC) )
+ENGINE = MyISAM DEFAULT CHARSET=utf8;
+
+
+-- -----------------------------------------------------
 -- Table `#__odyssey_pricerule`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `#__odyssey_pricerule`;

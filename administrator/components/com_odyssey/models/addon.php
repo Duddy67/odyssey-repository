@@ -60,12 +60,12 @@ class OdysseyModelAddon extends JModelAdmin
   {
     if($item = parent::getItem($pk)) {
 
-      if($item->addon_type == 'hosting') {
+      if($item->addon_type == 'hosting' || $item->addon_type == 'routing') {
 	$db = $this->getDbo();
 	$query = $db->getQuery(true);
 	//Get the value of the attribute from the mapping table.
 	$query->select('nb_persons')
-	      ->from('#__odyssey_addon_hosting')
+	      ->from('#__odyssey_addon_'.$item->addon_type)
 	      ->where('addon_id='.(int)$item->id);
 	$db->setQuery($query);
 	$item->nb_persons = $db->loadResult();

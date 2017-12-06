@@ -94,7 +94,7 @@
 
   $.fn.setAddonType = function() {
     var addonType = $('#jform_addon_type').val();
-    if(addonType == 'hosting') {
+    if(addonType == 'hosting' || addonType == 'routing') {
       $('#jform_nb_persons-lbl').parent().parent().css({'visibility':'visible','display':'block'});
     }
     else {

@@ -24,7 +24,8 @@ $canOrder = $user->authorise('core.edit.state', 'com_odyssey');
 $addonTypes = array('excursion' => 'COM_ODYSSEY_OPTION_EXCURSION',
 		    'hosting' => 'COM_ODYSSEY_OPTION_HOSTING',
 		    'insurance' => 'COM_ODYSSEY_OPTION_INSURANCE',
-		    'vehicle' => 'COM_ODYSSEY_OPTION_VEHICLE');
+		    'vehicle' => 'COM_ODYSSEY_OPTION_VEHICLE',
+		    'routing' => 'COM_ODYSSEY_OPTION_ROUTING');
 ?>
 
 

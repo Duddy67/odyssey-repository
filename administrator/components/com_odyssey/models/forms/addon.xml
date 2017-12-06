@@ -13,6 +13,7 @@
 		<option value="hosting">COM_ODYSSEY_OPTION_HOSTING</option>
 		<option value="insurance">COM_ODYSSEY_OPTION_INSURANCE</option>
 		<option value="vehicle">COM_ODYSSEY_OPTION_VEHICLE</option>
+		<option value="routing">COM_ODYSSEY_OPTION_ROUTING</option>
 	</field>
 
 	<field name="locked_addon_type" type="text"

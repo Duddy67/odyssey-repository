@@ -12,6 +12,8 @@ DROP TABLE IF EXISTS `#__odyssey_step_city_map`;
 DROP TABLE IF EXISTS `#__odyssey_step_transit_city_map`;
 DROP TABLE IF EXISTS `#__odyssey_step_addon_map`;
 DROP TABLE IF EXISTS `#__odyssey_addon`;
+DROP TABLE IF EXISTS `#__odyssey_addon_hosting`;
+DROP TABLE IF EXISTS `#__odyssey_addon_routing`;
 DROP TABLE IF EXISTS `#__odyssey_addon_option`;
 DROP TABLE IF EXISTS `#__odyssey_pricerule`;
 DROP TABLE IF EXISTS `#__odyssey_travel_pricerule`;

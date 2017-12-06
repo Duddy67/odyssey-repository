@@ -564,14 +564,13 @@ class plgContentOdyssey extends JPlugin
 
       OdysseyHelper::setAddonOptions($addonOptions, $data->id);
 
-      if($data->addon_type == 'hosting') {
+      if($data->addon_type == 'hosting' || $data->addon_type == 'routing') {
 	//Get and store hosting attribute values.
 	$jform = JFactory::getApplication()->input->post->get('jform', array(), 'array');
 	$columns = array('addon_id', 'nb_persons');
 	$row = new JObject;
 	$row->nb_persons = $jform['nb_persons'];
-	$hosting = array($row);
-	OdysseyHelper::updateMappingTable('#__odyssey_addon_hosting', $columns, $hosting, array($data->id));
+	OdysseyHelper::updateMappingTable('#__odyssey_addon_'.$data->addon_type, $columns, array($row), array($data->id));
       }
 
       return true;
@@ -838,11 +837,11 @@ class plgContentOdyssey extends JPlugin
       return true;
     }
     elseif($context == 'com_odyssey.addon') {
-      if($data->addon_type == 'hosting') {
+      if($data->addon_type == 'hosting' || $data->addon_type == 'routing') {
 	//Remove the deleted addon id from the mapping tables.
 	$db = JFactory::getDbo();
 	$query = $db->getQuery(true);
-	$query->delete('#__odyssey_addon_hosting')
+	$query->delete('#__odyssey_addon_'.$data->addon_type)
 	      ->where('addon_id='.(int)$data->id);
 	$db->setQuery($query);
 	$db->execute();
