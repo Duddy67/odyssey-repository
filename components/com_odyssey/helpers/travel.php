@@ -15,6 +15,13 @@ class TravelHelper
 {
   public static function getPricesStartingAt($travelIds)
   {
+    $single = false;
+    //A single id is given as argument.
+    if(!is_array($travelIds)) {
+      $travelIds = array($travelIds);
+      $single = true;
+    }
+
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
     $nowDate = $db->quote(JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true));
@@ -34,6 +41,11 @@ class TravelHelper
 	  ->group('t.id');
     $db->setQuery($query);
     $results = $db->loadAssocList();
+
+    //Returns the single price.
+    if($single) {
+      return $results[0]['price_starting_at'];
+    }
 
     //Create a mapping array id/price for more convenience.
     foreach($results as $result) {

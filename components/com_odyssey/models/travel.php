@@ -164,6 +164,8 @@ class OdysseyModelTravel extends JModelItem
 
       //Get the names and descriptions of the addons linked to this travel.
       $data->addons = TravelHelper::getAddons($data->dpt_step_id, $data->departure_number, array('excursion','hosting'));
+      //Gets the first price for this travel.
+      $data->price_starting_at = TravelHelper::getPricesStartingAt($data->id);
 
       $this->_item[$pk] = $data;
     }
