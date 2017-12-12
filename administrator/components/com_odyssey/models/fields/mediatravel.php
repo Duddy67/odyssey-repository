@@ -52,6 +52,12 @@ class JFormFieldMediatravel extends JFormField
       //Build the image url.
       //Note: Add "../" to the path as we are in the administrator area.
       $script[] = '  url="../"+value;';
+      //We're dealing with an addon option image.
+      $script[] = '  if(document.getElementById("jform_option_type") !== null) {';
+      $script[] = '    document.getElementById("option-image-"+id).value=url;';
+      $script[] = '    document.getElementById("option-preview-image-"+id).src=url;';
+      $script[] = '    return;';
+      $script[] = '  }';
       //Get the image attributes.
       $script[] = '  var newImg = new Image();';
       $script[] = '  newImg.src = url;';
@@ -74,6 +80,15 @@ class JFormFieldMediatravel extends JFormField
       $script[] = '    elem.value = url;';
       $script[] = '    elem.fireEvent("change");';
       $script[] = '  }';
+      $script[] = '}';
+
+      // Add the script to the document head.
+      JFactory::getDocument()->addScriptDeclaration(implode("\n", $script));
+
+      $script = array();
+      $script[] = 'function resetImageItem(id) {';
+      $script[] = '  document.getElementById("option-image-"+id).value="";';
+      $script[] = '  document.getElementById("option-preview-image-"+id).src="";';
       $script[] = '}';
 
       // Add the script to the document head.

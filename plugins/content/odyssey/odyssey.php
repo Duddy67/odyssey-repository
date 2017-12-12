@@ -551,11 +551,15 @@ class plgContentOdyssey extends JPlugin
 	    $published = 1;
 	  }
 
+	  //Remove "../" from image url as it comes from the administrator area.
+	  $imageUrl = preg_replace('#^\.\.\/#', '', $post['option_image_'.$idNb]);
+
 	  //Store the addon option attributes.
 	  $addonOption = array('id' => $post['option_id_'.$idNb], 
 	                 'name' => $post['option_name_'.$idNb],  
 	                 'code' => $post['option_code_'.$idNb],  
 	                 'description' => $post['option_description_'.$idNb],  
+	                 'image' => $imageUrl,  
 	                 'published' => $published,  
 	                 'ordering' => $post['option_ordering_'.$idNb]);
 

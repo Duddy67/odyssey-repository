@@ -433,7 +433,7 @@ class OdysseyHelper
     foreach($addonOptions as $addonOption) {
       if(empty($addonOption['id'])) { //insert
 	//Store a value line for each addon option.
-	$values[] = (int)$addonId.','.$db->quote($addonOption['name']).','.$db->quote($addonOption['code']).','.$db->quote($addonOption['description']).','.(int)$addonOption['published'].','.(int)$addonOption['ordering'];
+	$values[] = (int)$addonId.','.$db->quote($addonOption['name']).','.$db->quote($addonOption['code']).','.$db->quote($addonOption['description']).','.$db->quote($addonOption['image']).','.(int)$addonOption['published'].','.(int)$addonOption['ordering'];
       }
       else { //update
 	//Build the WHEN clause for each field to update.
@@ -456,6 +456,13 @@ class OdysseyHelper
 	}
 	else {
 	  $whens['description'] = 'WHEN id = '.(int)$addonOption['id'].' THEN '.$db->quote($addonOption['description']).' '; 
+	}
+
+	if(isset($whens['image'])) {
+	  $whens['image'] .= 'WHEN id = '.(int)$addonOption['id'].' THEN '.$db->quote($addonOption['image']).' '; 
+	}
+	else {
+	  $whens['image'] = 'WHEN id = '.(int)$addonOption['id'].' THEN '.$db->quote($addonOption['image']).' '; 
 	}
 
 	if(isset($whens['published'])) {

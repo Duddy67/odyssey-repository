@@ -34,6 +34,7 @@ class OdysseyViewAddon extends JViewLegacy
 
     JavascriptHelper::getCommonText();
     JavascriptHelper::getButtonText();
+    JavascriptHelper::loadFunctions(array('user'));
 
     //Display the toolbar.
     $this->addToolBar();

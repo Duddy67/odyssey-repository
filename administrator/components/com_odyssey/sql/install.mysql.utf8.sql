@@ -301,6 +301,7 @@ CREATE TABLE `#__odyssey_addon_option` (
   `name` VARCHAR(80) NOT NULL ,
   `code` VARCHAR(50) NOT NULL ,
   `description` TEXT NOT NULL ,
+  `image` TINYTEXT NOT NULL ,
   `published` TINYINT(1) UNSIGNED NOT NULL ,
   `ordering` INT NOT NULL ,
   PRIMARY KEY (`id`) ,

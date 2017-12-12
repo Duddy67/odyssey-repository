@@ -95,7 +95,7 @@
     $('#wrap-option-row1-'+idNb).createButton('remove_reorder');
 
     //Creates a wraper in which html tags are embedded.
-    var properties = {'id':'wrap-option-row2-'+idNb};
+    properties = {'id':'wrap-option-row2-'+idNb};
     $('#option-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-option-row2');
 
     //Create the "description" label.
@@ -109,6 +109,29 @@
     textArea.text(data.option_description); 
     $('#wrap-option-row2-'+idNb).append(textArea);
 
+    //Get the id of the current user.
+    var userId = odyssey.getUserId();
+    //Build the link to the Joomla image server.
+    var link = 'index.php?option=com_media&view=images&tmpl=component&asset=com_odyssey&author='+userId+'&fieldid='+idNb+'&folder=odyssey';
+    //Create the "image" label.
+    properties = {'title':Joomla.JText._('COM_ODYSSEY_ITEM_IMAGE_TITLE')};
+    $('#wrap-option-row2-'+idNb).createHTMLTag('<span>', properties, 'item-image-label');
+    $('#wrap-option-row2-'+idNb+' .item-image-label').text(Joomla.JText._('COM_ODYSSEY_ITEM_IMAGE_LABEL'));
+
+    $('#wrap-option-row2-'+idNb).createButton('select', '#', link);
+
+    properties = {'type':'hidden', 'name':'option_image_'+idNb, 'id':'option-image-'+idNb, 'value':data.option_image};
+    $('#wrap-option-row2-'+idNb).createHTMLTag('<input>', properties);
+
+    //Create a div in which img tag is nested.
+    properties = {'id':'img-div-'+idNb};
+    $('#wrap-option-row2-'+idNb).createHTMLTag('<div>', properties, 'div-option-image');
+    //Create the img tag within the div.
+    properties = {'src':data.option_image, 'width':'60px', 'height':'60px', 'id':'option-preview-image-'+idNb};
+    $('#img-div-'+idNb).createHTMLTag('<img>', properties, 'option-preview-image');
+    //Create the reset image button.
+    var resetImage = $('<span class="btn icon-remove reset-image" onclick="resetImageItem('+idNb+');">'); 
+    $('#wrap-option-row2-'+idNb).append(resetImage);
   };
 
 

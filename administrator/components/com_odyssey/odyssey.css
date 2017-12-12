@@ -120,6 +120,15 @@
   margin-left: 20px;
 }
 
+.wrap-option-row2 .btn-wrapper {
+  float: left;
+  margin-left: 20px;
+}
+
+.reset-image {
+  margin-left: 20px;
+}
+
 .sequence-item .item-ordering, 
 .option-item .item-ordering, 
 .addon-item .item-ordering {
@@ -181,6 +190,12 @@
   margin: 50px auto 20px auto;
 }
 
+.div-option-image {
+  float: left; /* Block formatting context. */
+  margin-left: 20px;
+  border: 1px solid #c0c0c0;
+}
+
 .addon-status {
   float: left;
   margin-left: 20px;
@@ -233,6 +248,7 @@
 .item-quantity-label,
 .item-description-label,
 .item-code-label,
+.item-image-label,
 .departures-label,
 .published-label,
 .departure-number,
@@ -240,6 +256,10 @@
   margin: 5px 5px 0 5px;
   font-weight: bold;
   color: #404040;
+}
+
+.item-image-label {
+  float: left;
 }
 
 .published-label {

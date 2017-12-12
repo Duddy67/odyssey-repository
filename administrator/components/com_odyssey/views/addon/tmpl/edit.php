@@ -72,7 +72,9 @@ Joomla.submitbutton = function(task)
       <div class="row-fluid">
 	<div class="span8" id="options">
 	  <div class="form-vertical">
-	    <?php echo $this->form->getControlGroup('option_type'); ?>
+	    <?php echo $this->form->getControlGroup('option_type'); 
+		  echo $this->form->getInput('imageurl'); //Must be loaded to call the overrided media file.
+	    ?>
 	    <div id="option">
 	    </div>
 	  </div>

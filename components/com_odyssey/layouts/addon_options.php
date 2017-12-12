@@ -30,6 +30,10 @@ foreach($addonOptions as $key => $addonOption) {
          '<h2 class="addon-option-title">'.$this->escape($addonOption['name']).'</h2>'.
          '<div class="addon-option-description">'.$this->escape($addonOption['description']).'</div>';
 
+    if(!empty($addonOption['image'])) {
+      echo '<div class="addon-option-image"><img src="'.$addonOption['image'].'"></div>';
+    }
+
     $normalPrice = $price = $addonOption['price'];
     //Check price rules for this addon.
     $isPriceRule = false;

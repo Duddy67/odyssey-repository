@@ -351,6 +351,15 @@
       //Reverse the order of the description items.
       $('#'+itemType+'-description-'+idNb).val($('#'+itemType+'-description-'+idNbToReverse).val());
       $('#'+itemType+'-description-'+idNbToReverse).val(currentItemDesc);
+
+      //Get the image url of the current item.
+      var currentItemImgUrl = $('#'+itemType+'-image-'+idNb).val();
+      //Reverse the order of the image items.
+      $('#'+itemType+'-image-'+idNb).val($('#'+itemType+'-image-'+idNbToReverse).val());
+      $('#'+itemType+'-image-'+idNbToReverse).val(currentItemImgUrl);
+      //Also reverse the order of the image preview by shifting the src attribute value.
+      $('#'+itemType+'-preview-image-'+idNb).attr('src', $('#'+itemType+'-preview-image-'+idNbToReverse).attr('src'));
+      $('#'+itemType+'-preview-image-'+idNbToReverse).attr('src', currentItemImgUrl);
     }
   };
 
@@ -435,7 +444,7 @@
     } else if(itemType == 'addon') {
       data = {'addon_ordering':''};
     } else if(itemType == 'option') {
-      data = {'option_ordering':'', 'option_description':''};
+      data = {'option_ordering':'', 'option_description':'', 'option_image':''};
     } else if(itemType == 'image') {
       data = {'alt':'', 'ordering':'', 'src':'', 'width':'', 'height':''};
     } else { //

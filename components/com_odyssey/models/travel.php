@@ -508,7 +508,7 @@ class OdysseyModelTravel extends JModelItem
       //Note: The addon option prices are based on the number of passengers selected by the user.
       $query->clear();
       $query->select('sa.step_id, ao.addon_id, ao.id AS addon_option_id, ao.name, ao.description,'.
-	             'ao.ordering, IFNULL(ap.price, 0) AS price')
+	             'ao.image, ao.ordering, IFNULL(ap.price, 0) AS price')
 	    ->from('#__odyssey_addon_option AS ao')
 	    ->join('INNER', '#__odyssey_step_addon_map AS sa ON sa.addon_id=ao.addon_id')
 	    ->join('LEFT', '#__odyssey_addon_option_price AS ap ON ap.travel_id='.(int)$travel['travel_id'].' AND ap.step_id=sa.step_id'.
