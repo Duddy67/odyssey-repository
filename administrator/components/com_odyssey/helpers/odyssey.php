@@ -433,7 +433,7 @@ class OdysseyHelper
     foreach($addonOptions as $addonOption) {
       if(empty($addonOption['id'])) { //insert
 	//Store a value line for each addon option.
-	$values[] = (int)$addonId.','.$db->quote($addonOption['name']).','.$db->quote($addonOption['code']).','.(int)$addonOption['published'].','.(int)$addonOption['ordering'];
+	$values[] = (int)$addonId.','.$db->quote($addonOption['name']).','.$db->quote($addonOption['code']).','.$db->quote($addonOption['description']).','.(int)$addonOption['published'].','.(int)$addonOption['ordering'];
       }
       else { //update
 	//Build the WHEN clause for each field to update.
@@ -449,6 +449,13 @@ class OdysseyHelper
 	}
 	else {
 	  $whens['code'] = 'WHEN id = '.(int)$addonOption['id'].' THEN '.$db->quote($addonOption['code']).' '; 
+	}
+
+	if(isset($whens['description'])) {
+	  $whens['description'] .= 'WHEN id = '.(int)$addonOption['id'].' THEN '.$db->quote($addonOption['description']).' '; 
+	}
+	else {
+	  $whens['description'] = 'WHEN id = '.(int)$addonOption['id'].' THEN '.$db->quote($addonOption['description']).' '; 
 	}
 
 	if(isset($whens['published'])) {
@@ -495,7 +502,7 @@ class OdysseyHelper
 
     if(!empty($values)) {
       //Insert a new row for each option linked to the addon.
-      $columns = array('addon_id', 'name', 'code', 'published', 'ordering');
+      $columns = array('addon_id', 'name', 'code', 'description', 'published', 'ordering');
       $query->clear();
       $query->insert('#__odyssey_addon_option')
 	    ->columns($columns)

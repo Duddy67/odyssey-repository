@@ -36,6 +36,7 @@ $addonTypes = array('excursion' => 'COM_ODYSSEY_OPTION_EXCURSION',
 		    'hosting' => 'COM_ODYSSEY_OPTION_HOSTING',
 		    'insurance' => 'COM_ODYSSEY_OPTION_INSURANCE',
 		    'vehicle' => 'COM_ODYSSEY_OPTION_VEHICLE',
+		    'routing' => 'COM_ODYSSEY_OPTION_ROUTING',
 		    'addon_option' => 'COM_ODYSSEY_OPTION_ADDON_OPTION');
 
 if($modalOption != '&modal_option=option_only') {

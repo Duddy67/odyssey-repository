@@ -40,36 +40,40 @@
 
 
   $.fn.createOptionItem = function(idNb, data) {
+    //Creates a wraper in which html tags are embedded.
+    var properties = {'id':'wrap-option-row1-'+idNb};
+    $('#option-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-option-row1');
+
     //Create the hidden input tag for the option id.
     var properties = {'type':'hidden', 'name':'option_id_'+idNb, 'id':'option-id-'+idNb, 'value':data.option_id};
-    $('#option-item-'+idNb).createHTMLTag('<input>', properties);
+    $('#wrap-option-row1-'+idNb).createHTMLTag('<input>', properties);
 
     //Create the "name" label.
     properties = {'title':Joomla.JText._('COM_ODYSSEY_ITEM_NAME_TITLE')};
-    $('#option-item-'+idNb).createHTMLTag('<span>', properties, 'item-name-label');
-    $('#option-item-'+idNb+' .item-name-label').text(Joomla.JText._('COM_ODYSSEY_ITEM_NAME_LABEL'));
+    $('#wrap-option-row1-'+idNb).createHTMLTag('<span>', properties, 'item-name-label');
+    $('#wrap-option-row1-'+idNb+' .item-name-label').text(Joomla.JText._('COM_ODYSSEY_ITEM_NAME_LABEL'));
 
     //Create the "name" input.
     var properties = {'type':'text', 'name':'option_name_'+idNb, 'id':'option-name-'+idNb, 'value':data.option_name};
-    $('#option-item-'+idNb).createHTMLTag('<input>', properties, 'item-name');
+    $('#wrap-option-row1-'+idNb).createHTMLTag('<input>', properties, 'item-name');
 
     //Create the "code" label.
     properties = {'title':Joomla.JText._('COM_ODYSSEY_ITEM_CODE_TITLE')};
-    $('#option-item-'+idNb).createHTMLTag('<span>', properties, 'item-code-label');
-    $('#option-item-'+idNb+' .item-code-label').text(Joomla.JText._('COM_ODYSSEY_ITEM_CODE_LABEL'));
+    $('#wrap-option-row1-'+idNb).createHTMLTag('<span>', properties, 'item-code-label');
+    $('#wrap-option-row1-'+idNb+' .item-code-label').text(Joomla.JText._('COM_ODYSSEY_ITEM_CODE_LABEL'));
 
     //Create the "code" input.
     var properties = {'type':'text', 'name':'option_code_'+idNb, 'id':'option-code-'+idNb, 'value':data.option_code};
-    $('#option-item-'+idNb).createHTMLTag('<input>', properties, 'item-code');
+    $('#wrap-option-row1-'+idNb).createHTMLTag('<input>', properties, 'item-code');
 
     //Create the "published" label.
     properties = {'title':Joomla.JText._('COM_ODYSSEY_PUBLISHED_TITLE')};
-    $('#option-item-'+idNb).createHTMLTag('<span>', properties, 'published-label');
-    $('#option-item-'+idNb+' .published-label').text(Joomla.JText._('COM_ODYSSEY_PUBLISHED_LABEL'));
+    $('#wrap-option-row1-'+idNb).createHTMLTag('<span>', properties, 'published-label');
+    $('#wrap-option-row1-'+idNb+' .published-label').text(Joomla.JText._('COM_ODYSSEY_PUBLISHED_LABEL'));
 
     //Create the "published" checkbox.
     var properties = {'type':'checkbox', 'name':'published_'+idNb, 'id':'published-'+idNb, 'value':idNb};
-    $('#option-item-'+idNb).createHTMLTag('<input>', properties, 'option-name-item');
+    $('#wrap-option-row1-'+idNb).createHTMLTag('<input>', properties, 'option-name-item');
 
     //Set the checkbox state.
     if(data.published == 1) { //checked
@@ -84,11 +88,27 @@
     }
     //Create the "order" input.
     properties = {'type':'text', 'name':'option_ordering_'+idNb, 'id':'option-ordering-'+idNb, 'readonly':'readonly', 'value':ordering};
-    $('#option-item-'+idNb).createHTMLTag('<input>', properties, 'item-ordering');
+    $('#wrap-option-row1-'+idNb).createHTMLTag('<input>', properties, 'item-ordering');
     $.fn.setOrderManagement('option');
 
     //Create the item removal button.
-    $('#option-item-'+idNb).createButton('remove_reorder');
+    $('#wrap-option-row1-'+idNb).createButton('remove_reorder');
+
+    //Creates a wraper in which html tags are embedded.
+    var properties = {'id':'wrap-option-row2-'+idNb};
+    $('#option-item-'+idNb).createHTMLTag('<div>', properties, 'wrap-option-row2');
+
+    //Create the "description" label.
+    properties = {'title':Joomla.JText._('COM_ODYSSEY_ITEM_DESCRIPTION_TITLE')};
+    $('#wrap-option-row2-'+idNb).createHTMLTag('<span>', properties, 'item-description-label');
+    $('#wrap-option-row2-'+idNb+' .item-description-label').text(Joomla.JText._('COM_ODYSSEY_ITEM_DESCRIPTION_LABEL'));
+
+    //Create the "description" input.
+    //Note: textarea tag is specific, so it is created manually.
+    var textArea = $('<textarea name="option_description_'+idNb+'" id="option-description-'+idNb+'" class="item-description">'); 
+    textArea.text(data.option_description); 
+    $('#wrap-option-row2-'+idNb).append(textArea);
+
   };
 
 

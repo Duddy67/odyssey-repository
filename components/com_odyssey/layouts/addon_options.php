@@ -27,7 +27,8 @@ foreach($addonOptions as $key => $addonOption) {
 
     //Display information and price.
     echo '<div class="addon-option">'.
-         '<h2 class="addon-option-title">'.$this->escape($addonOption['name']).'</h2>';
+         '<h2 class="addon-option-title">'.$this->escape($addonOption['name']).'</h2>'.
+         '<div class="addon-option-description">'.$this->escape($addonOption['description']).'</div>';
 
     $normalPrice = $price = $addonOption['price'];
     //Check price rules for this addon.

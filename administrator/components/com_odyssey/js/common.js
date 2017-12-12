@@ -345,6 +345,12 @@
       //Reverse the order of the code items.
       $('#'+itemType+'-code-'+idNb).val($('#'+itemType+'-code-'+idNbToReverse).val());
       $('#'+itemType+'-code-'+idNbToReverse).val(currentItemCode);
+
+      //Get the description of the current item.
+      var currentItemDesc = $('#'+itemType+'-description-'+idNb).val();
+      //Reverse the order of the description items.
+      $('#'+itemType+'-description-'+idNb).val($('#'+itemType+'-description-'+idNbToReverse).val());
+      $('#'+itemType+'-description-'+idNbToReverse).val(currentItemDesc);
     }
   };
 
@@ -429,7 +435,7 @@
     } else if(itemType == 'addon') {
       data = {'addon_ordering':''};
     } else if(itemType == 'option') {
-      data = {'option_ordering':''};
+      data = {'option_ordering':'', 'option_description':''};
     } else if(itemType == 'image') {
       data = {'alt':'', 'ordering':'', 'src':'', 'width':'', 'height':''};
     } else { //
