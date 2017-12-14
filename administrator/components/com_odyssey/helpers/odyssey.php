@@ -509,7 +509,7 @@ class OdysseyHelper
 
     if(!empty($values)) {
       //Insert a new row for each option linked to the addon.
-      $columns = array('addon_id', 'name', 'code', 'description', 'published', 'ordering');
+      $columns = array('addon_id', 'name', 'code', 'description', 'image', 'published', 'ordering');
       $query->clear();
       $query->insert('#__odyssey_addon_option')
 	    ->columns($columns)
