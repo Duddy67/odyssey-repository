@@ -278,6 +278,7 @@ CREATE TABLE `#__odyssey_addon` (
   `from_nb_psgr` TINYINT UNSIGNED NOT NULL DEFAULT 0 ,
   `to_nb_psgr` TINYINT UNSIGNED NOT NULL DEFAULT 0 ,
   `description` TEXT NULL ,
+  `image` VARCHAR(255) NOT NULL ,
   `published` TINYINT NOT NULL DEFAULT 0 ,
   `checked_out` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `checked_out_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,

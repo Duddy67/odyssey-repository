@@ -54,6 +54,7 @@ Joomla.submitbutton = function(task)
 		  echo $this->form->getControlGroup('global');
 		  echo $this->form->getControlGroup('code');
 		  echo $this->form->getControlGroup('group_nb');
+		  echo $this->form->getControlGroup('image');
 		  echo $this->form->getControlGroup('description');
 	      ?>
 	  </div>

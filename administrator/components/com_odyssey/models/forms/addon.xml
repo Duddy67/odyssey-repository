@@ -49,6 +49,10 @@
 		<option value="multi_sel">COM_ODYSSEY_OPTION_MULTI_SELECT</option>
 	</field>
 
+	<field name="image" type="media"
+	       label="COM_ODYSSEY_FIELD_IMAGE_LABEL"
+	       description="COM_ODYSSEY_FIELD_IMAGE_DESC" />
+
 	<field name="imageurl" type="mediatravel" directory="stories/odyssey"
                 hide_none="1" label="COM_ODYSSEY_FIELD_IMAGE_URL_LABEL"
                 size="40"

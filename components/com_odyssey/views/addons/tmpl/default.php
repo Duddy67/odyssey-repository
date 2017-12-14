@@ -108,6 +108,10 @@ $settings = $session->get('settings', array(), 'odyssey');
 	   '<h2 class="addon-title">'.$this->escape($addon['name']).'</h2>'.
 	   '<div class="addon-description">'.$addon['description'].'</div>';
 
+      if(!empty($addon['image'])) {
+	echo '<div class="addon-image"><img src="'.$addon['image'].'" /></div>';
+      }
+
       if($addon['price'] > 0) {
 	//Check for price rules.
 	if($isPriceRule) {
@@ -157,6 +161,10 @@ $settings = $session->get('settings', array(), 'odyssey');
       echo '<div class="addon">'.
 	   '<h2 class="addon-title">'.$this->escape($addon['name']).'</h2>'.
 	   '<div class="addon-description">'.$addon['description'].'</div>';
+
+      if(!empty($addon['image'])) {
+	echo '<div class="addon-image"><img src="'.$addon['image'].'" /></div>';
+      }
 
       if($addon['price'] > 0) {
 	//Check for price rules.

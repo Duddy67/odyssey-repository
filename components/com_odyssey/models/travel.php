@@ -462,8 +462,9 @@ class OdysseyModelTravel extends JModelItem
     //Get the addons set in the steps of the sequence.
     //Note: The addon prices are based on the number of passengers selected by the user.
     $query->clear();
-    $query->select('sa.step_id, s.name AS step_name, sa.addon_id, IFNULL(ts.time_gap, "000:00:00") AS time_gap, a.name, a.addon_type, a.group_nb,'.
-	           'a.option_type, a.global, a.description, IFNULL(ap.price, 0) AS price, sa.ordering, h.nb_persons')
+    $query->select('sa.step_id, s.name AS step_name, sa.addon_id, IFNULL(ts.time_gap, "000:00:00") AS time_gap,'.
+	           'a.name, a.addon_type, a.group_nb, a.option_type, a.global, a.image,'.
+	           'a.description, IFNULL(ap.price, 0) AS price, sa.ordering, h.nb_persons')
 	  ->from('#__odyssey_step_addon_map AS sa')
 	  ->join('INNER', '#__odyssey_addon AS a ON a.id=sa.addon_id')
 	  ->join('LEFT', '#__odyssey_addon_hosting AS h ON h.addon_id=a.id')

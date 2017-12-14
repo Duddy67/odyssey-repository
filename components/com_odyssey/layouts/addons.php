@@ -25,6 +25,10 @@ foreach($addons as $key => $addon) {
        '<h2 class="addon-title">'.$this->escape($addon['name']).'</h2>'.
        '<div class="addon-description">'.$addon['description'].'</div></div>';
 
+  if(!empty($addon['image'])) {
+    echo '<div class="addon-image"><img src="'.$addon['image'].'" /></div>';
+  }
+
   //Close the addon type div.
   if(!isset($addons[$key + 1]) || $addons[$key + 1]['addon_type'] != $addon['addon_type']) {
     echo '</div>';
