@@ -113,6 +113,10 @@
 		<option value="0">JNO</option>
 	      </field>
 
+	      <field name="owl_setting_file" type="text" default="carousel.js"
+		     label="MOD_ODYSPLAY_FIELD_OWL_SETTING_FILE_LABEL"
+		     description="MOD_ODYSPLAY_FIELD_OWL_SETTING_FILE_DESC" />
+
 	      <field name="img_reduction_rate" type="list"
 		      label="MOD_ODYSPLAY_FIELD_IMAGE_REDUCTION_RATE_LABEL"
 		      description="MOD_ODYSPLAY_FIELD_IMAGE_REDUCTION_RATE_DESC"
