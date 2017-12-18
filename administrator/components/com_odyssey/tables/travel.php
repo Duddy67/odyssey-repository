@@ -122,6 +122,11 @@ class OdysseyTableTravel extends JTable
       }
     }
 
+    //Turns the travel id array into Json.
+    if(is_array($this->travel_ids)) {
+      $this->travel_ids = json_encode($this->travel_ids);
+    }
+
     //Set the alias of the travel.
     
     //Create a sanitized alias, (see stringURLSafe function for details).

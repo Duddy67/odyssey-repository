@@ -117,6 +117,12 @@
 	       description="COM_ODYSSEY_FIELD_CODE_DESC" 
 	       readonly="true" class="readonly" filter="unset" />
 
+	<field name="travel_ids" type="travellist"
+	       multiple="multiple"
+	       label="COM_ODYSSEY_FIELD_ASSOCIATED_TRAVELS_LABEL" 
+	       description="COM_ODYSSEY_FIELD_ASSOCIATED_TRAVELS_DESC">
+	</field>
+
 	<field name="image" type="media"
 	       label="COM_ODYSSEY_FIELD_IMAGE_LABEL"
 	       description="COM_ODYSSEY_FIELD_IMAGE_DESC" />

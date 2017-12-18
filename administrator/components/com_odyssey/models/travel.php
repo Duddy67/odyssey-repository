@@ -88,6 +88,11 @@ class OdysseyModelTravel extends JModelAdmin
 	//Gets the extrafield array back.
 	$item->extra_fields = json_decode($item->extra_fields, true);
       }
+
+      if(!empty($item->travel_ids)) {
+	//Gets the travel id array back.
+	$item->travel_ids = json_decode($item->travel_ids, true);
+      }
     }
 
     return $item;

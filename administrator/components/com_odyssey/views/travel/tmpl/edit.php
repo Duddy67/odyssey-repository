@@ -66,6 +66,7 @@ Joomla.submitbutton = function(task)
 		echo $this->form->getControlGroup('show_grouped_steps');
 		echo $this->form->getControlGroup('departure_number');
 		echo $this->form->getControlGroup('show_testimonies');
+		echo $this->form->getControlGroup('travel_ids');
 		echo $this->form->getControlGroup('traveltext');
 	  ?>
 	</div>
