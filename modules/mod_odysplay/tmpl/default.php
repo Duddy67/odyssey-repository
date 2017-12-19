@@ -103,5 +103,5 @@ if(!empty($params->get('module_image'))) {
 <?php 
 //Add Owl carousel scripts.
 $doc->addScript(JURI::base().'modules/mod_odysplay/js/owl.carousel.min.js');
-$doc->addScript(JURI::base().'modules/mod_odysplay/js/'.$params->get('owl_setting_file'));
+$doc->addScript(JURI::base().'modules/mod_odysplay/js/carousel.js');
 
