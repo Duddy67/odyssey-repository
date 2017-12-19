@@ -23,10 +23,17 @@
       <config>
 	<fields name="params">
 	  <fieldset name="basic" addfieldpath="/administrator/components/com_odyssey/models/fields">
+	      <field name="linked_travels" type="radio" class="btn-group" default="1"
+		     label="MOD_ODYSPLAY_FIELD_LINKED_TRAVELS_LABEL"
+		     description="MOD_ODYSPLAY_FIELD_LINKED_TRAVELS_DESC">
+		<option value="1">JYES</option>
+		<option value="0">JNO</option>
+	      </field>
+
 	      <field name="travel_ids" type="travellist"
 		      label="MOD_ODYSPLAY_FIELD_TRAVELS_LABEL"
 		      description="MOD_ODYSPLAY_FIELD_TRAVELS_DESC"
-		      multiple="true" size="5" required="true" >
+		      multiple="true" size="5">
 	      </field>
 
 	      <field name="ordering" type="list"
@@ -132,6 +139,10 @@
 	      <field name="module_image" type="media"
 		     label="MOD_ODYSPLAY_FIELD_MODULE_IMAGE_LABEL"
 		     description="MOD_ODYSPLAY_FIELD_MODULE_IMAGE_DESC" />
+
+	      <field name="carousel_id" type="text" default=""
+		     label="MOD_ODYSPLAY_FIELD_CAROUSEL_ID_LABEL"
+		     description="MOD_ODYSPLAY_FIELD_CAROUSEL_ID_DESC" />
 
 	      <field name="module_text" type="editor"
 		     label="MOD_ODYSPLAY_FIELD_MODULE_TEXT_LABEL" 

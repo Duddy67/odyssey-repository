@@ -12,7 +12,26 @@ defined('_JEXEC') or die;
 
 class ModOdysplayHelper {
 
-  public static function getTravels($travelIds, $params) {
+  public static function getLinkedTravelIds($travelId)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    $query->select('travel_ids')
+	  ->from($db->qn('#__odyssey_travel'))
+	  ->where('id='.(int)$travelId);
+    $travelIds = $db->setQuery($query)
+		    ->loadResult();
+
+    if(empty($travelIds)) {
+      return array();
+    }
+
+    return json_decode($travelIds, true);
+  }
+
+
+  public static function getTravels($travelIds, $params)
+  {
     //Get the user view levels groups.
     $user = JFactory::getUser();
     $groups = $user->getAuthorisedViewLevels();

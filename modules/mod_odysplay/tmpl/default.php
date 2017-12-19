@@ -20,6 +20,11 @@ $backgroungImage = '';
 if(!empty($params->get('module_image'))) {
   $backgroungImage = ' style="background-image: url('.$params->get('module_image').');"';
 }
+
+$carouselId = '';
+if(!empty($params->get('carousel_id'))) {
+  $carouselId = ' id="'.$params->get('carousel_id').'" ';
+}
 ?>
 
 <div class="odysplay-module" <?php echo $backgroungImage; ?>>
@@ -31,7 +36,7 @@ if(!empty($params->get('module_image'))) {
   <?php echo $params->get('module_text'); ?>
 <?php endif; ?>
 
-<div class="owl-carousel">
+<div <?php echo $carouselId; ?> class="owl-carousel">
 <?php foreach($travels as $travel) : 
 	$link = JRoute::_(OdysseyHelperRoute::getTravelRoute($travel->slug, $travel->catid));
 ?>
