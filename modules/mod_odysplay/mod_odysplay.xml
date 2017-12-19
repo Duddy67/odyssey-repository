@@ -23,7 +23,7 @@
       <config>
 	<fields name="params">
 	  <fieldset name="basic" addfieldpath="/administrator/components/com_odyssey/models/fields">
-	      <field name="linked_travels" type="radio" class="btn-group" default="1"
+	      <field name="linked_travels" type="radio" class="btn-group" default="0"
 		     label="MOD_ODYSPLAY_FIELD_LINKED_TRAVELS_LABEL"
 		     description="MOD_ODYSPLAY_FIELD_LINKED_TRAVELS_DESC">
 		<option value="1">JYES</option>
