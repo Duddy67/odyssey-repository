@@ -15,6 +15,7 @@
 	    <filename>camera-icon.jpg</filename>
 	    <filename>mod_odysplay.xml</filename>
 	    <folder>css</folder>
+	    <folder>fields</folder>
 	    <folder>js</folder>
 	    <folder>language</folder>
 	    <folder>tmpl</folder>
@@ -22,7 +23,7 @@
 	<!-- Optional parameters -->
       <config>
 	<fields name="params">
-	  <fieldset name="basic" addfieldpath="/administrator/components/com_odyssey/models/fields">
+	  <fieldset name="basic" >
 	      <field name="linked_travels" type="radio" class="btn-group" default="0"
 		     label="MOD_ODYSPLAY_FIELD_LINKED_TRAVELS_LABEL"
 		     description="MOD_ODYSPLAY_FIELD_LINKED_TRAVELS_DESC">
@@ -33,6 +34,7 @@
 	      <field name="travel_ids" type="travellist"
 		      label="MOD_ODYSPLAY_FIELD_TRAVELS_LABEL"
 		      description="MOD_ODYSPLAY_FIELD_TRAVELS_DESC"
+		      addfieldpath="/administrator/components/com_odyssey/models/fields"
 		      multiple="true" size="5">
 	      </field>
 
@@ -148,6 +150,10 @@
 		     label="MOD_ODYSPLAY_FIELD_MODULE_TEXT_LABEL" 
 		     description="MOD_ODYSPLAY_FIELD_MODULE_TEXT_DESC"
 		     filter="JComponentHelper::filterText" buttons="false" />
+
+	      <field name="jsloader" type="modjsloader"
+		     addfieldpath="/modules/mod_odysplay/fields">
+	      </field>
 
 	  </fieldset>
 	  <fieldset name="advanced">
