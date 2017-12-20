@@ -13,7 +13,6 @@ JLoader::register('PriceruleHelper', JPATH_ROOT.'/components/com_odyssey/helpers
 JLoader::register('OdysseyHelperRoute', JPATH_ROOT.'/components/com_odyssey/helpers/route.php');
 JLoader::register('UtilityHelper', JPATH_ROOT.'/administrator/components/com_odyssey/helpers/utility.php');
 
-$module = JModuleHelper::getModule('mod_odysplay');
 
 if($params->get('linked_travels')) {
   $jinput = JFactory::getApplication()->input;
