@@ -160,6 +160,20 @@ class UtilityHelper
   }
 
 
+  public static function formatPrice($price, $thousandSeparator = ' ', $digits = false)
+  {
+    if(!$digits) {
+      $price = preg_replace('#\.[0-9]*#', '', $price);
+    }
+
+    if(strlen($price) > 3) {
+      $price = preg_replace('#[0-9]{3}$#', $thousandSeparator.'$0', $price);
+    }
+
+    return $price;
+  }
+
+
   public static function formatNumber($float, $digits = 2)
   {
     //In case variable passed in argument is undefined.
