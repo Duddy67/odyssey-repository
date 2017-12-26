@@ -41,5 +41,5 @@ $travels = ModOdysplayHelper::getTravels($travelIds, $params);
 //Get the currency in the default display mode (ie: code or symbol);
 $currency = UtilityHelper::getCurrency();
 
-require(JModuleHelper::getLayoutPath('mod_odysplay'));
+require(JModuleHelper::getLayoutPath('mod_odysplay', $params->get('layout', 'default')));
 
