@@ -40,3 +40,5 @@ DROP TABLE IF EXISTS `#__odyssey_passenger`;
 DROP TABLE IF EXISTS `#__odyssey_search_filter`;
 DROP TABLE IF EXISTS `#__odyssey_tmp_data`;
 DROP TABLE IF EXISTS `#__odyssey_document`;
+DROP TABLE IF EXISTS `#__odyssey_testimony`;
+DROP TABLE IF EXISTS `#__odyssey_address`;

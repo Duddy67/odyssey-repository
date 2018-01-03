@@ -113,7 +113,8 @@ if($travel['transit_price'] > 0) {
 }
 
 $bookingDetails .= '<tr><td></td><td></td><td>'.
-                 UtilityHelper::formatNumber($finalAmount, $settings['digits_precision']).' '.$currency.'</td></tr>';
+		   '<span id="js_display_total_amount">'.UtilityHelper::formatNumber($finalAmount, $settings['digits_precision']).
+		   '</span> '.$currency.'</td></tr>';
 $bookingDetails .= '</table>';
 
 if($travel['overlapping']) {
@@ -121,6 +122,9 @@ if($travel['overlapping']) {
 }
 
 echo $bookingDetails;
+
+//For the Javascript dynamical addon prices functions. 
+echo '<form method="post" name="js_addons" ><input type="hidden" name="js_total_amount" id="js_total_amount" value="'.$finalAmount.'"></form>'
 ?>
 </div>
 

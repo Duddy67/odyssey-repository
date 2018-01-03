@@ -14,6 +14,7 @@ $addons = $this->addonData['addons'];
 $addonOptions = $this->addonData['addon_options'];
 $addonPrules = $this->addonData['addon_prules'];
 $addonOptionPrules = $this->addonData['addon_option_prules'];
+$prevRadioChecked = array();
 
 //Ensure first that there is at least one hosting addon (matching with the number of
 //passengers selected by the customer).
@@ -186,9 +187,21 @@ $settings = $session->get('settings', array(), 'odyssey');
       if($selType == 'single_sel') {
 	//Note: Ids are set differently for single selection (radio buttons).
 	echo '<input type="radio" class="single" name="single_'.$grpNb.'_'.$addon['step_id'].'" value="'.$addon['addon_id'].'" '.$checked.'>';
+	//Used for the dynamical addon prices Javascript function. 
+	echo '<input type="hidden" name="js_addon_prices" id="js_single_'.$grpNb.'_'.$addon['step_id'].'_'.$addon['addon_id'].'" value="'.$price.'" disabled>';
+
+	//Detects wether the tag used with js to get the previous checked button value has been created.
+	if(!in_array('js_prev_radio_checked_'.$grpNb.'_'.$addon['step_id'], $prevRadioChecked)) {
+	  //Stores the tag id as it must be created just once.
+	  $prevRadioChecked[] = 'js_prev_radio_checked_'.$grpNb.'_'.$addon['step_id'];
+	  //Used by Javascript to store the value (ie: the addon id) of the previous checked button in this group.
+	  echo '<input type="hidden" name="js_addon_prices" id="js_prev_radio_checked_'.$grpNb.'_'.$addon['step_id'].'" value="'.$addon['addon_id'].'" disabled>';
+	}
       }
       elseif($selType == 'multi_sel') {
 	echo '<input type="checkbox" class="multi" name="multi_'.$grpNb.'_'.$addon['step_id'].'[]" value="'.$addon['addon_id'].'" >';
+	//Used for the dynamical addon prices Javascript function. 
+	echo '<input type="hidden" name="js_addon_prices" id="js_multi_'.$grpNb.'_'.$addon['step_id'].'_'.$addon['addon_id'].'" value="'.$price.'" disabled>';
       }
       else { //no_sel
 	//Use a hidden type tag as there is no selection for this addon.
@@ -227,4 +240,9 @@ $settings = $session->get('settings', array(), 'odyssey');
   </div>
 <?php endif; ?>
 
+<?php
+JHtml::_('jquery.framework');
+//Load the jQuery scripts.
+$doc = JFactory::getDocument();
+$doc->addScript(JURI::base().'components/com_odyssey/js/addonprices.js');
 

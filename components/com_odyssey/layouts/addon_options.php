@@ -13,6 +13,7 @@ $addonOptions = $displayData['addon_options'];
 $addonOptionPrules = $displayData['addon_option_prules'];
 $addon = $displayData['addon'];
 $currency = $displayData['currency'];
+$prevOptionRadioChecked = array();
 
 echo '<div class="addon-options">';
 
@@ -78,10 +79,24 @@ foreach($addonOptions as $key => $addonOption) {
     if($addon['option_type'] == 'single_sel') {
       echo '<input type="radio" class="option-single" name="option_single_'.$addonOption['step_id'].'_'.$addonOption['addon_id'].'" '.
 	   'value="'.$addonOption['addon_option_id'].'" '.$checked.'>';
+
+      //Used for the dynamical addon prices Javascript function. 
+      echo '<input type="hidden" name="js_addon_prices" id="js_option_single_'.$addonOption['step_id'].'_'.$addonOption['addon_id'].'_'.$addonOption['addon_option_id'].'" value="'.$price.'" disabled>';
+
+      //Detects wether the tag used with js to get the previous checked button value has been created.
+      if(!in_array('js_prev_option_radio_checked_'.$addonOption['step_id'].'_'.$addonOption['addon_id'], $prevOptionRadioChecked)) {
+	//Stores the tag id as it must be created just once.
+	$prevOptionRadioChecked[] = 'js_prev_option_radio_checked_'.$addonOption['step_id'].'_'.$addonOption['addon_id'];
+	//Used by Javascript to store the value of the previous checked button in this group.
+	echo '<input type="hidden" name="js_addon_prices" id="js_prev_option_radio_checked_'.$addonOption['step_id'].'_'.$addonOption['addon_id'].'" value="'.$addonOption['addon_option_id'].'" disabled>';
+      }
     }
     else { //multi_sel
       echo '<input type="checkbox" class="option-multi" name="option_multi_'.$addonOption['step_id'].'_'.$addonOption['addon_id'].'[]" '.
 	   'value="'.$addonOption['addon_option_id'].'" >';
+
+      //Used for the dynamical addon prices Javascript function. 
+      echo '<input type="hidden" name="js_addon_prices" id="js_option_multi_'.$addonOption['step_id'].'_'.$addonOption['addon_id'].'_'.$addonOption['addon_option_id'].'" value="'.$price.'" disabled>';
     }
 
     echo '</div>';
