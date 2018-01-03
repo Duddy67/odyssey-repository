@@ -124,7 +124,7 @@ if($travel['overlapping']) {
 echo $bookingDetails;
 
 //For the Javascript dynamical addon prices functions. 
-echo '<form method="post" name="js_addons" ><input type="hidden" name="js_total_amount" id="js_total_amount" value="'.$finalAmount.'"></form>'
+echo '<form method="post" name="js_addons" ><input type="hidden" name="js_total_amount" id="js_total_amount" value="'.$finalAmount.'"></form>';
 ?>
 </div>
 
