@@ -18,7 +18,8 @@
     //If the "Select passenger" option is chosen the passenger fields must be emptied.
     if(psgrId == '') {
       for(var i = 0; i < attributes.length; i++) {
-        $('[name="'+attributes[i]+'_'+psgrNb+'"]').val('');
+        $('[name="'+attributes[i]+'_'+psgrNb+'"]').attr('value', '');
+	$('[name="'+attributes[j]+'_'+psgrNb+'"]').focus();
       }
     }
     else {
@@ -26,7 +27,11 @@
 	if(passengers[i].id == psgrId) {
 	  //Fill in the fields with the passenger data.
 	  for(var j = 0; j < attributes.length; j++) {
-	    $('[name="'+attributes[j]+'_'+psgrNb+'"]').val(passengers[i][attributes[j]]);
+	    //Important: Set the input value with attr() method instead of val() or the
+	    //date and datetime value won't be properly set. We must also give the focus
+	    //to the field or the value won't be submited. Very weird problem !
+	    $('[name="'+attributes[j]+'_'+psgrNb+'"]').attr('value', passengers[i][attributes[j]]);
+	    $('[name="'+attributes[j]+'_'+psgrNb+'"]').focus();
 	  }
 	}
       }

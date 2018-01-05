@@ -15,7 +15,7 @@ $session = JFactory::getSession();
 $travel = $session->get('travel', array(), 'odyssey'); 
 $addons = $session->get('addons', array(), 'odyssey'); 
 $settings = $session->get('settings', array(), 'odyssey'); 
-
+var_dump($session->get('passengers', array(), 'odyssey'));
 $date = $travel['date_time'];
 if($travel['date_type'] == 'period') {
   $date = $travel['date_picker'].' 12:00';

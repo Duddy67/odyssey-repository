@@ -467,6 +467,13 @@ class TravelHelper
 	  ->where('customer_id='.(int)$userId.' AND customer=1');
     $db->setQuery($query);
     $passenger = $db->loadAssoc();
+
+    //The user has just subscribed, he has no passenger data yet.
+    if($passenger === null) {
+      $customerData['passenger'] = array();
+      return $customerData;
+    }
+
     //Removes the unwanted attributes from the data.
     $attribs = array('id','customer_id','customer','firstname','lastname');
     foreach($passenger as $key => $value) {
