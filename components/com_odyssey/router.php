@@ -36,6 +36,11 @@ function OdysseyBuildRoute(&$query)
     unset($query['layout']);
   }
 
+  if(isset($query['alias'])) {
+    $segments[] = $query['alias'];
+    unset($query['alias']);
+  }
+
   unset($query['catid']);
   unset($query['tagid']);
 
@@ -82,12 +87,15 @@ function OdysseyParseRoute($segments)
     //Define all of the Odyssey views.
     case 'addons':
 	   $vars['view'] = 'addons';
+	   $vars['alias'] = $segments[1];
 	   break;
     case 'passengers':
 	   $vars['view'] = 'passengers';
+	   $vars['alias'] = $segments[1];
 	   break;
     case 'booking':
 	   $vars['view'] = 'booking';
+	   $vars['alias'] = $segments[1];
 	   break;
     case 'outstdbal':
 	   $vars['view'] = 'outstdbal';

@@ -336,8 +336,9 @@ class OdysseyModelCategory extends JModelList
 
     // Select required fields from the categories.
     $query->select($this->getState('list.select', 't.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,t.published,t.image,'.
-	                           't.subtitle,t.checked_out,t.checked_out_time,t.created,t.created_by,t.access,t.params,t.metadata,'.
-				   't.metakey,t.metadesc,t.hits,t.publish_up,t.publish_down,t.language,t.modified,t.modified_by'))
+	                           't.extra_fields,t.subtitle,t.checked_out,t.checked_out_time,t.created,t.created_by,t.access,'.
+				   't.params,t.metadata,t.metakey,t.metadesc,t.hits,t.publish_up,t.publish_down,'.
+				   't.language,t.modified,t.modified_by'))
 	  ->from($db->quoteName('#__odyssey_travel').' AS t')
 	  //Display travels of the current category.
 	  ->where('t.catid='.(int)$this->getState('category.id'));

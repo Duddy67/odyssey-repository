@@ -96,6 +96,11 @@ class OdysseyViewCategory extends JViewCategory
       $item->currency = $currency;
       //Store all the item ids.
       $itemIds[] = $item->id;
+
+      if(!empty($item->extra_fields)) {
+	//Gets the extrafield array back.
+	$item->extra_fields = json_decode($item->extra_fields, true);
+      }
     }
 
     if(!empty($itemIds)) {

@@ -116,7 +116,7 @@ class OdysseyControllerPayment extends JControllerForm
 	//Just in case a previous temporary data for this order is still remaining.
 	OrderHelper::deleteTemporaryData($travel['order_id']);
 	//Move on to the payment part.
-	$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=payment', false));
+	$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=payment&alias='.$travel['alias'], false));
       }
 
       return true;

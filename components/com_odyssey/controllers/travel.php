@@ -211,7 +211,7 @@ class OdysseyControllerTravel extends JControllerForm
     $session->set('travel', $travel, 'odyssey'); 
     $session->set('location', 'addons', 'odyssey'); 
 
-    $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=addons', false));
+    $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=addons&alias='.$travel['alias'], false));
 
     return true;
   }

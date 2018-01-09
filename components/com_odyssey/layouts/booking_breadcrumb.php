@@ -35,7 +35,7 @@ foreach($activeLinks as $key => $value) {
 
   <div class="breadcrumb-arrow">>></div>
   <?php if($activeLinks['addons']) : ?>
-    <a href="<?php echo JRoute::_('index.php?option=com_odyssey&view=addons', false); ?>">
+    <a href="<?php echo JRoute::_('index.php?option=com_odyssey&view=addons&alias='.$travel['alias'], false); ?>">
       <div class="addons"><?php echo JText::_('COM_ODYSSEY_BREADCRUMB_ADDONS'); ?></div>
     </a>
   <?php else :
@@ -49,7 +49,7 @@ foreach($activeLinks as $key => $value) {
 
   <div class="breadcrumb-arrow">>></div>
   <?php if($activeLinks['passengers']) : ?>
-    <a href="<?php echo JRoute::_('index.php?option=com_odyssey&view=passengers', false); ?>">
+    <a href="<?php echo JRoute::_('index.php?option=com_odyssey&view=passengers&alias='.$travel['alias'], false); ?>">
       <div class="passengers"><?php echo JText::_('COM_ODYSSEY_BREADCRUMB_PASSENGERS'); ?></div>
     </a>
   <?php else :
@@ -63,7 +63,7 @@ foreach($activeLinks as $key => $value) {
 
   <div class="breadcrumb-arrow">>></div>
   <?php if($activeLinks['booking']) : ?>
-    <a href="<?php echo JRoute::_('index.php?option=com_odyssey&view=booking', false); ?>">
+    <a href="<?php echo JRoute::_('index.php?option=com_odyssey&view=booking&alias='.$travel['alias'], false); ?>">
       <div class="booking"><?php echo JText::_('COM_ODYSSEY_BREADCRUMB_BOOKING'); ?></div>
     </a>
   <?php else :

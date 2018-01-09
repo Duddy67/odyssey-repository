@@ -507,7 +507,17 @@ class PlgUserOdysseyprofile extends JPlugin
 
     //Redirect the user to the location he was before log in (when purchasing a travel).
     if(!empty($location)) {
-      JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_odyssey&view='.$location, false));
+      //The customer is probably booking a travel, but we check it anyway through the
+      //travel session variable.
+      $session = JFactory::getSession();
+      $travel = $session->get('travel', array(), 'odyssey'); 
+      $alias = '';
+      if(isset($travel['alias']) && !empty($travel['alias'])) {
+	//Adds the alias to the url.
+	$alias = '&alias='.$travel['alias'];
+      }
+
+      JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_odyssey&view='.$location.$alias, false));
       return true;
     }
 

@@ -31,15 +31,11 @@ class OdysseyControllerPassengers extends JControllerForm
     //Grab the user session.
     $session = JFactory::getSession();
     $session->set('location', 'passengers', 'odyssey'); 
-$addons = $session->get('addons', array(), 'odyssey'); 
-echo '<pre>';
-var_dump($addons);
-echo '</pre>';
-//return;
+    $travel = $session->get('travel', array(), 'odyssey'); 
 
     //If the user is logged we redirect him to the first ordering step.
     if($user->id > 1) {
-      $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=passengers'.$Itemid, false));
+      $this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view=passengers'.$Itemid.'&alias='.$travel['alias'], false));
     }
     else { //The user must login or registrate.
       //Note: Passes a booking flag to allow the login template to detect where the user is coming from. 

@@ -138,6 +138,11 @@ class OdysseyViewTag extends JViewLegacy
       }
 
       $item->tag_ids = $tagIds;
+
+      if(!empty($item->extra_fields)) {
+	//Gets the extrafield array back.
+	$item->extra_fields = json_decode($item->extra_fields, true);
+      }
     }
 
     if(!empty($itemIds)) {
