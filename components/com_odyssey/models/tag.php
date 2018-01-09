@@ -296,7 +296,7 @@ class OdysseyModelTag extends JModelList
     $query->select($this->getState('list.select', 't.id,t.name,t.alias,t.intro_text,t.full_text,t.catid,'.
 	                           'tm.tag_id,t.published,t.checked_out,t.checked_out_time,t.created,t.image,t.extra_fields,'.
 				   't.subtitle,t.created_by,t.access,t.params,t.metadata,t.metakey,t.metadesc,t.hits,'.
-				   't.publish_up,t.publish_down,t.language,t.modified,t.modified_by'))
+				   'ds.nb_days,ds.nb_nights,t.publish_up,t.publish_down,t.language,t.modified,t.modified_by'))
 	  ->from($db->quoteName('#__odyssey_travel').' AS t')
 	  ->join('LEFT', '#__odyssey_travel_tag_map AS tm ON t.id=tm.travel_id')
 	  //Display travels labeled with the current tag.
