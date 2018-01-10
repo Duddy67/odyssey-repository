@@ -156,6 +156,12 @@
 			<option value="1">JSHOW</option>
 		</field>
 
+		<field name="display_num" 
+			type="text"
+			label="COM_ODYSSEY_NUMBER_ITEMS_DISPLAY_LABEL"
+			description="COM_ODYSSEY_NUMBER_ITEMS_DISPLAY_DESC">
+		</field>
+
 		<field name="spacer1" type="spacer" hr="true" />
 
 		<field name="list_show_author"

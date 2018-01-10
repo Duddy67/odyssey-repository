@@ -113,8 +113,9 @@ class OdysseyModelTag extends JModelList
 
     // List state information
     //Get the number of travels to display per page.
+    //The display_num variable (set in the component or menu config) is taken as default
     //Note: The LIMIT clause is added in the setQuery function: libraries/joomla/database/query/driver.php
-    $limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'), 'uint');
+    $limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $params->get('display_num', 10), 'uint');
     $this->setState('list.limit', $limit);
 
     //Get the limitstart variable (used for the pagination) from the form variable.

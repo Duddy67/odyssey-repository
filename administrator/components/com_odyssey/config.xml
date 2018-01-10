@@ -773,6 +773,13 @@
 		     <option value="0">JHIDE</option>
 	      </field>
 
+	      <field name="display_num" 
+		      type="text"
+		      label="COM_ODYSSEY_NUMBER_ITEMS_DISPLAY_LABEL"
+		      description="COM_ODYSSEY_NUMBER_ITEMS_DISPLAY_DESC"
+		      default="10">
+	      </field>
+
 		<field name="spacer2" type="spacer" hr="true" />
 
 	    <field name="orderby_pri"

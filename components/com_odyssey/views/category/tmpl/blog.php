@@ -73,11 +73,12 @@ var odyssey = {
 	</div>
       <?php endif; ?>
      
-      <?php echo JLayoutHelper::render('filter_ordering', $this, JPATH_SITE.'/components/com_odyssey/layouts/'); ?>
+      <?php echo JLayoutHelper::render('filter_ordering', $this); ?>
 
       <?php if($this->params->get('show_pagination_limit')) : ?>
 	<div class="span1">
-	    <?php echo $this->pagination->getLimitBox(); ?>
+	    <?php echo JLayoutHelper::render('limitbox', array('limit_range' => $this->params->get('display_num'),
+							       'current_limit' => $this->state->get('list.limit'))); ?>
 	</div>
       <?php endif; ?>
 
