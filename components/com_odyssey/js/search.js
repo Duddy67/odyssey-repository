@@ -5,6 +5,12 @@
   $(window).load(function() {
     $('#search-btn-clear').click( function() { $.fn.clearFilters(); });
     $.fn.setFilters($('#nb-items').val());
+
+    //The user has just landed on the search page. Clears all filters in case their values
+    //are still stored in the session from a previous search.
+    if($('#search-reset').val() == 0) {
+      $.fn.clearFilters();
+    }
   });
 
   $.fn.clearFilters = function() {

@@ -14,6 +14,8 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 
 $digitsPrecision = $this->config->get('digits_precision');
 $nbItems = count($this->items);
+//Check if the user has just land on the search page (the search variable has not be sent yet in the url). 
+$search = JFactory::getApplication()->input->get('search', 0);
 ?>
 <script type="text/javascript">
 var odyssey = {
@@ -31,8 +33,7 @@ var odyssey = {
 };
 </script>
 
-
-<form action="<?php echo JRoute::_('index.php?option=com_odyssey&view=search&layout=thumbnail');?>" method="post" name="siteForm" id="siteForm">
+<form action="<?php echo JRoute::_('index.php?option=com_odyssey&view=search&layout=thumbnail&search=1');?>" method="post" name="siteForm" id="siteForm">
 <?php
 // Search tools bar 
 //echo JLayoutHelper::render('search.default', array('view' => $this, 'search_filters' => $this->state->get('search.filters')));
@@ -110,6 +111,7 @@ if($this->params->get('show_pagination_limit')) {
 <input type="hidden" name="nb_items" id="nb-items" value="<?php echo $nbItems; ?>" />
 <input type="hidden" name="option" value="com_odyssey" />
 <input type="hidden" name="limitstart" value="" />
+<input type="hidden" id="search-reset" name="search_reset" value="<?php echo $search; ?>" />
 <input type="hidden" name="task" value="" />
 <?php echo JHtml::_('form.token'); ?>
 </form>
