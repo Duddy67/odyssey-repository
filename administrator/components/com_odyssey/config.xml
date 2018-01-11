@@ -768,7 +768,7 @@
 		     type="radio" default="1"
 		     class="btn-group btn-group-yesno"
 		     label="JGLOBAL_DISPLAY_SELECT_LABEL"
-		     description="JGLOBAL_DISPLAY_SELECT_DESC">
+		     description="COM_ODYSSEY_DISPLAY_SELECT_DESC">
 		     <option value="1">JSHOW</option>
 		     <option value="0">JHIDE</option>
 	      </field>

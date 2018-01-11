@@ -111,11 +111,21 @@ class OdysseyModelTag extends JModelList
       $this->setState('filter.access', false);
     }
 
-    // List state information
-    //Get the number of travels to display per page.
-    //The display_num variable (set in the component or menu config) is taken as default
-    //Note: The LIMIT clause is added in the setQuery function: libraries/joomla/database/query/driver.php
-    $limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $params->get('display_num', 10), 'uint');
+    // Set limit for query. If list, use parameter. If blog, add blog parameters for limit.
+    //Important: The pagination limit box must be hidden to use the limit value based upon the layout.
+    if(!$params->get('show_pagination_limit') && (($app->input->get('layout') === 'blog') || $params->get('layout_type') === 'blog')) {
+      $limit = $params->get('num_leading_travels') + $params->get('num_intro_travels') + $params->get('num_links');
+    }
+    else { // list layout or blog layout with the pagination limit box shown.
+      //Get the number of songs to display per page.
+      $limit = $params->get('display_num', 10);
+
+      if($params->get('show_pagination_limit')) {
+	//Gets the limit value from the pagination limit box.
+	$limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $limit, 'uint');
+      }
+    }
+
     $this->setState('list.limit', $limit);
 
     //Get the limitstart variable (used for the pagination) from the form variable.

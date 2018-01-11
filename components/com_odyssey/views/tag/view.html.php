@@ -175,14 +175,22 @@ class OdysseyViewTag extends JViewLegacy
     // For blog layouts, preprocess the breakdown of leading, intro and linked travels.
     // This makes it much easier for the designer to just interrogate the arrays.
     if(($this->params->get('layout_type') == 'blog') || ($this->getLayout() == 'blog')) {
+
+      //Computes the number of extra items (if any).
+      $numExtra = 0;
+      if(count($this->items) > ($numLeading + $numIntro + $numLinks)) {
+	$numExtra = count($this->items) - ($numLeading + $numIntro + $numLinks);
+      }
+
       foreach($this->items as $i => $item) {
 	if($i < $numLeading) {
 	  $this->lead_items[] = $item;
 	}
-	elseif($i >= $numLeading && $i < $numLeading + $numIntro) {
+	//Adds the possible extra items to the intro items.
+	elseif($i >= $numLeading && $i < $numLeading + $numIntro + $numExtra) {
 	  $this->intro_items[] = $item;
 	}
-	elseif($i < $numLeading + $numIntro + $numLinks) {
+	elseif($i < $numLeading + $numIntro + $numLinks + $numExtra) {
 	  $this->link_items[] = $item;
 	}
 	else {
