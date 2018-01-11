@@ -32,11 +32,26 @@ var odyssey = {
 </script>
 
 
-<form action="<?php echo
-JRoute::_('index.php?option=com_odyssey&view=search&layout=thumbnail');?>" method="post" name="siteForm" id="siteForm">
+<form action="<?php echo JRoute::_('index.php?option=com_odyssey&view=search&layout=thumbnail');?>" method="post" name="siteForm" id="siteForm">
 <?php
 // Search tools bar 
-echo JLayoutHelper::render('default', array('view' => $this, 'search_filters' => $this->state->get('search.filters')), JPATH_SITE.'/components/com_odyssey/layouts/search/');
+//echo JLayoutHelper::render('search.default', array('view' => $this, 'search_filters' => $this->state->get('search.filters')));
+//TODO: The default layout file needs to be reshape. 
+echo JLayoutHelper::render('search.filters', array('view' => $this, 'search_filters' => $this->state->get('search.filters')));
+?>
+
+<div class="btn-wrapper">
+  <div id="search-btn-clear" class="btn hasTooltip js-stools-btn-clear"
+	  title="<?php echo JHtml::tooltipText('JSEARCH_FILTER_CLEAR'); ?>">
+	  <?php echo JText::_('JSEARCH_FILTER_CLEAR');?>
+  </div>
+</div>
+
+<?php
+if($this->params->get('show_pagination_limit')) {
+  echo JLayoutHelper::render('limitbox', array('limit_range' => $this->params->get('display_num'),
+					       'current_limit' => $this->state->get('list.limit')));
+}
 ?>
 
   <?php if (empty($this->items)) : ?>
@@ -100,6 +115,7 @@ echo JLayoutHelper::render('default', array('view' => $this, 'search_filters' =>
 </form>
 
 <?php
+JHtml::_('jquery.framework');
 //Load the jQuery script.
 $doc = JFactory::getDocument();
 $doc->addScript(JURI::base().'components/com_odyssey/js/search.js');

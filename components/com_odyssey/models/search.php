@@ -39,6 +39,24 @@ class OdysseyModelSearch extends JModelList
       $this->context .= '.'.$layout;
     }
 
+    //getParams function return global parameters overrided by the menu parameters (if any).
+    //Note: Some specific parameters of this menu are not returned.
+    $params = $app->getParams();
+
+    $menuParams = new JRegistry;
+
+    //Get the menu with its specific parameters.
+    if($menu = $app->getMenu()->getActive()) {
+      $menuParams->loadString($menu->params);
+    }
+
+    //Merge Global and Menu Item params into a new object.
+    $mergedParams = clone $menuParams;
+    $mergedParams->merge($params);
+
+    // Load the parameters in the session.
+    $this->setState('params', $mergedParams);
+
     //Get and set the default filter type set in the component global configuration.
     $this->setState('search.filters', JComponentHelper::getParams('com_odyssey')->get('search_filters'));
 
@@ -67,8 +85,20 @@ class OdysseyModelSearch extends JModelList
     $theme = $app->getUserStateFromRequest($this->context.'.filter.theme', 'filter_theme');
     $this->setState('filter.theme', $theme);
 
-    // List state information.
     parent::populateState('t.name', 'asc');
+
+    //IMPORTANT: The pagination values must be set AFTER the call to the parent method or
+    //these values will be overwritten.
+    $limit = $params->get('display_num', 10);
+    if($params->get('show_pagination_limit')) {
+      $limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $limit, 'uint');
+    }
+
+    $this->setState('list.limit', $limit);
+
+    //Get the limitstart variable (used for the pagination) from the form variable.
+    $limitstart = $app->input->get('limitstart', 0, 'uint');
+    $this->setState('list.start', $limitstart);
   }
 
 
@@ -178,7 +208,7 @@ class OdysseyModelSearch extends JModelList
     $orderDirn = $this->state->get('list.direction'); //asc or desc
 
     $query->order($db->escape($orderCol.' '.$orderDirn));
-//echo $query;
+
     return $query;
   }
 }

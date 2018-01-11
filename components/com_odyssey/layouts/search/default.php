@@ -33,11 +33,11 @@ $filtersClass = isset($data['view']->activeFilters) && $data['view']->activeFilt
 ?>
 
 <?php echo JLayoutHelper::render('filters', $data, JPATH_SITE.'/components/com_odyssey/layouts/search/'); ?>
-<div class="btn-wrapper">
+<!--<div class="btn-wrapper">
   <button type="button" id="search-btn-clear" class="btn hasTooltip js-stools-btn-clear"
-	  title="<?php echo JHtml::tooltipText('JSEARCH_FILTER_CLEAR'); ?>">
-	  <?php echo JText::_('JSEARCH_FILTER_CLEAR');?>
+	  title="<?php //echo JHtml::tooltipText('JSEARCH_FILTER_CLEAR'); ?>">
+	  <?php //echo JText::_('JSEARCH_FILTER_CLEAR');?>
   </button>
-</div>
-<?php echo JLayoutHelper::render('joomla.searchtools.default.list', $data); ?>
+</div>-->
+<?php //echo JLayoutHelper::render('joomla.searchtools.default.list', $data); ?>
 
