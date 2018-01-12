@@ -448,7 +448,7 @@ class TravelHelper
 
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
-    $query->select('u.name AS lastname, p.id, c.firstname, c.customer_title, a.street, a.city, a.postcode, a.phone,'.
+    $query->select('u.name AS lastname, p.id, c.firstname, c.customer_title AS title, a.street, a.city, a.postcode, a.phone,'.
 	           'a.country_code, co.name AS country_name, co.lang_var AS country_lang_var, r.lang_var AS region_lang_var')
 	  ->from('#__users AS u')
 	  ->join('LEFT', '#__odyssey_customer AS c ON c.id=u.id')
