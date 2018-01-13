@@ -17,6 +17,8 @@ class OdysseyViewDocuments extends JViewLegacy
   protected $state;
   protected $pagination;
   protected $myForm;
+  protected $allowedExtensions;
+  protected $maxFileSize;
 
   public function display($tpl = null)
   {
@@ -31,6 +33,11 @@ class OdysseyViewDocuments extends JViewLegacy
       JError::raiseError(500, implode('<br />', $errors));
       return false;
     }
+
+    //Gets and sets the file informations.
+    $params = JComponentHelper::getParams('com_odyssey');
+    $this->maxFileSize = $params->get('max_file_size');
+    $this->allowedExtensions = preg_replace('#;#', ', ', $params->get('allowed_extensions'));
 
     //$this->myForm = new JForm('myForm');
     // Load any form .xml file you want (like registration.xml)

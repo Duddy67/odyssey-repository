@@ -40,6 +40,10 @@ function removeDocument(documentId)
   <button onclick="Joomla.submitbutton('documents.uploadFile');" style="margin-top:10px;" class="btn btn-small btn-info">
   <span class="icon-upload icon-white"></span><?php echo JText::_('COM_ODYSSEY_BUTTON_UPLOAD_LABEL'); ?></button>
   </div>
+  <br />
+  <div class="alert">
+    <?php echo JText::sprintf('COM_ODYSSEY_FILE_INFORMATIONS', $this->allowedExtensions, $this->maxFileSize); ?>
+  </div>
   <hr>
   <?php
 	echo '<h3>'.JText::_('COM_ODYSSEY_RECEIVED_DOCUMENTS').'</h3>';

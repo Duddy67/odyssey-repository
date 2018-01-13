@@ -35,6 +35,11 @@ class OdysseyViewCustomer extends JViewLegacy
       return false;
     }
 
+    //Gets and sets the file informations.
+    $params = JComponentHelper::getParams('com_odyssey');
+    $this->item->max_file_size = $params->get('max_file_size');
+    $this->item->allowed_extensions = preg_replace('#;#', ', ', $params->get('allowed_extensions'));
+
     //Display the toolbar.
     $this->addToolBar();
 
