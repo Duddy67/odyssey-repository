@@ -85,7 +85,7 @@ class OdysseyModelTravel extends JModelItem
 				     't.subtitle,t.checked_out,t.checked_out_time,t.created,t.created_by,t.access,t.params,t.metadata,'.
 				     't.metakey,t.metadesc,t.hits,t.publish_up,t.publish_down,t.language,t.modified,t.modified_by,'.
 				     't.dpt_step_id,t.show_steps,t.show_grouped_steps,t.show_testimonies,t.departure_number,'.
-				     't.extra_desc_1,t.extra_desc_2,t.extra_desc_3,t.extra_desc_4,ds.nb_days,ds.nb_nights,ds.code,'.
+				     't.extra_desc_1,t.extra_desc_2,t.extra_desc_3,t.extra_desc_4,ds.nb_days,ds.nb_nights,s.code,'.
 				     't.theme,t.extra_fields,MIN(tp.price) AS lowest_price'))
 	    ->from($db->quoteName('#__odyssey_travel').' AS t')
 	    //Get the lowest price of this travel for one passenger.
