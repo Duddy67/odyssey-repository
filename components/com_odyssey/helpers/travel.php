@@ -586,6 +586,13 @@ class TravelHelper
       $settings = TravelHelper::getSettings();
     }
 
+    //Set the admin body option.
+    $admin = '';
+    if($toAdmin) {
+      $admin = 'ADMIN_';
+      $userId = JFactory::getUser()->get('id');
+    }
+
     //Get the needed data.
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
@@ -617,12 +624,6 @@ class TravelHelper
     $limitDate = UtilityHelper::getLimitDate($settings['option_validity_period']);
     $limitDate = JHTML::_('date', $limitDate, JText::_('DATE_FORMAT_LC2'));
     $finalAmount = UtilityHelper::formatNumber($result->final_amount).' '.$currency;
-
-    //Set the admin body option.
-    $admin = '';
-    if($toAdmin) {
-      $admin = 'ADMIN_';
-    }
 
     //Get the corresponding subject and body.
     switch($emailType) {
