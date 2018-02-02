@@ -14,8 +14,15 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 
 $digitsPrecision = $this->config->get('digits_precision');
 $nbItems = count($this->items);
-//Check if the user has just land on the search page (the search variable has not be sent yet in the url). 
-$search = JFactory::getApplication()->input->get('search', 0);
+
+//Check if the user has just land on the search page (the search variable has not be set). 
+$search = 1;
+$post = JFactory::getApplication()->input->post->getArray();
+//No POST data means that the user has just arrived (ie: the search form has not been submited yet).
+if(empty($post)) {
+  //Tells JS to reload the form in case filter data still remains from a previous search.
+  $search = 0;
+}
 ?>
 <script type="text/javascript">
 var odyssey = {
@@ -33,7 +40,7 @@ var odyssey = {
 };
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_odyssey&view=search&layout=thumbnail&search=1');?>" method="post" name="siteForm" id="siteForm">
+<form action="<?php echo htmlspecialchars(JUri::getInstance()->toString()); ?>" method="post" name="siteForm" id="siteForm">
 <?php
 // Search tools bar 
 //echo JLayoutHelper::render('search.default', array('view' => $this, 'search_filters' => $this->state->get('search.filters')));
