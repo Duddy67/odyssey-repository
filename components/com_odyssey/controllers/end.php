@@ -243,8 +243,8 @@ class OdysseyControllerEnd extends JControllerForm
     }
 
       //For test purposes.
-      //$reminderDate = '13:40 2017-07-29';
-      //$limitDate = '13:41 2017-07-29';
+      //$reminderDate = '09:52 2018-02-24';
+      //$limitDate = '09:53 2018-02-24';
 
       $orderId = $travel['order_id'];
       $uri = JUri::getInstance();
@@ -254,12 +254,12 @@ class OdysseyControllerEnd extends JControllerForm
       //Lines between LimitStrings must not be indented (tabulations).
       //IMPORTANT: The files using shell_exec MUST be in UNIX format and not in DOS format.
       shell_exec('/usr/bin/at '.$reminderDate.' <<EOF
-/usr/bin/wget -O - -q -t 1 "'.$uri->root().'components/com_odyssey/helpers/tasks.php?order_id='.$orderId.'&task='.$task1.'" >/dev/null 2>&1
+/usr/bin/php '.JPATH_ROOT.'/components/com_odyssey/helpers/tasks.php '.$orderId.' '.$task1.'
 EOF'
 );
 
       shell_exec('/usr/bin/at '.$limitDate.' <<EOF
-/usr/bin/wget -O - -q -t 1 "'.$uri->root().'components/com_odyssey/helpers/tasks.php?order_id='.$orderId.'&task='.$task2.'" >/dev/null 2>&1
+/usr/bin/php '.JPATH_ROOT.'/components/com_odyssey/helpers/tasks.php '.$orderId.' '.$task2.'
 EOF'
 );
 

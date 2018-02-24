@@ -28,13 +28,14 @@ require_once (JPATH_BASE.'/components/com_odyssey/helpers/travel.php');
 //Create the application
 $mainframe = JFactory::getApplication('site');
 
-//Get the parameters passed through the url.
-$jinput = JFactory::getApplication()->input;
-$orderId = $jinput->get('order_id', 0, 'uint');
-$task = $jinput->get('task', '', 'str');
-$langTag = $jinput->get('lang_tag', '', 'str');
+//Gets the arguments passed through the php command.
+$orderId = $argv[1];
+$task = $argv[2];
+$langTag = '';
 
-//file_put_contents('debog_file_task.txt', print_r($orderId.':'.$task, true)); 
+if(isset($argv[3])) {
+  $langTag = $argv[3];
+}
 
 //Get the needed data.
 $db = JFactory::getDbo();
@@ -55,8 +56,8 @@ $result = $db->loadObject();
 $lang = JFactory::getLanguage();
 //Check the lang tag parameter has been properly retrieved.
 if(empty($langTag)) {
-    //If not, we'll use english by default.
-    $langTag = $lang->getTag();
+  //If not, we'll use english by default.
+  $langTag = $lang->getTag();
 }
 //Load language.
 $lang->load('com_odyssey', JPATH_ROOT.'/components/com_odyssey', $langTag, true);
@@ -69,7 +70,7 @@ $parameters = JComponentHelper::getParams('com_odyssey');
 //website url.
 $length = strlen('components/com_odyssey/helpers/');
 $length = $length - ($length * 2);
-$websiteUrl = substr(JURI::root(), 0, $length);
+$websiteUrl = $parameters->get('website');
 
 $finalAmount = UtilityHelper::formatNumber($result->final_amount).' '.$result->currency_code;
 $limitDate = JHTML::_('date', $result->limit_date, JText::_('DATE_FORMAT_LC2'));
@@ -79,7 +80,6 @@ if($task == 'deposit_reminder' || $task == 'warning_payment') {
   $remainingPayment = $result->final_amount - $result->outstanding_balance;
   $remainingPayment = UtilityHelper::formatNumber($remainingPayment).' '.$result->currency_code;
 }
-
 
 //Nothing has been paid or the remaining payment is missing.
 if($result->outstanding_balance == $result->final_amount || $result->outstanding_balance > 0) {
@@ -181,11 +181,4 @@ else {
   $db->setQuery($query);
   $db->execute();
 }
-
-/*
-//For testing purpose.
-$fp = fopen('at-test.txt', 'w');
-fwrite($fp, $orderId.' '.$msg);
-fclose($fp);*/
-
 
