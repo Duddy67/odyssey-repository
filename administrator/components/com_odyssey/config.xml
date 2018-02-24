@@ -13,6 +13,13 @@
 	       description="COM_ODYSSEY_FIELD_COMPANY_DESC">
 	</field>
 
+	<field name="website"
+	       type="text"
+	       required="true"
+	       label="COM_ODYSSEY_FIELD_WEBSITE_LABEL"
+	       description="COM_ODYSSEY_FIELD_WEBSITE_DESC">
+	</field>
+
 	<field name="country_code" type="countrylist"
 		label="COM_ODYSSEY_FIELD_COUNTRY_LABEL"
 		description="COM_ODYSSEY_FIELD_COMPANY_COUNTRY_DESC"

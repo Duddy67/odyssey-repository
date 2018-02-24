@@ -329,14 +329,8 @@ class StepHelper
 
   public static function applyTimeOffset($timeOffset, $stepIds, $dptStepId, $dptNb)
   {
-    //First run some tests to ensure we have correct data to work with.
-
-    if(!is_array($stepIds)) {
-      return false;
-    }
-
-    //Check we have exactly 2 step ids.
-    if(count($stepIds) != 2) {
+    //Check we have an array which contains exactly 2 step ids.
+    if(!is_array($stepIds) || count($stepIds) != 2) {
       JFactory::getApplication()->enqueueMessage(JText::_('COM_ODYSSEY_WARNING_INVALID_STEP_SELECTION'), 'warning');
       return false;
     }
