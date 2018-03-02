@@ -228,5 +228,87 @@ class OdysseyHelperQuery
 
     return $return;
   }
+
+
+  /**
+   * Method which set up the JOIN and WHERE clauses for a given filter according the state
+   * of the other filters.
+   *
+   * @param   string $filterName  The name of the filter for which the query is built.
+   *
+   * @return  array  The JOIN and WHERE clauses set according to the state of the other
+   *                 filters.
+   *
+   */
+  public static function getSearchFilterQuery($filterName)
+  {
+    $filterQuery = array('join' => array(), 'where' => array());
+    $post = JFactory::getApplication()->input->post->getArray();
+    $geographicalFilters = array('country', 'region', 'city');
+    $db = JFactory::getDbo();
+
+    //The geographical filters are not taken in account in the query  as they 
+    //deal with each other in their respective file.
+    if(in_array($filterName, $geographicalFilters)) {
+      $filters = array('month', 'price', 'duration', 'theme', 'date');
+    }
+    else {
+      $filters = array('country', 'region', 'city', 'month', 'price', 'duration', 'theme', 'date');
+    }
+
+    foreach($filters as $key => $filter) {
+      //Stores the value of each available filter.
+      //Note: The calling filter is not taken in account.
+      if($filter != $filterName && isset($post['filter'][$filter])) {
+	//Note: Uses a variable's variable
+	${$filter} = $post['filter'][$filter];
+      }
+    }
+
+    //Joins over the travel table for the geographical filters.
+    if(in_array($filterName, $geographicalFilters)) {
+      if((isset($price) && !empty($price)) || (isset($duration) && !empty($duration)) || (isset($theme) && !empty($theme)) || (isset($month) && !empty($month))) {
+	$alias = substr($filterName, 0, 2);
+	$filterQuery['join'][] = '#__odyssey_travel AS t ON sf_'.$alias.'.travel_id=t.id';
+      }
+    }
+    //Joins over the search_fiter table for the "regular" filters.
+    else {
+      if(isset($country) && !empty($country)) {
+	$filterQuery['join'][] = '#__odyssey_search_filter AS sf_co ON sf_co.travel_id=t.id';
+	$filterQuery['where'][] = 'sf_co.country_code='.$db->Quote($country);
+      }
+
+      if(isset($region) && !empty($region)) {
+	$filterQuery['join'][] = '#__odyssey_search_filter AS sf_re ON sf_re.travel_id=t.id';
+	$filterQuery['where'][] = 'sf_re.region_code='.$db->Quote($region);
+      }
+
+      if(isset($city) && !empty($city)) {
+	$filterQuery['join'][] = '#__odyssey_search_filter AS sf_ci ON sf_ci.travel_id=t.id';
+	$filterQuery['where'][] = 'sf_ci.city_id='.(int)$city;
+      }
+    }
+
+    //To get the months we also have to join over the departure step map table.
+    if(isset($month) && !empty($month)) {
+      $filterQuery['join'][] = '#__odyssey_departure_step_map AS ds ON ds.step_id=t.dpt_step_id';
+      $filterQuery['where'][] = 'ds.date_time LIKE '.$db->Quote($month.'%');
+    }
+
+    if(isset($price) && !empty($price)) {
+      $filterQuery['where'][] = 't.price_range='.$db->Quote($price);
+    }
+
+    if(isset($duration) && !empty($duration)) {
+      $filterQuery['where'][] = 't.travel_duration='.$db->Quote($duration);
+    }
+
+    if(isset($theme) && !empty($theme)) {
+      $filterQuery['where'][] = 't.theme='.$db->Quote($theme);
+    }
+
+    return $filterQuery;
+  }
 }
 

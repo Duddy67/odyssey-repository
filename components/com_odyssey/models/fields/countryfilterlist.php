@@ -13,6 +13,7 @@ jimport('joomla.form.formfield');
 // import the list field type
 jimport('joomla.form.helper');
 JFormHelper::loadFieldClass('list');
+require_once JPATH_ROOT.'/components/com_odyssey/helpers/query.php';
 
 
 //Script which build the select html tag containing the country names and codes.
@@ -25,12 +26,6 @@ class JFormFieldCountryfilterList extends JFormFieldList
   {
     $options = array();
     $post = JFactory::getApplication()->input->post->getArray();
-    $duration = '';
-
-    if(isset($post['filter']['duration'])) {
-      $duration = $post['filter']['duration'];
-    }
-
       
     //Get the country names.
     $db = JFactory::getDbo();
@@ -40,10 +35,17 @@ class JFormFieldCountryfilterList extends JFormFieldList
 	  //Get only the countries defined in the search filter table.
 	  ->join('INNER', '#__odyssey_search_filter AS sf_co ON sf_co.country_code=c.alpha_2');
 
-    //Display only countries linked to travels which match the given duration.
-    if(!empty($duration)) {
-      $query->join('INNER', '#__odyssey_travel AS t ON sf_co.travel_id=t.id')
-	    ->where('t.travel_duration='.$db->Quote($duration));
+    //Gets the join and where clauses needed for the non geographical filters (ie: theme,
+    //price range etc...)
+    $filterQuery = OdysseyHelperQuery::getSearchFilterQuery('country');
+
+    //Adds the join and where clauses to the query.
+    foreach($filterQuery['join'] as $join) {
+      $query->join('INNER', $join);
+    }
+
+    foreach($filterQuery['where'] as $where) {
+      $query->where($where);
     }
 
     $query->where('c.published=1')

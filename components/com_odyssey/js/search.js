@@ -21,6 +21,8 @@
     $('#filter_region').val('');
     $('#filter_city').prop('disabled', false);
     $('#filter_city').val('');
+    $('#filter_month').prop('disabled', false);
+    $('#filter_month').val('');
     $('#filter_price').prop('disabled', false);
     $('#filter_price').val('');
     $('#filter_duration').prop('disabled', false);
@@ -39,6 +41,7 @@
     var country = $('#filter_country').val();
     var region = $('#filter_region').val();
     var city = $('#filter_city').val();
+    var month = $('#filter_month').val();
     var price = $('#filter_price').val();
     var duration = $('#filter_duration').val();
     var theme = $('#filter_theme').val();
@@ -58,14 +61,19 @@
       $('#filter_date').prop('disabled', true);
     }
 
+    //If there is only 1 value left (plus the select value) there is no need to 
+    //enable the filter. Duration value can also be read in the result array.
+
     if($('#filter_price').children('option').length == 2) {
-      //If there is only 1 value left (plus the select value) there is no need to 
-      //enable the filter. Duration value can also be read in the result array.
       $('#filter_price').prop('disabled', true);
     }
 
     if($('#filter_duration').children('option').length == 2) {
       $('#filter_duration').prop('disabled', true);
+    }
+
+    if($('#filter_month').children('option').length == 2) {
+      $('#filter_month').prop('disabled', true);
     }
 
     if($('#filter_theme').children('option').length == 2) {

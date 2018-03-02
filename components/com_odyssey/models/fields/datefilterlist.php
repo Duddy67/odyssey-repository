@@ -28,7 +28,7 @@ class JFormFieldDatefilterList extends JFormFieldList
     $options = $dates = array();
     $nowDate = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
     $post = JFactory::getApplication()->input->post->getArray();
-    $country = $region = $city = $price = $duration = '';
+    $country = $region = $city = $month = $price = $duration = '';
 
     if(isset($post['filter']['country'])) {
       $country = $post['filter']['country'];
@@ -40,6 +40,10 @@ class JFormFieldDatefilterList extends JFormFieldList
 
     if(isset($post['filter']['city'])) {
       $city = $post['filter']['city'];
+    }
+      
+    if(isset($post['filter']['month'])) {
+      $month = $post['filter']['month'];
     }
       
     if(isset($post['filter']['price'])) {
@@ -72,6 +76,10 @@ class JFormFieldDatefilterList extends JFormFieldList
     if(!empty($city)) {
       $query->join('INNER', '#__odyssey_search_filter AS sf_ci ON sf_ci.travel_id=t.id')
 	    ->where('sf_ci.city_id='.(int)$city);
+    }
+
+    if(!empty($month)) {
+      $query->where('ds.date_time LIKE '.$db->Quote($month.'%'));
     }
 
     //Display only departures linked to travels which match the given price and duration.

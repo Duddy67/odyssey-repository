@@ -13,6 +13,7 @@ jimport('joomla.form.formfield');
 // import the list field type
 jimport('joomla.form.helper');
 JFormHelper::loadFieldClass('list');
+require_once JPATH_ROOT.'/components/com_odyssey/helpers/query.php';
 
 
 //Script which build the select html tag containing the city names and ids.
@@ -33,10 +34,6 @@ class JFormFieldCityfilterList extends JFormFieldList
       
     if(isset($post['filter']['region'])) {
       $region = $post['filter']['region'];
-    }
-      
-    if(isset($post['filter']['duration'])) {
-      $duration = $post['filter']['duration'];
     }
 
     //Get the city names.
@@ -62,10 +59,17 @@ class JFormFieldCityfilterList extends JFormFieldList
 	    ->where('sf_ci.travel_id=sf.travel_id');
     }
 
-    //Display only cities linked to travels which match the given duration.
-    if(!empty($duration)) {
-      $query->join('INNER', '#__odyssey_travel AS t ON sf_ci.travel_id=t.id')
-	    ->where('t.travel_duration='.$db->Quote($duration));
+    //Gets the join and where clauses needed for the non geographical filters (ie: theme,
+    //price range etc...)
+    $filterQuery = OdysseyHelperQuery::getSearchFilterQuery('city');
+
+    //Adds the join and where clauses to the query.
+    foreach($filterQuery['join'] as $join) {
+      $query->join('INNER', $join);
+    }
+
+    foreach($filterQuery['where'] as $where) {
+      $query->where($where);
     }
 
     $query->where('c.published=1')
