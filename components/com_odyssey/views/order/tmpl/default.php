@@ -60,7 +60,7 @@ Joomla.submitbutton = function(task)
 	      echo $this->form->getControlGroup('nb_psgr');
 
 	      //Set the date format according to the date type of the departure.
-	      $departureDate = JHtml::_('date', $this->item->departure_date, JText::_('DATE_FORMAT_LC2'));
+	      $departureDate = JHtml::_('date', $this->item->departure_date, JText::_($this->item->departure_date_format));
 	      if($this->item->date_type == 'period') {
 		$departureDate = JHtml::_('date', $this->item->departure_date, JText::_('DATE_FORMAT_LC3'));
 	      }

@@ -72,11 +72,13 @@ class OdysseyModelOrder extends JModelAdmin
     $item->customer = $result['name'].' '.$result['firstname'];
     $item->travel_name = $result['travel_name'];
     $item->date_type = $result['date_type'];
-    $digitsPrecision = JComponentHelper::getParams('com_odyssey')->get('digits_precision');
+    $config = JComponentHelper::getParams('com_odyssey');
+    $digitsPrecision = $config->get('digits_precision');
     $item->final_amount = UtilityHelper::formatNumber($item->final_amount, $digitsPrecision).' '.$item->currency_code;
     $item->outstanding_balance = UtilityHelper::formatNumber($item->outstanding_balance, $digitsPrecision).' '.$item->currency_code;
     $item->digits_precision = $digitsPrecision;
     $item->deposit_rate = $item->deposit_rate.' %';
+    $item->departure_date_format = $config->get('departure_date_format');
 
     return $item;
   }

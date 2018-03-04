@@ -114,6 +114,7 @@ class TravelHelper
     $settings['company'] = $parameters->get('company');
     $settings['rounding_rule'] = $parameters->get('rounding_rule');
     $settings['digits_precision'] = $parameters->get('digits_precision');
+    $settings['departure_date_format'] = $parameters->get('departure_date_format');
     $settings['base_nb_psgr'] = $parameters->get('base_nb_psgr');
     $settings['gts_article_ids'] = $parameters->get('gts_article_ids');
     $settings['option_time_limit'] = $parameters->get('option_time_limit');

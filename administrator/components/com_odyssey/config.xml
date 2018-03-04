@@ -84,6 +84,14 @@
 	       description="COM_ODYSSEY_FIELD_GTS_ARTICLE_IDS_DESC">
 	</field>
 
+	<field name="departure_date_format"
+	       type="list" default="DATE_FORMAT_LC2"
+	       label="COM_ODYSSEY_DEPARTURE_DATE_FORMAT_LABEL"
+	       description="COM_ODYSSEY_DEPARTURE_DATE_FORMAT_DESC">
+	       <option value="DATE_FORMAT_LC2">COM_ODYSSEY_OPTION_SHOW_TIME</option>
+	       <option value="DATE_FORMAT_LC3">COM_ODYSSEY_OPTION_DO_NOT_SHOW_TIME</option>
+	</field>
+
 	<field name="spacer1" type="spacer" hr="true" />
 
 	<field name="option_time_limit"

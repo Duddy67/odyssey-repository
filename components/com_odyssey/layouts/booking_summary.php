@@ -19,7 +19,7 @@ if(isset($displayData['addons'])) {
 
 //Set departure date according to the date type.
 $dptDate = $travel['date_time'];
-$dateFormat = 'DATE_FORMAT_LC2';
+$dateFormat = $settings['departure_date_format'];
 if($travel['date_type'] == 'period') {
   $dateFormat = 'DATE_FORMAT_LC3';
   $dptDate = $travel['date_picker'];
