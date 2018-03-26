@@ -512,7 +512,7 @@ class TravelHelper
 
 
   //Send an appropriate email to customers according to the performed action.
-  public static function sendEmail($emailType, $userId = 0, $orderId = 0, $toAdmin = false, $message = array())
+  public static function sendEmail($emailType, $userId = 0, $orderId = 0, $toAdmin = false, $message = array(), $html = true)
   {
     //A reference to the global mail object (JMail) is fetched through the JFactory object. 
     //This is the object creating our mail.
@@ -546,9 +546,13 @@ class TravelHelper
     //Set the subject and body of the email.
     $body = $message['body'];
     $mailer->setSubject($message['subject']);
-    //We want the body message in HTML.
-    $mailer->isHTML(true);
-    $mailer->Encoding = 'base64';
+
+    if($html) {
+      //We want the body message in HTML.
+      $mailer->isHTML(true);
+      $mailer->Encoding = 'base64';
+    }
+
     $mailer->setBody($body);
 
     $send = $mailer->Send();
