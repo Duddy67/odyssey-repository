@@ -92,6 +92,7 @@ class JFormFieldDatefilterList extends JFormFieldList
     }
 
     $query->where('t.published=1')
+	  ->where('ds.published=1')
 	  ->where('(ds.date_time > '.$db->Quote($nowDate).' OR date_time_2 > '.$db->Quote($nowDate).')')
 	  ->order('ds.date_time');
     $db->setQuery($query);
