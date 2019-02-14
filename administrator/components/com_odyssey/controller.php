@@ -17,7 +17,7 @@ class OdysseyController extends JControllerLegacy
     require_once JPATH_COMPONENT.'/helpers/odyssey.php';
 
     //Display the submenu.
-    OdysseyHelper::addSubmenu(JRequest::getCmd('view', 'travels'));
+    OdysseyHelper::addSubmenu($this->input->get('view', 'travels'));
 
     //Check if the Odyssey plugin is installed (or enabled).
     //If it doesn't we display a warning note.
@@ -26,7 +26,7 @@ class OdysseyController extends JControllerLegacy
     }
 
     //Set the default view.
-    JRequest::setVar('view', JRequest::getCmd('view', 'odyssey'));
+    $this->input->set('view', $this->input->get('view', 'odyssey'));
 
     //Display the view.
     parent::display();

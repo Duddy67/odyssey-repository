@@ -22,7 +22,7 @@ $controller = JControllerLegacy::getInstance('Odyssey');
 
 //Execute the requested task (set in the url).
 //If no task is set then the "display' task will be executed.
-$controller->execute(JRequest::getCmd('task'));
+$controller->execute(JFactory::getApplication()->input->get('task'));
 
 $controller->redirect();
 

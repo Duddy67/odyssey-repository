@@ -339,7 +339,7 @@ class PlgUserOdysseyprofile extends JPlugin
     //possible mistakes during login phase.
     //Note: This is performed only if certain conditions are gathered.
     if($isNew && !empty($location) && $app->isSite() && $uParams->get('useractivation') == 0) {
-      JRequest::checkToken('post') or jexit(JText::_('JInvalid_Token'));
+      JSession::checkToken('post') or jexit(JText::_('JInvalid_Token'));
 
       //Since onUserAfterSave function is triggered before any email is send to
       //the user by the register function (component/com_users/models/registration.php from line 341) 

@@ -43,7 +43,7 @@ class OdysseyModelCustomers extends JModelList
     $session = JFactory::getSession();
 
     // Adjust the context to support modal layouts.
-    if($layout = JRequest::getVar('layout')) {
+    if($layout = JFactory::getApplication()->input->get('layout')) {
       $this->context .= '.'.$layout;
     }
 

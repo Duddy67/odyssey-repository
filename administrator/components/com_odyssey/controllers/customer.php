@@ -22,7 +22,6 @@ class OdysseyControllerCustomer extends JControllerForm
     //Get the jform data.
     $data = $this->input->post->get('jform', array(), 'array');
 
-    //$post = JRequest::get('post');
     //Reset the jform data array 
     $this->input->post->set('jform', $data);
 
