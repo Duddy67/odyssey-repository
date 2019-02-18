@@ -41,7 +41,7 @@ class JFormFieldCountryList extends JFormFieldList
 
     //Build the select options.
     foreach($countries as $country) {
-      $options[] = JHtml::_('select.option', $country->alpha_2, (empty($country->lang_var)) ? JText::_($country->name) : JText::_($country->lang_var));
+      $options[] = JHtml::_('select.option', $country->alpha_2, $country->name);
     }
 
     // Merge any additional options in the XML definition.
