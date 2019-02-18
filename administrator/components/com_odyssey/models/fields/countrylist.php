@@ -31,7 +31,8 @@ class JFormFieldCountryList extends JFormFieldList
     $query->select('alpha_2,name,lang_var')
 	  ->from('#__odyssey_country')
 	  ->where('published=1')
-	  ->order('alpha_3');
+    //TODO: This is a band-aid solution. A real solution based on ini language files must be implemented. 
+	  ->order('name');
     $db->setQuery($query);
     $countries = $db->loadObjectList();
 
