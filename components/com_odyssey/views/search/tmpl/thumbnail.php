@@ -96,6 +96,12 @@ if($this->params->get('show_pagination_limit')) {
 	  <?php else : ?>
 	    <span class="price"><?php echo UtilityHelper::formatNumber($item->price, $digitsPrecision).' '.$this->currency; ?></span>
 	  <?php endif; ?>
+
+	  <?php if(!$item->dpt_published) : ?>
+	    <div class="travel-unvailable">
+	      <?php echo JText::_('COM_ODYSSEY_TRAVEL_NOT_AVAILABLE');?>
+	    </div>
+	  <?php endif; ?>
 	</div>
       </div>
     <?php endforeach; ?>
